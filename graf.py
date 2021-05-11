@@ -1,5 +1,6 @@
 from datetime import datetime
-
+import math
+from os import stat
 # 1.: Definicija razredov Vozlišče, Povezava in Graf.
 
 class Vozlisce:
@@ -12,15 +13,15 @@ class Vozlisce:
 
 
 class Povezava:
-    ''' Konstruira novo usmerjeno povezavo od vozlisce1 do vozlisce2. Za ustvarjanje neusmerjene povezave bom ustvaril nova dva objekta. '''
+    ''' Konstruira novo usmerjeno povezavo od vozlisce1 do vozlisce2. Za ustvarjanje neusmerjene povezave bom ustvaril dva enosmerna objekta. '''
     def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez = -1):
         # vozlisce1 je zacetek povezave, vozlisce2 je konec povezave.
         self.vozlisce1 = vozlisce1
         self.vozlisce2 = vozlisce2
         if utez == -1:
-            self.fiksna_utez = False # fiksna_utez == True --> Ceno povezave JE treba izračunati vedno znova.
+            self.fiksna_utez = False # fiksna_utez == False --> Ceno povezave JE treba izračunati vedno znova.
         else:
-            self.fiksna_utez = True # fiksna_utez == False --> Cene povezave NI treba izračunati vedno znova.
+            self.fiksna_utez = True # fiksna_utez == True --> Cene povezave NI treba izračunati vedno znova.
         ''' 
         fiksna_utez nam pove, če bo čas potovanja odvisen od časa vpogleda.
         Ta atribut imajo tiste povezave, po katerih se lahko sprehajamo/ vozimo s kolesom.
@@ -28,16 +29,37 @@ class Povezava:
         '''
         self.utez = utez
 
-    def izracunaj_se(self, cas_vpogleda = datetime.now()):
-        # TODO: Iz casa vpogleda dobi zapis na minute natančen
-        pass
+    def izracunaj_se(self, cas_vpogleda: datetime = datetime.now()):
+        ''' 
+        Izračuna utež na grafu v odvisnosti od časa. Če je povezava fiksna, bo cena vedno ista.
+        Sicer: Pošči čas od cas_vpogleda do naslednjega odhoda avtobusa ter nastavi ceno povezave na <cas do odhoda> + <cas voznje>.
+        '''
+        if self.fiksna_utez:
+            return self
+        
+        minute = self.dobi_minute_iz_casa(cas_vpogleda)
+        ime_datoteke = self.vozlisce1.ime + "-" + self.vozlisce2.ime + ".txt" # Vse tekstovne datoteke imajo isto sintakso, vsa vozlišča pa tako ime, da je ime datoteke brez težav skonstruirati
+        with open("./PodatkiOdhodov/" + ime_datoteke, "r") as input_file:
+            for line in input_file.readlines():
+                trenutna_vrsta = [int(data.strip()) for data in line.split()]
+                trenutni_odhod, trenutni_prihod = trenutna_vrsta[0], trenutna_vrsta[1]
+                if trenutni_odhod > minute:
+                    self.utez = trenutni_prihod - minute
+                    return self
+            # Ura je preveč, da bi peljal še kakšen avtobus. Kar počakat na prvega naslednji dan ;)
+            self.utez = 24*60 - minute + input_file.readlines().split()[0].strip()
+            return self 
+        
+    @staticmethod
+    def dobi_minute_iz_casa(datum: datetime = datetime.now()):
+        return int(datum.strftime("%H")) * 60 + int(datum.strftime("%M"))
 
     def __str__(self):
         return f"Začetek povezave: {self.vozlisce1}; Konec povezave: {self.vozlisce2}; Fiksna: {self.fiksna_utez}; utez: {self.utez}"
 
 
 class Graf:
-    
+    ''' Graf združuje vozlišča in povezave. Njegove informacije hranim v spremenljivki self.tocke '''
     def __init__(self):
         self.tocke = {} # {Key: Točka; Value: list povezav iz te točke}
     
@@ -92,14 +114,20 @@ class Graf:
         self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez = -1))
     
     def __str__(self):
+
         ''' Izpiše nam podatke o našem grafu.'''
         izpis = ""
         for tocka in self.tocke.keys():
             izpis += tocka.ime + ": [" + "; ".join([sosednja_povezava.vozlisce2.ime + ": " + str(sosednja_povezava.utez) for sosednja_povezava in self.tocke[tocka]]) + "]\n"
         return izpis
+    
+    def nastavi_vse_povezave(self, cas_vpogleda: datetime = datetime.now()):
+        ''' Posodobi vrednosti uteži vseh povezav. Sprehodi se po vseh povezavah ter na vsaki posebi pokliče metodo za nastavitev uteži. '''
+        for vozlisce, seznam_povezav in self.tocke.items():
+            self.tocke[vozlisce] = {povezava.izracunaj_se(cas_vpogleda) for povezava in seznam_povezav}
+        return self.tocke
         
-    @staticmethod
-    def dijkstra(vozlisce_start: Vozlisce, vozlisce_end: Vozlisce):
+    def dijkstra(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce):
         # TODO: Razpiši algoritem.
         '''
         Poišče najkrajšo pot od start_vertex do vseh ostalih.
@@ -107,7 +135,35 @@ class Graf:
         zraven pa skonstruira še našo pot potovanja.
         Output je oblike (<cena sprehoda>, <pot sprehoda>).
         '''
-        return 104, [1, 6, 42]
+        # Najprej posodobi uteži na povezavah
+        self.tocke = self.nastavi_vse_povezave()
+        # Definiraj slovarja poti in povezav. 
+        # # Namesto slovarja vozlišč sem uporabil seznam povezav, ker v mojem programu objekt povezava drži večjo vlogo in več informacij kot vozlišče.
+        slovar_razdalj = {vozlisce: math.inf for vozlisce in self.tocke.keys()}
+        slovar_povezav = {vozlisce: [] for vozlisce in self.tocke.keys()}
+        najkrajsa_pot_do_vozlisca = {}
+        slovar_razdalj[vozlisce_start] = 0
+        while slovar_razdalj:
+            # Najdi in vrži ven najkrajšo pot.
+            trenutno_vozlisce, razdalja_vozlisca = sorted(slovar_razdalj.items(), key=lambda x: x[1])[0]
+            najkrajsa_pot_do_vozlisca[trenutno_vozlisce] = slovar_razdalj.pop(trenutno_vozlisce)
+            # Sprehodi se po sosednjih povezavah.
+            for sosednja_povezava in self.vrni_sosednje_povezave(trenutno_vozlisce):
+                sosednje_vozlisce = sosednja_povezava.vozlisce2
+                # Če za sosednje vozlišče še nismo našli najkrajše cene in poti
+                if sosednje_vozlisce in slovar_razdalj:
+                    nova_razdalja_do_vozlisca = razdalja_vozlisca + sosednja_povezava.utez
+                    # Če je trenutna pot boljša kot tista, po kateri smo hodili prej, jo posodobi.
+                    if slovar_razdalj[sosednje_vozlisce] > nova_razdalja_do_vozlisca:
+                        slovar_razdalj[sosednje_vozlisce] = nova_razdalja_do_vozlisca
+                        slovar_povezav[sosednje_vozlisce] = slovar_povezav[trenutno_vozlisce] + [sosednja_povezava]
+
+        return najkrajsa_pot_do_vozlisca[vozlisce_end], slovar_povezav[vozlisce_end]
+
+    @staticmethod
+    def dobi_pot_iz_povezav(seznam_povezav):
+        ''' Iz seznama prepotovanih poti vrne seznam imen prepotovanih vozlišč. Helper funkcija k outputu za funkcijo dikstra '''
+        return [seznam_povezav[0].vozlisce1.ime] + [povezava.vozlisce2.ime for povezava in seznam_povezav]
 
 
 # 2.: Konstrukcija grafa
@@ -118,7 +174,7 @@ ljubljana_tivoli = Vozlisce("LjubljanaTivoli")
 postaja_jadranska = Vozlisce("PostajaJadranska")
 fmf = Vozlisce("FMF")
 ljubljana_zelezniska = Vozlisce("LjubljanaZelezniska")
-kranj_zelezniska =Vozlisce("KranjZelezniska")
+kranj_zelezniska = Vozlisce("KranjZelezniska")
 
 graf = Graf()
 
@@ -126,6 +182,9 @@ graf.dodaj_tocke([britof_kr, kranj_ap, ljubljana_tivoli, postaja_jadranska, fmf,
 
 graf.dodaj_usmerjeno_povezavo(britof_kr, kranj_ap)
 graf.dodaj_usmerjeno_povezavo(kranj_ap, britof_kr)
+
+graf.dodaj_usmerjeno_povezavo(kranj_zelezniska, britof_kr)
+graf.dodaj_usmerjeno_povezavo(britof_kr, kranj_zelezniska)
 
 graf.dodaj_usmerjeno_povezavo(kranj_ap, ljubljana_tivoli)
 graf.dodaj_usmerjeno_povezavo(ljubljana_tivoli, kranj_ap)
@@ -138,5 +197,4 @@ graf.dodaj_neusmerjeno_povezavo(postaja_jadranska, fmf, 2)
 graf.dodaj_neusmerjeno_povezavo(ljubljana_zelezniska, fmf, 20)
 
 graf.dodaj_usmerjeno_povezavo(ljubljana_zelezniska, kranj_zelezniska)
-graf.dodaj_usmerjeno_povezavo(kranj_zelezniska, britof_kr)
 graf.dodaj_usmerjeno_povezavo(postaja_jadranska, ljubljana_zelezniska)
