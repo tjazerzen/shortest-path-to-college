@@ -7,5 +7,7 @@ print(g2, "\n")
 
 print(Povezava.dobi_minute_iz_casa(), "\n")
 
-cena, pot_povezav = g2.dijkstra(britof_kr, fmf)
+cena, pot_povezav = g2.dijkstra(britof_kr, postaja_jadranska)
 print(cena, g2.dobi_pot_iz_povezav(pot_povezav))
+
+print(g2)

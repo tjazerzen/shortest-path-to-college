@@ -1,6 +1,5 @@
 from datetime import datetime
 import math
-from os import stat
 # 1.: Definicija razredov Vozlišče, Povezava in Graf.
 
 class Vozlisce:
@@ -61,7 +60,7 @@ class Povezava:
 class Graf:
     ''' Graf združuje vozlišča in povezave. Njegove informacije hranim v spremenljivki self.tocke '''
     def __init__(self):
-        self.tocke = {} # {Key: Točka; Value: list povezav iz te točke}
+        self.tocke = {} # {Key: Točka; Value: množica povezav z začetkom v tej točki}
     
     def tocka(self, ime):
         ''' Vrne točko z danim imenom. Če v grafu takega imena ni, vrne None. '''
@@ -94,15 +93,14 @@ class Graf:
     
     def dodaj_neusmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez_povezave):
         ''' 
-        V graf doda neusmerjeno povezavo. 
+        V graf doda neusmerjeno povezavo med vozliščema 1 in 2. 
         Ta ukaz bo generiral povezave za vožnjo s kolesom in hojo peš, kjer bo cena povezave v obe smeri enaka ter od časa vpogleda neodvisna. 
         Vse neusmerjene povezave bodo imele tudi fiksno ceno potovanja.
         '''
         if vozlisce1 == vozlisce2: return None # Trivivalen primer; zank ne bomo ustvarjali.
-        self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez = utez_povezave))
-        self.tocke[vozlisce2].add(Povezava(vozlisce2, vozlisce1, utez = utez_povezave))
+        return self.dodaj_usmerjeno_povezavo(vozlisce1, vozlisce2, utez=utez_povezave), self.dodaj_usmerjeno_povezavo(vozlisce2, vozlisce1, utez=utez_povezave)
     
-    def dodaj_usmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce):
+    def dodaj_usmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez = -1):
         ''' 
         V graf doda usmerjeno povezavo od vozlisce1 do vozlisce2.
         Ta ukaz bo generiral povezave za vožnjo s trolo in avtobusom, kjer cena povezave v eno in drugo smer ne bo enaka ter bo odvisna od časa vpogleda.
@@ -111,18 +109,18 @@ class Graf:
         '''
         # Ustvarim nov objekt. Ker se bo utež vedno znova izračunala, je lahko karkoli. Tukaj jo postavim na -1.
         # Ker utež povezave ni fiksna, je fiksna = False.
-        self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez = -1))
+        return self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez))
     
     def __str__(self):
 
-        ''' Izpiše nam podatke o našem grafu.'''
+        ''' Izpiše nam podatke o našem grafu. '''
         izpis = ""
         for tocka in self.tocke.keys():
             izpis += tocka.ime + ": [" + "; ".join([sosednja_povezava.vozlisce2.ime + ": " + str(sosednja_povezava.utez) for sosednja_povezava in self.tocke[tocka]]) + "]\n"
         return izpis
     
     def nastavi_vse_povezave(self, cas_vpogleda: datetime = datetime.now()):
-        ''' Posodobi vrednosti uteži vseh povezav. Sprehodi se po vseh povezavah ter na vsaki posebi pokliče metodo za nastavitev uteži. '''
+        ''' Posodobi vrednosti uteži vseh povezav. Sprehodi se po vseh povezavah ter na vsaki posebi pokliče metodo za nastavitev uteži, definirano na objektu Povezava. '''
         for vozlisce, seznam_povezav in self.tocke.items():
             self.tocke[vozlisce] = {povezava.izracunaj_se(cas_vpogleda) for povezava in seznam_povezav}
         return self.tocke
