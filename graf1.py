@@ -1,4 +1,5 @@
-# Datoteka, ki generira naš prvi graf. Objekt graf1 je nadaljno uporabljen v datoteki model.py
+# Datoteka, ki generira naš prvi graf.
+from model import Vozlisce
 
 britof_kr = Vozlisce("BritofKR")
 kranj_ap = Vozlisce("KranjAP")
@@ -8,7 +9,7 @@ fmf = Vozlisce("FMF")
 ljubljana_zelezniska = Vozlisce("LjubljanaZelezniska")
 kranj_zelezniska = Vozlisce("KranjZelezniska")
 
-graf1 = graf1()
+graf1 = Graf()
 
 graf1.dodaj_tocke([britof_kr, kranj_ap, ljubljana_tivoli, postaja_jadranska, fmf, ljubljana_zelezniska, kranj_zelezniska])
 

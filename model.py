@@ -1,11 +1,9 @@
-from graf1 import graf1
-from datetime import datetime
+from datetime import datetime, date
 import math
-import date
 import json
 
-# 1 Transportna mreza: N tranportnih linij = grafov
-class TransportnaMreza:
+# 1 Model: N tranportnih linij = grafov
+class Model:
     ''' Krovni objekt, ki povezuje moj program.'''
     def __init__(self, grafi=[]):
         self.grafi = grafi
@@ -17,19 +15,19 @@ class TransportnaMreza:
     
     @staticmethod
     def iz_slovarja(slovar):
-        return TransportnaMreza(
-            grafi=[graf.iz_slovarja() for graf in slovar["grafi"]]
+        return Model(
+            grafi=[Graf.iz_slovarja(slovar["grafi"][0])]
         )
     
-    def v_datoteko(self):
-        with open("stanje.json", "w") as datoteka:
+    def v_datoteko(self, ime_datoteke="stanje.json"):
+        with open(ime_datoteke, "w") as datoteka:
             json.dump(self.v_slovar(), datoteka, ensure_ascii=False, indent=4)
     
     @staticmethod
-    def iz_datoteke():
-        with open("stanje.json", "r") as datoteka:
+    def iz_datoteke(ime_datoteke="stanje.json"):
+        with open(ime_datoteke, "r") as datoteka:
             slovar = json.load(datoteka)
-            return TransportnaMreza.iz_slovarja(slovar)
+            return Model.iz_slovarja(slovar)
 
     def dodaj_nov_graf(self, graf):
         ''' Doda nov graf v seznam self.grafi. Če točko tak graf obstaja, vrne obstoječi graf, sicer pa nov objekt doda v naš seznam self.grafi ter ta objekt vrne.'''
@@ -45,7 +43,7 @@ class Vozlisce:
     
     def __str__(self):
         return self.ime
-
+    
 # 1 Graf: E povezav
 class Povezava:
     ''' 
@@ -73,14 +71,6 @@ class Povezava:
             "konec_povezave": self.vozlisce2.ime, 
             "utez": self.utez
             }
-    
-    @staticmethod
-    def iz_slovarja(slovar):
-        return Povezava(
-            vozlisce1=Vozlisce(slovar["zacetek_povezave"]), 
-            vozlisce2=Vozlisce(slovar["konec_povezave"]), 
-            utez=int(slovar["utez"])
-            )
     
     def izracunaj_se(self, cas_vpogleda: datetime = datetime.now()):
         ''' 
@@ -119,9 +109,14 @@ class Graf:
 
     @staticmethod
     def iz_slovarja(slovar):
-        tocke = {tocka.iz_slovarja() : set() for tocka in slovar["vozlisca"]}
+        tocke = {Vozlisce(ime_vozlisca) : set() for ime_vozlisca in slovar["vozlisca"]}
+
         for povezava_slovar in slovar["povezave"]:
-            povezava = povezava_slovar.iz_slovarja()
+            povezava = Povezava(
+                vozlisce1 = Graf.vrni_vozlisce_s_tem_imenom(povezava_slovar["zacetek_povezave"], tocke),
+                vozlisce2 = Graf.vrni_vozlisce_s_tem_imenom(povezava_slovar["konec_povezave"], tocke),
+                utez = int(povezava_slovar["utez"])
+            )
             tocke[povezava.vozlisce1].add(povezava)
 
         return Graf(
@@ -130,11 +125,27 @@ class Graf:
         )
 
     def v_slovar(self):
+        vse_povezave = []
+        for mnozica_povezav in self.tocke.values():
+            vse_povezave += list(mnozica_povezav)
         return {
             "uporabniki": [uporabnik.v_slovar() for uporabnik in self.uporabniki.values()],
             "vozlisca": [vozlisce.ime for vozlisce in self.tocke.keys()], # Vozlisce nima svoje funkcije "v_slovar," ker je edina potrebna informacija ime.
-            "povezave": [povezava.v_slovar() for povezava in self.tocke.values()]
+            "povezave": [povezava.v_slovar() for povezava in vse_povezave]
         }
+    
+    @staticmethod
+    def vrni_vozlisce_s_tem_imenom(iskano_ime, slovar):
+        ''' 
+        Helper metoda k Graf.iz_datoteke().
+        Poišče vozliščom z iskanim imenom v našem slovarju.
+        Če vozlišča s takim imenom ni
+         '''
+        # Oblika slovarja: Key - <Objekt točka>; Value - nima veze
+        for vozlisce in slovar.keys():
+            if vozlisce.ime == iskano_ime:
+                return vozlisce
+        return None
 
     def tocka(self, ime):
         ''' Vrne točko z danim imenom. Če v grafu takega imena ni, vrne None. '''
