@@ -1,2 +1,29 @@
-<h1> Pozdravljen.</h1> 
-<h2> Kako si?</h2>
+<html>
+
+<body>
+
+    <h1> Pozdravljen.</h1>
+
+    <h2> Kako si?</h2>
+    % if nerazporejeno > 0:
+    <h3> Trenutno imaš {{ nerazporejeno }} € nerazporejenih sredstev.</h3>
+    % elif nerazporejeno < 0: 
+    <h3>Pozor!! Razporedil si {{ - nerazporejeno }} € preveč.</h3>
+    % else:
+    <h3>Ves denar je razporejen</h3>
+    % end
+
+    <ul>
+        % for racun in racuni:
+        <li> {{ racun }}: {{ racun }}</li>
+        %end
+    </ul>
+
+    <form action="/dodaj-racun/">
+        <input type="text" name="ime_racuna">
+        <input type="submit" value="Dodaj račun">
+    </form>
+
+</body>
+
+</html>

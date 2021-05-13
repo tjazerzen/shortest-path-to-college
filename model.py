@@ -1,13 +1,36 @@
 from graf1 import graf1
 from datetime import datetime
 import math
+import date
+import json
 
-# 1 Model: N grafov
-class Model:
-    ''' Krovni objekt, ki povezuje moj program. '''
-    def __init__(self):
-        self.grafi = [] # V temu programu ima en model: en graf. Koda je nastavljena tako, da posplošitev na en model: N grafov ne bi bila težka.
+# 1 Transportna mreza: N tranportnih linij = grafov
+class TransportnaMreza:
+    ''' Krovni objekt, ki povezuje moj program.'''
+    def __init__(self, grafi=[]):
+        self.grafi = grafi
     
+    def v_slovar(self):
+        return {
+            "grafi": [graf.v_slovar() for graf in self.grafi]
+        }
+    
+    @staticmethod
+    def iz_slovarja(slovar):
+        return TransportnaMreza(
+            grafi=[graf.iz_slovarja() for graf in slovar["grafi"]]
+        )
+    
+    def v_datoteko(self):
+        with open("stanje.json", "w") as datoteka:
+            json.dump(self.v_slovar(), datoteka, ensure_ascii=False, indent=4)
+    
+    @staticmethod
+    def iz_datoteke():
+        with open("stanje.json", "r") as datoteka:
+            slovar = json.load(datoteka)
+            return TransportnaMreza.iz_slovarja(slovar)
+
     def dodaj_nov_graf(self, graf):
         ''' Doda nov graf v seznam self.grafi. Če točko tak graf obstaja, vrne obstoječi graf, sicer pa nov objekt doda v naš seznam self.grafi ter ta objekt vrne.'''
         if graf in self.grafi:
@@ -43,7 +66,22 @@ class Povezava:
         če je fiksna_utez = False, bo objekt povezave skonstruiran z specificirano utezjo. Sicer je utež = -1. 
         '''
         self.utez = utez
-
+    
+    def v_slovar(self):
+        return {
+            "zacetek_povezave": self.vozlisce1.ime, 
+            "konec_povezave": self.vozlisce2.ime, 
+            "utez": self.utez
+            }
+    
+    @staticmethod
+    def iz_slovarja(slovar):
+        return Povezava(
+            vozlisce1=Vozlisce(slovar["zacetek_povezave"]), 
+            vozlisce2=Vozlisce(slovar["konec_povezave"]), 
+            utez=int(slovar["utez"])
+            )
+    
     def izracunaj_se(self, cas_vpogleda: datetime = datetime.now()):
         ''' 
         Izračuna utež na grafu v odvisnosti od časa. Če je povezava fiksna, bo cena vedno ista.
@@ -75,9 +113,28 @@ class Povezava:
 # 1 Graf: V vozlišč; 1 Graf: E povezav; 1 graf: N uporabnikov
 class Graf:
     ''' Graf združuje vozlišča in povezave. Njegove tehnične informacije hranim v spremenljivki self.tocke, informacije o uporabnikih pa v self.uporabniki'''
-    def __init__(self):
-        self.tocke = {} # {Key: Točka; Value: množica povezav z začetkom v tej točki}
-        self.uporabniki = {} # SLOVAR --> Key: Ime; Value: <Objekt Uporabnik>
+    def __init__(self, tocke={}, uporabniki={}):
+        self.tocke = tocke # {Key: Točka; Value: množica povezav z začetkom v tej točki}
+        self.uporabniki = uporabniki # SLOVAR --> Key: Ime; Value: <Objekt Uporabnik>
+
+    @staticmethod
+    def iz_slovarja(slovar):
+        tocke = {tocka.iz_slovarja() : set() for tocka in slovar["vozlisca"]}
+        for povezava_slovar in slovar["povezave"]:
+            povezava = povezava_slovar.iz_slovarja()
+            tocke[povezava.vozlisce1].add(povezava)
+
+        return Graf(
+            tocke=tocke,
+            uporabniki={uporabnik.iz_slovarja.ime: uporabnik.iz_slovarja for uporabnik in slovar["uporabniki"]}
+        )
+
+    def v_slovar(self):
+        return {
+            "uporabniki": [uporabnik.v_slovar() for uporabnik in self.uporabniki.values()],
+            "vozlisca": [vozlisce.ime for vozlisce in self.tocke.keys()], # Vozlisce nima svoje funkcije "v_slovar," ker je edina potrebna informacija ime.
+            "povezave": [povezava.v_slovar() for povezava in self.tocke.values()]
+        }
 
     def tocka(self, ime):
         ''' Vrne točko z danim imenom. Če v grafu takega imena ni, vrne None. '''
@@ -183,14 +240,45 @@ class Graf:
 # 1 Uporabnik: N iskanj
 class Uporabnik: 
     
-    def __init__(self, ime):
+    def __init__(self, ime, prejsna_iskanja=[]):
         self.ime = ime
-        self.prejsna_iskanja = [] # Evidenca iskanj. Kronološko urejene
+        self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene
+
+    def v_slovar(self):
+        return {
+            "ime": self.ime, 
+            "prejsna_iskanja": [iskanje.v_slovar() for iskanje in self.prejsna_iskanja]
+        }
+    
+    @staticmethod
+    def iz_slovarja(slovar):
+        return Uporabnik(
+            ime=slovar["ime"],
+            prejsna_iskanja=[prejsno_iskanje.v_slovar() for prejsno_iskanje in slovar["prejsna_iskanja"]]
+        )
 
 # 1 Uporabnik: N iskanj
 class Iskanje:
 
-    def __init__(self, kraj_zacetka, kraj_konca, cas_evidence):
-        self.kraj_zacetka = kraj_zacetka
-        self.kraj_konca = kraj_konca
-        self.cas_evidence = cas_evidence
+    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cas_potovanja):
+        self.vozlisce1 = vozlisce1 # Od kod potujemo; input = niz
+        self.vozlisce2 = vozlisce2 # Kam potujemo; input = niz
+        self.cas_potovanja = cas_potovanja # Cena sprehoda od "zacetek" od "konec" v nasem grafu
+        self.cas_vpogleda = cas_vpogleda # V isoformatu
+    
+    def v_slovar(self):
+        return {
+            "zacetek": self.vozlisce1.ime, 
+            "konec": self.vozlisce2.ime, 
+            "cas_evidence": date.isoformat(self.cas_vpogleda), 
+            "cas_potovanja": self.cas_potovanja # Enota so minute
+        }
+    
+    @staticmethod
+    def iz_slovarja(slovar):
+        return Iskanje(
+            vozlisce1=Vozlisce(slovar["zacetek"]), 
+            vozlisce2=Vozlisce(slovar["konec"]), 
+            cas_vpogleda=date.fromisoformat(slovar["cas_evidence"]), 
+            cas_potovanja=int(slovar["cas_potovanja"])
+            )
