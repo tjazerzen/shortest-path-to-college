@@ -108,10 +108,11 @@ class Povezava:
 # 1 Graf: V vozlišč; 1 Graf: E povezav; N grafov: M uporabnikov
 class Graf:
     ''' Graf združuje vozlišča in povezave. Njegove tehnične informacije hranim v spremenljivki self.tocke, informacije o uporabnikih pa v self.uporabniki'''
-    def __init__(self, tocke={}, uporabniki={}):
+    def __init__(self, stevilka_linije, tocke={}, uporabniki={}, ):
         self.tocke = tocke # {Key: Točka; Value: množica povezav z začetkom v tej točki}
         self.uporabniki = uporabniki # SLOVAR --> Key: Ime; Value: <Objekt Uporabnik>
         # vsak graf bo imel M uporabnikov. Toda tudi vsak uporabnik se lahko vozi po večih grafih.
+        self.stevilka_linije = stevilka_linije
 
     @staticmethod
     def iz_slovarja(slovar):
@@ -126,16 +127,20 @@ class Graf:
             tocke[povezava.vozlisce1].add(povezava)
 
         return Graf(
+            stevilka_linije=int(slovar["stevilka_linije"]),
             tocke=tocke,
             uporabniki={}
         )
+
+    def dobi_ime(self):
+        return f"Linija{self.stevilka_linije}"
 
     def v_slovar(self):
         vse_povezave = []
         for mnozica_povezav in self.tocke.values():
             vse_povezave += list(mnozica_povezav)
         return {
-            # "uporabniki": [uporabnik.v_slovar() for uporabnik in self.uporabniki.values()],
+            "stevilka_linije": self.stevilka_linije,
             "vozlisca": [vozlisce.ime for vozlisce in self.tocke.keys()], # Vozlisce nima svoje funkcije "v_slovar," ker je edina potrebna informacija ime.
             "povezave": [povezava.v_slovar() for povezava in vse_povezave]
         }

@@ -1,6 +1,7 @@
 {
     "grafi": [
         {
+            "stevilka_linije": 1,
             "vozlisca": [
                 "BritofKR",
                 "KranjAP",
@@ -23,18 +24,13 @@
                 },
                 {
                     "zacetek_povezave": "KranjAP",
-                    "konec_povezave": "BritofKR",
-                    "utez": -1
-                },
-                {
-                    "zacetek_povezave": "KranjAP",
                     "konec_povezave": "LjubljanaTivoli",
                     "utez": -1
                 },
                 {
-                    "zacetek_povezave": "LjubljanaTivoli",
-                    "konec_povezave": "FMF",
-                    "utez": 17
+                    "zacetek_povezave": "KranjAP",
+                    "konec_povezave": "BritofKR",
+                    "utez": -1
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
@@ -47,9 +43,9 @@
                     "utez": -1
                 },
                 {
-                    "zacetek_povezave": "PostajaJadranska",
-                    "konec_povezave": "LjubljanaZelezniska",
-                    "utez": -1
+                    "zacetek_povezave": "LjubljanaTivoli",
+                    "konec_povezave": "FMF",
+                    "utez": 17
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
@@ -60,6 +56,11 @@
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "FMF",
                     "utez": 2
+                },
+                {
+                    "zacetek_povezave": "PostajaJadranska",
+                    "konec_povezave": "LjubljanaZelezniska",
+                    "utez": -1
                 },
                 {
                     "zacetek_povezave": "FMF",

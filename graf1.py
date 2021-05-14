@@ -9,7 +9,7 @@ fmf = Vozlisce("FMF")
 ljubljana_zelezniska = Vozlisce("LjubljanaZelezniska")
 kranj_zelezniska = Vozlisce("KranjZelezniska")
 
-graf1 = Graf()
+graf1 = Graf(stevilka_linije=1)
 
 graf1.dodaj_tocke([britof_kr, kranj_ap, ljubljana_tivoli, postaja_jadranska, fmf, ljubljana_zelezniska, kranj_zelezniska])
 
