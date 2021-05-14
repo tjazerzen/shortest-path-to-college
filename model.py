@@ -16,15 +16,15 @@ class Model:
     @staticmethod
     def iz_slovarja(slovar):
         return Model(
-            grafi=[Graf.iz_slovarja(slovar["grafi"][0])]
+            grafi=[Graf.iz_slovarja(graf) for graf in slovar["grafi"]]
         )
     
-    def v_datoteko(self, ime_datoteke="stanje.json"):
+    def v_datoteko(self, ime_datoteke="podatki_grafov.json"):
         with open(ime_datoteke, "w") as datoteka:
             json.dump(self.v_slovar(), datoteka, ensure_ascii=False, indent=4)
     
     @staticmethod
-    def iz_datoteke(ime_datoteke="stanje.json"):
+    def iz_datoteke(ime_datoteke="podatki_grafov.json"):
         with open(ime_datoteke, "r") as datoteka:
             slovar = json.load(datoteka)
             return Model.iz_slovarja(slovar)
@@ -37,7 +37,6 @@ class Model:
 
 # 1 Graf: V vozlišč
 class Vozlisce:
-    ''' Definiran za lažjo back-end konstrukcijo grafa. Pri front-endu pa ne igra bistvene vloge. '''
     def __init__(self, ime):
         self.ime = ime
     
@@ -48,7 +47,6 @@ class Vozlisce:
 class Povezava:
     ''' 
     Konstruira novo usmerjeno povezavo od vozlisce1 do vozlisce2. Za ustvarjanje neusmerjene povezave bom ustvaril dva enosmerna objekta. 
-    Definirana za lažjo back-end konstrukcijo grafa.
     '''
     def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez = -1):
         # vozlisce1 je zacetek povezave, vozlisce2 je konec povezave.
@@ -121,7 +119,7 @@ class Graf:
 
         return Graf(
             tocke=tocke,
-            uporabniki={uporabnik.iz_slovarja.ime: uporabnik.iz_slovarja for uporabnik in slovar["uporabniki"]}
+            uporabniki={}
         )
 
     def v_slovar(self):
@@ -129,7 +127,7 @@ class Graf:
         for mnozica_povezav in self.tocke.values():
             vse_povezave += list(mnozica_povezav)
         return {
-            "uporabniki": [uporabnik.v_slovar() for uporabnik in self.uporabniki.values()],
+            # "uporabniki": [uporabnik.v_slovar() for uporabnik in self.uporabniki.values()],
             "vozlisca": [vozlisce.ime for vozlisce in self.tocke.keys()], # Vozlisce nima svoje funkcije "v_slovar," ker je edina potrebna informacija ime.
             "povezave": [povezava.v_slovar() for povezava in vse_povezave]
         }
@@ -285,6 +283,7 @@ class Iskanje:
             "cas_potovanja": self.cas_potovanja # Enota so minute
         }
     
+    # TODO: Ugotovi, kako deluje Pythonov ISO format. Vem, je primer pri projektu Kuverte.
     @staticmethod
     def iz_slovarja(slovar):
         return Iskanje(

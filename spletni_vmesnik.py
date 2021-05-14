@@ -6,6 +6,7 @@ IME_DATOTEKE = "podatki_grafov"
 moj_model = Model.iz_datoteke(IME_DATOTEKE)
 
 
+
 @bottle.get("/")
 def osnovna_stran():
     return bottle.template(

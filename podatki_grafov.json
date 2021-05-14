@@ -1,0 +1,97 @@
+{
+    "grafi": [
+        {
+            "vozlisca": [
+                "BritofKR",
+                "KranjAP",
+                "LjubljanaTivoli",
+                "PostajaJadranska",
+                "FMF",
+                "LjubljanaZelezniska",
+                "KranjZelezniska"
+            ],
+            "povezave": [
+                {
+                    "zacetek_povezave": "BritofKR",
+                    "konec_povezave": "KranjAP",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "BritofKR",
+                    "konec_povezave": "KranjZelezniska",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "KranjAP",
+                    "konec_povezave": "BritofKR",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "KranjAP",
+                    "konec_povezave": "LjubljanaTivoli",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "LjubljanaTivoli",
+                    "konec_povezave": "FMF",
+                    "utez": 17
+                },
+                {
+                    "zacetek_povezave": "LjubljanaTivoli",
+                    "konec_povezave": "PostajaJadranska",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "LjubljanaTivoli",
+                    "konec_povezave": "KranjAP",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "PostajaJadranska",
+                    "konec_povezave": "LjubljanaZelezniska",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "PostajaJadranska",
+                    "konec_povezave": "LjubljanaTivoli",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "PostajaJadranska",
+                    "konec_povezave": "FMF",
+                    "utez": 2
+                },
+                {
+                    "zacetek_povezave": "FMF",
+                    "konec_povezave": "LjubljanaZelezniska",
+                    "utez": 20
+                },
+                {
+                    "zacetek_povezave": "FMF",
+                    "konec_povezave": "PostajaJadranska",
+                    "utez": 2
+                },
+                {
+                    "zacetek_povezave": "FMF",
+                    "konec_povezave": "LjubljanaTivoli",
+                    "utez": 17
+                },
+                {
+                    "zacetek_povezave": "LjubljanaZelezniska",
+                    "konec_povezave": "KranjZelezniska",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "LjubljanaZelezniska",
+                    "konec_povezave": "FMF",
+                    "utez": 20
+                },
+                {
+                    "zacetek_povezave": "KranjZelezniska",
+                    "konec_povezave": "BritofKR",
+                    "utez": -1
+                }
+            ]
+        }
+    ]
+}

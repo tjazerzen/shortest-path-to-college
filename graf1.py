@@ -1,5 +1,5 @@
 # Datoteka, ki generira naš prvi graf.
-from model import Vozlisce
+from model import Vozlisce, Graf
 
 britof_kr = Vozlisce("BritofKR")
 kranj_ap = Vozlisce("KranjAP")
