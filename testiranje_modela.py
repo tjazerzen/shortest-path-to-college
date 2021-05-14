@@ -5,6 +5,5 @@ moj_model = Model([g1])
 
 moj_model.v_datoteko()
 
-#prvi_uporabnik = Uporabnik("Tjaž Eržen", [])
-
-#prvi_uporabnik.shrani_v_datoteko("podatki_prvega_uporabnika.json")
+prvi_uporabnik = Uporabnik.preberi_iz_datoteke("podatki_prvega_uporabnika.json")
+print(prvi_uporabnik)

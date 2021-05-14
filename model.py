@@ -263,21 +263,27 @@ class Graf:
 # 1 Uporabnik: N iskanj
 class Uporabnik: 
     
-    def __init__(self, ime, prejsna_iskanja=[]):
+    def __init__(self, ime, prejsna_iskanja=[], stevilke_linij=[]):
         self.ime = ime
         self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene
+        self.stevilke_linij = stevilke_linij # Pove nam, po katerih omrežjih se fura uporabnik
 
     def v_slovar(self):
         return {
+            "stevilke_linij": [stevilka_linije for stevilka_linije in self.stevilke_linij],
             "ime": self.ime, 
             "prejsna_iskanja": [iskanje.v_slovar() for iskanje in self.prejsna_iskanja]
         }
+    
+    def __str__(self):
+        return f"Ime: {self.ime}; Prejsna Iskanja: {' '.join([str(_) for _ in self.prejsna_iskanja])}; Številke Linij: {' '.join([str(_) for _ in self.stevilke_linij])}"
     
     @staticmethod
     def iz_slovarja(slovar):
         return Uporabnik(
             ime=slovar["ime"],
-            prejsna_iskanja=[prejsno_iskanje.v_slovar() for prejsno_iskanje in slovar["prejsna_iskanja"]]
+            prejsna_iskanja=[prejsno_iskanje.v_slovar() for prejsno_iskanje in slovar["prejsna_iskanja"]],
+            stevilke_linij=[int(stevilka_linije) for stevilka_linije in slovar["stevilke_linij"]]
         )
     
     def shrani_v_datoteko(self, ime_datoteke):
