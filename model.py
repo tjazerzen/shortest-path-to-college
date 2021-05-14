@@ -14,6 +14,7 @@ class Model:
             "grafi": [graf.v_slovar() for graf in self.grafi]
         }
     
+    
     @staticmethod
     def iz_slovarja(slovar):
         return Model(
@@ -21,11 +22,16 @@ class Model:
         )
     
     def v_datoteko(self, ime_datoteke="podatki_grafov.json"):
+        ''' Bo uporabljena tako za pisanje podatkov o uporabnikih kot za pisanje podatkov o grafih. '''
         with open(ime_datoteke, "w") as datoteka:
             json.dump(self.v_slovar(), datoteka, ensure_ascii=False, indent=4)
     
+    # Za posameznikovo izkušnjo moram prebrati dve datoteki: 
+    # 1. Tisto, ki drži podatke o grafih / voznih linijah
+    # 2. Tisto, ki drži podatke o obstoječem uporabniku (Če ta obstaja)
     @staticmethod
     def iz_datoteke(ime_datoteke="podatki_grafov.json"):
+        ''' Bo uporabljena tako za branje podatkov o uporabnikih kot za branje podatkov o grafih. '''
         with open(ime_datoteke, "r") as datoteka:
             slovar = json.load(datoteka)
             return Model.iz_slovarja(slovar)
@@ -210,7 +216,7 @@ class Graf:
             self.tocke[vozlisce] = {povezava.izracunaj_se(cas_vpogleda) for povezava in seznam_povezav}
         return self.tocke
         
-    def dijkstra(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce):
+    def dijkstra(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, cas_iskanja=datetime.now()):
         # TODO: Razpiši algoritem.
         '''
         Poišče najkrajšo pot od start_vertex do vseh ostalih.
@@ -219,7 +225,7 @@ class Graf:
         Output je oblike (<cena sprehoda>, <pot sprehoda>).
         '''
         # Najprej posodobi uteži na povezavah
-        self.tocke = self.nastavi_vse_povezave()
+        self.tocke = self.nastavi_vse_povezave(cas_vpogleda=cas_iskanja)
         # Definiraj slovarja poti in povezav. 
         # # Namesto slovarja vozlišč sem uporabil seznam povezav, ker v mojem programu objekt povezava drži večjo vlogo in več informacij kot vozlišče.
         slovar_razdalj = {vozlisce: math.inf for vozlisce in self.tocke.keys()}
@@ -254,7 +260,7 @@ class Uporabnik:
     
     def __init__(self, ime, prejsna_iskanja=[]):
         self.ime = ime
-        self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene        
+        self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene
 
     def v_slovar(self):
         return {
@@ -268,14 +274,19 @@ class Uporabnik:
             ime=slovar["ime"],
             prejsna_iskanja=[prejsno_iskanje.v_slovar() for prejsno_iskanje in slovar["prejsna_iskanja"]]
         )
-
+    
+    def shrani_v_datoteko(self, ime_datoteke):
+        with open(ime_datoteke, "w") as datoteka:
+            json.dump(self.v_slovar(), datoteka, ensure_ascii=False, indent=4)
+    
     @staticmethod
-    def iz_datoteke(ime_datoteke):
-        with open(ime_datoteke) as dat:
-            slovar = json.load(dat)
+    def preberi_iz_datoteke(ime_datoteke):
+        with open(ime_datoteke, "r") as datoteka:
+            slovar = json.load(datoteka)
             return Uporabnik.iz_slovarja(slovar)
     
-    #def shrani_v_datoteko()
+    def dodaj_iskanje(self, vozlisce1, vozlisce2, cas_vpogleda, cas_potovanja):
+        pass
 
 # 1 Uporabnik: N iskanj
 class Iskanje:
