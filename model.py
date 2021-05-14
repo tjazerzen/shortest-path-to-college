@@ -1,6 +1,7 @@
 from datetime import datetime, date
 import math
 import json
+from os import stat
 
 # 1 Model: N tranportnih linij = grafov
 class Model:
@@ -98,12 +99,13 @@ class Povezava:
     def __str__(self):
         return f"Začetek povezave: {self.vozlisce1}; Konec povezave: {self.vozlisce2}; Fiksna: {self.fiksna_utez}; utez: {self.utez}"
 
-# 1 Graf: V vozlišč; 1 Graf: E povezav; 1 graf: N uporabnikov
+# 1 Graf: V vozlišč; 1 Graf: E povezav; N grafov: M uporabnikov
 class Graf:
     ''' Graf združuje vozlišča in povezave. Njegove tehnične informacije hranim v spremenljivki self.tocke, informacije o uporabnikih pa v self.uporabniki'''
     def __init__(self, tocke={}, uporabniki={}):
         self.tocke = tocke # {Key: Točka; Value: množica povezav z začetkom v tej točki}
         self.uporabniki = uporabniki # SLOVAR --> Key: Ime; Value: <Objekt Uporabnik>
+        # vsak graf bo imel M uporabnikov. Toda tudi vsak uporabnik se lahko vozi po večih grafih.
 
     @staticmethod
     def iz_slovarja(slovar):
@@ -246,12 +248,13 @@ class Graf:
         ''' Iz seznama prepotovanih poti vrne seznam imen prepotovanih vozlišč. Helper funkcija k outputu za funkcijo dikstra '''
         return [seznam_povezav[0].vozlisce1.ime] + [povezava.vozlisce2.ime for povezava in seznam_povezav]
 
+
 # 1 Uporabnik: N iskanj
 class Uporabnik: 
     
     def __init__(self, ime, prejsna_iskanja=[]):
         self.ime = ime
-        self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene
+        self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene        
 
     def v_slovar(self):
         return {
@@ -265,6 +268,14 @@ class Uporabnik:
             ime=slovar["ime"],
             prejsna_iskanja=[prejsno_iskanje.v_slovar() for prejsno_iskanje in slovar["prejsna_iskanja"]]
         )
+
+    @staticmethod
+    def iz_datoteke(ime_datoteke):
+        with open(ime_datoteke) as dat:
+            slovar = json.load(dat)
+            return Uporabnik.iz_slovarja(slovar)
+    
+    #def shrani_v_datoteko()
 
 # 1 Uporabnik: N iskanj
 class Iskanje:
