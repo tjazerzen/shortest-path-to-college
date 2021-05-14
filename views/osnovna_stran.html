@@ -1,28 +1,31 @@
 <html>
 
 <body>
+    <h1>Opravila</h1>
+    <h2>Najboljši projekt na svetu!</h2>
 
-    <h1> Pozdravljen.</h1>
-
-    <h2> Kako si?</h2>
-    % if nerazporejeno > 0:
-    <h3> Trenutno imaš {{ nerazporejeno }} € nerazporejenih sredstev.</h3>
-    % elif nerazporejeno < 0: 
-    <h3>Pozor!! Razporedil si {{ - nerazporejeno }} € preveč.</h3>
+    % if stevilo_grafov != 0:
+    <h3>Lahko se zapelješ po eni izmed naših {{stevilo_grafov}} voznih linij!</h3>
     % else:
-    <h3>Ves denar je razporejen</h3>
+    <h3>Priskrbi si karto za na avtobus</h3>
     % end
 
+    <h3>Aktualna opravila</h3>
     <ul>
-        % for racun in racuni:
-        <li> {{ racun }}: {{ racun }}</li>
-        %end
-    </ul>
+        % for i in range(10):
+        % if True:
+        <li><del>{{ i * i }}</del></li>
 
-    <form action="/dodaj-racun/">
-        <input type="text" name="ime_racuna">
-        <input type="submit" value="Dodaj račun">
-    </form>
+        <li>
+            Neznano ime opravila
+            <form method="POST" action="/opravi/">
+                <input type="hidden" name="indeks" value="{{indeks}}">
+                <input type="submit" value="opravi!">
+            </form>
+        </li>
+        % end
+        % end
+    </ul>
 
 </body>
 

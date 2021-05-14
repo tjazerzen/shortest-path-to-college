@@ -1,28 +1,23 @@
 import bottle
+from datetime import date
+from model import Model, Uporabnik, Vozlisce
+
+IME_DATOTEKE = "podatki_grafov"
+moj_model = Model.iz_datoteke(IME_DATOTEKE)
+
 
 @bottle.get("/")
-def osnova_stran():
-    if "ime_racuna" in bottle.request.query:
-        print(bottle.request.query["ime_racuna"])
-
+def osnovna_stran():
     return bottle.template(
-        "osnovna_stran.html", 
-        nerazporejeno = -1, 
-        racuni = [i for i in range(10)]
-        )
+        "osnovna_stran.html",
+        stevilo_grafov=len(moj_model.grafi) + 4,
+        indeks=6
+    )
 
-@bottle.get("/dodaj-racun/")
-def dodaj_racun():
-    print(bottle.request.query.getunicode("ime_racuna"))
-    bottle.redirect("/uspesno-dodajanje-racuna/")
-    
 
-@bottle.get("/uspesno-dodajanje-racuna/")
-def uspesno_dodajanje_racuna():
-    return "Uspešno si dodal račun"
+@bottle.get("/uspesno-dodajanje/")
+def uspesno_dodajanje():
+    return "Uspešno si dodXXXal"
 
-@bottle.get("/pozdravi/<ime>/")
-def pozdravi(ime):
-    return f"Živjo, {ime}!"
 
-bottle.run(reloader=True, debug=True) 
+bottle.run(reloader=True, debug=True)
