@@ -1,7 +1,6 @@
 from datetime import datetime, date
 import math
 import json
-from os import stat
 
 
 # 1 Model: N tranportnih linij = grafov
@@ -227,7 +226,6 @@ class Graf:
         return self.tocke
         
     def dijkstra(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, cas_iskanja=datetime.now()):
-        # TODO: Razpiši algoritem.
         '''
         Poišče najkrajšo pot od start_vertex do vseh ostalih.
         Vrne najmanjšo ceno od start_vertex do end_vertex, 
@@ -262,14 +260,14 @@ class Graf:
             vozlisce1=vozlisce_start, 
             vozlisce2=vozlisce_end, 
             cas_vpogleda=cas_iskanja, 
-            cas_iskanja=najkrajsa_pot_do_vozlisca[vozlisce_end],
+            cena_potovanja=najkrajsa_pot_do_vozlisca[vozlisce_end],
             najkrajsa_pot=self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end])
             )
 
     @staticmethod
     def dobi_pot_iz_povezav(seznam_povezav):
         ''' Iz seznama prepotovanih poti vrne seznam imen prepotovanih vozlišč. Helper funkcija k outputu za funkcijo dikstra '''
-        return [seznam_povezav[0].vozlisce1.ime] + [povezava.vozlisce2.ime for povezava in seznam_povezav]
+        return [seznam_povezav[0].vozlisce1] + [povezava.vozlisce2 for povezava in seznam_povezav]
 
 
 # 1 Uporabnik: N iskanj
@@ -299,9 +297,16 @@ class Uporabnik:
             stevilke_linij=[int(stevilka_linije) for stevilka_linije in slovar["stevilke_linij"]]
         )
     
-    def shrani_v_datoteko(self, ime_datoteke):
-        with open(ime_datoteke, "w") as datoteka:
+    def v_datoteko(self):
+        ''' 
+        Uporabnikove podatke shrani v datoteko. 
+        Ime datoteke se ne zahteva, saj ima vsak uporabnik rezervirano svojo datoteko pod imenom "<njegovo/njeno ime>.json"
+        '''
+        with open(self.dobi_ime_datoteke(), "w") as datoteka:
             json.dump(self.v_slovar(), datoteka, ensure_ascii=False, indent=4)
+    
+    def dobi_ime_datoteke(self):
+        return self.ime + ".json"
     
     @staticmethod
     def preberi_iz_datoteke(ime_datoteke):
@@ -319,8 +324,9 @@ class Uporabnik:
         if not graf: # Če nam zgornja funkcija vrne None --> Če linije s tako številko ni
             return
         start_vozlisce, end_vozlisce = graf.tocka(start_vozlisce_ime), graf.tocka(end_vozlisce_ime)
+
         return self.prejsna_iskanja.append(
-                graf.dijkstra(start_vozlisce, end_vozlisce, cas_vpogleda=cas_vpogleda)
+                graf.dijkstra(start_vozlisce, end_vozlisce, cas_iskanja=cas_vpogleda)
                     )
 
     def dodaj_novo_linijo(self, stevilka_linije):
@@ -332,7 +338,8 @@ class Uporabnik:
         if stevilka_linije in self.stevilke_linij: # Če se po tej liniji že vozimo
             return self.vsi_grafi[stevilka_linije]
         if stevilka_linije in self.vsi_grafi.keys(): # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
-            return self.stevilke_linij.append(self.vsi_grafi[stevilka_linije])
+            self.stevilke_linij.append(stevilka_linije)
+            return self.vsi_grafi[stevilka_linije]
         return None # Sicer, taka linija kar ne obstaja.
 
     def dobi_grafe_in_stevilk_linij(self):
@@ -342,10 +349,10 @@ class Uporabnik:
 # 1 Uporabnik: N iskanj
 class Iskanje:
 
-    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cas_potovanja, najkrajsa_pot):
-        self.vozlisce1 = vozlisce1 # Od kod potujemo; input = niz
-        self.vozlisce2 = vozlisce2 # Kam potujemo; input = niz
-        self.cas_potovanja = cas_potovanja # Cena sprehoda od "zacetek" od "konec" v nasem grafu
+    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cena_potovanja, najkrajsa_pot):
+        self.vozlisce1 = vozlisce1 # Od kod potujemo; input = objekt vozlisce
+        self.vozlisce2 = vozlisce2 # Kam potujemo; input = objekt vozlisce
+        self.cena_potovanja = cena_potovanja # Cena sprehoda od "zacetek" od "konec" v nasem grafu
         self.cas_vpogleda = cas_vpogleda # V isoformatu
         self.najkrajsa_pot = najkrajsa_pot # Seznam objektov vozlisce
     
@@ -354,7 +361,7 @@ class Iskanje:
             "zacetek": self.vozlisce1.ime, 
             "konec": self.vozlisce2.ime, 
             "cas_evidence": date.isoformat(self.cas_vpogleda), 
-            "cas_potovanja": self.cas_potovanja, # Enota so minute
+            "cena_potovanja": self.cena_potovanja, # Enota so minute
             "najkrajsa_pot": [vozlisce.ime for vozlisce in self.najkrajsa_pot]
         }
     
@@ -365,6 +372,11 @@ class Iskanje:
             vozlisce1=Vozlisce(slovar["zacetek"]), 
             vozlisce2=Vozlisce(slovar["konec"]), 
             cas_vpogleda=date.fromisoformat(slovar["cas_evidence"]), 
-            cas_potovanja=int(slovar["cas_potovanja"]),
+            cas_potovanja=int(slovar["cena_potovanja"]),
             najkrajsa_pot=[Vozlisce(ime_vozlisca) for ime_vozlisca in slovar["najkrajsa_pot"]]
             )
+    
+    def __str__(self):
+        output1 = f"Začetno vozlišče: {self.vozlisce1.ime}; Končno vozlišče: {self.vozlisce2.ime}; Cas vpogleda {self.cas_vpogleda};"
+        output2 = f"Cena sprehoda: {self.cena_potovanja}; Najkrajša pot: {' '.join([vozlisce.ime for vozlisce in self.najkrajsa_pot])}"
+        return output1 + output2
