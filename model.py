@@ -3,17 +3,19 @@ import math
 import json
 from os import stat
 
+
 # 1 Model: N tranportnih linij = grafov
 class Model:
     ''' Krovni objekt, ki povezuje moj program.'''
+    
     def __init__(self, grafi=[]):
-        self.grafi = grafi
+        # Pozorni čitalec bo opazil, da se model inicializira z seznamom, razredna spremenljivka pa je slovar.
+        self.grafi = {graf.stevilka_linije : graf for graf in grafi}
     
     def v_slovar(self):
         return {
-            "grafi": [graf.v_slovar() for graf in self.grafi]
+            "grafi": [graf.v_slovar() for graf in self.grafi.values()]
         }
-    
     
     @staticmethod
     def iz_slovarja(slovar):
@@ -36,11 +38,15 @@ class Model:
             slovar = json.load(datoteka)
             return Model.iz_slovarja(slovar)
 
+    # Naslednja stvar
+
     def dodaj_nov_graf(self, graf):
         ''' Doda nov graf v seznam self.grafi. Če točko tak graf obstaja, vrne obstoječi graf, sicer pa nov objekt doda v naš seznam self.grafi ter ta objekt vrne.'''
-        if graf in self.grafi:
+        if graf in self.grafi.values():
             return graf
-        return self.grafi.append(graf)
+        self.grafi[graf.stevilka_linije] = graf
+        return self.grafi[graf.stevilka_linije]
+
 
 # 1 Graf: V vozlišč
 class Vozlisce:
@@ -208,9 +214,8 @@ class Graf:
         return self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez))
     
     def __str__(self):
-
         ''' Izpiše nam podatke o našem grafu. '''
-        izpis = ""
+        izpis = f"Ime grafa: " + self.dobi_ime() + "\n"
         for tocka in self.tocke.keys():
             izpis += tocka.ime + ": [" + "; ".join([sosednja_povezava.vozlisce2.ime + ": " + str(sosednja_povezava.utez) for sosednja_povezava in self.tocke[tocka]]) + "]\n"
         return izpis
@@ -227,7 +232,7 @@ class Graf:
         Poišče najkrajšo pot od start_vertex do vseh ostalih.
         Vrne najmanjšo ceno od start_vertex do end_vertex, 
         zraven pa skonstruira še našo pot potovanja.
-        Output je oblike (<cena sprehoda>, <pot sprehoda>).
+        Vrne nov objekt Iskanje.
         '''
         # Najprej posodobi uteži na povezavah
         self.tocke = self.nastavi_vse_povezave(cas_vpogleda=cas_iskanja)
@@ -252,7 +257,14 @@ class Graf:
                         slovar_razdalj[sosednje_vozlisce] = nova_razdalja_do_vozlisca
                         slovar_povezav[sosednje_vozlisce] = slovar_povezav[trenutno_vozlisce] + [sosednja_povezava]
 
-        return najkrajsa_pot_do_vozlisca[vozlisce_end], slovar_povezav[vozlisce_end]
+        #return najkrajsa_pot_do_vozlisca[vozlisce_end], slovar_povezav[vozlisce_end]
+        return Iskanje(
+            vozlisce1=vozlisce_start, 
+            vozlisce2=vozlisce_end, 
+            cas_vpogleda=cas_iskanja, 
+            cas_iskanja=najkrajsa_pot_do_vozlisca[vozlisce_end],
+            najkrajsa_pot=self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end])
+            )
 
     @staticmethod
     def dobi_pot_iz_povezav(seznam_povezav):
@@ -265,8 +277,9 @@ class Uporabnik:
     
     def __init__(self, ime, prejsna_iskanja=[], stevilke_linij=[]):
         self.ime = ime
-        self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene
+        self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene. Vsak element je objekt razreda iskanje.
         self.stevilke_linij = stevilke_linij # Pove nam, po katerih omrežjih se fura uporabnik
+        self.vsi_grafi = Model.iz_datoteke("podatki_grafov.json").grafi
 
     def v_slovar(self):
         return {
@@ -296,24 +309,53 @@ class Uporabnik:
             slovar = json.load(datoteka)
             return Uporabnik.iz_slovarja(slovar)
     
-    def dodaj_iskanje(self, vozlisce1, vozlisce2, cas_vpogleda, cas_potovanja):
-        pass
+    def dodaj_iskanje(self, start_vozlisce_ime, end_vozlisce_ime, stevilka_linije, cas_vpogleda=datetime.now()):
+        ''' 
+        Doda nov objekt Iskanje v odvisnosti od zgovrnjih parametrov.
+        Z argumentom stevilka_linije dostopamo do specifičnega grafa, potem pa na tem grafu samo pokličemo algoritem dijkstra s preostalimi parametri.
+        Vrne objekt Iskanje
+        '''
+        graf = self.dodaj_novo_linijo(stevilka_linije)
+        if not graf: # Če nam zgornja funkcija vrne None --> Če linije s tako številko ni
+            return
+        start_vozlisce, end_vozlisce = graf.tocka(start_vozlisce_ime), graf.tocka(end_vozlisce_ime)
+        return self.prejsna_iskanja.append(
+                graf.dijkstra(start_vozlisce, end_vozlisce, cas_vpogleda=cas_vpogleda)
+                    )
 
+    def dodaj_novo_linijo(self, stevilka_linije):
+        ''' 
+        Doda novo linijo za uporabnika. Vrne pripadajoči graf s to številko 
+        Če se uporabnik po tej liniji že vozi, vrne to linijo (graf).
+        Če take številke linije ni, vrne None
+        '''
+        if stevilka_linije in self.stevilke_linij: # Če se po tej liniji že vozimo
+            return self.vsi_grafi[stevilka_linije]
+        if stevilka_linije in self.vsi_grafi.keys(): # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
+            return self.stevilke_linij.append(self.vsi_grafi[stevilka_linije])
+        return None # Sicer, taka linija kar ne obstaja.
+
+    def dobi_grafe_in_stevilk_linij(self):
+        ''' Vrne nam podmnozico slovarja vsi_grafi --> samo tiste, po katerih se naš uporabnik vozi '''
+        # Key - številka linije; Value - Objekt graf
+        return {graf.stevilka_linije : graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij}
 # 1 Uporabnik: N iskanj
 class Iskanje:
 
-    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cas_potovanja):
+    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cas_potovanja, najkrajsa_pot):
         self.vozlisce1 = vozlisce1 # Od kod potujemo; input = niz
         self.vozlisce2 = vozlisce2 # Kam potujemo; input = niz
         self.cas_potovanja = cas_potovanja # Cena sprehoda od "zacetek" od "konec" v nasem grafu
         self.cas_vpogleda = cas_vpogleda # V isoformatu
+        self.najkrajsa_pot = najkrajsa_pot # Seznam objektov vozlisce
     
     def v_slovar(self):
         return {
             "zacetek": self.vozlisce1.ime, 
             "konec": self.vozlisce2.ime, 
             "cas_evidence": date.isoformat(self.cas_vpogleda), 
-            "cas_potovanja": self.cas_potovanja # Enota so minute
+            "cas_potovanja": self.cas_potovanja, # Enota so minute
+            "najkrajsa_pot": [vozlisce.ime for vozlisce in self.najkrajsa_pot]
         }
     
     # TODO: Ugotovi, kako deluje Pythonov ISO format. Vem, je primer pri projektu Kuverte.
@@ -323,5 +365,6 @@ class Iskanje:
             vozlisce1=Vozlisce(slovar["zacetek"]), 
             vozlisce2=Vozlisce(slovar["konec"]), 
             cas_vpogleda=date.fromisoformat(slovar["cas_evidence"]), 
-            cas_potovanja=int(slovar["cas_potovanja"])
+            cas_potovanja=int(slovar["cas_potovanja"]),
+            najkrajsa_pot=[Vozlisce(ime_vozlisca) for ime_vozlisca in slovar["najkrajsa_pot"]]
             )
