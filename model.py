@@ -1,9 +1,17 @@
 from datetime import datetime, date
 import math
 import json
+import hashlib
 
+
+def zasifriraj_geslo(geslo_v_cistopisu):
+    h = hashlib.blake2b()
+    h.update(geslo_v_cistopisu.encode(encoding="utf-8"))
+    return h.hexdigest()
 
 # 1 Model: N tranportnih linij = grafov
+# TODO: Ustvari funkcijo, ki se iz modela sprehodi po vseh grafih, znotraj njega po vseh uporabnikih ter potem vrne
+#       najbolj popularna iskanja
 class Model:
     ''' Krovni objekt, ki povezuje moj program.'''
     
@@ -101,6 +109,7 @@ class Povezava:
         return f"Začetek povezave: {self.vozlisce1}; Konec povezave: {self.vozlisce2}; Fiksna: {self.fiksna_utez}; utez: {self.utez}"
 
 # 1 Graf: V vozlišč; 1 Graf: E povezav; N grafov: M uporabnikov
+# TODO: Ustvari več tekstovnih datotek in več grafov.
 class Graf:
     ''' Objekt, ki povezuje objekta Vozlisce in Povezave na eni strani, ter objekt Uporabnik na drugi. '''
     def __init__(self, stevilka_linije, tocke={}, uporabniki={}, ):
@@ -254,22 +263,25 @@ class Graf:
         ''' Iz seznama prepotovanih poti vrne seznam imen prepotovanih vozlišč. Helper funkcija k outputu za funkcijo dikstra '''
         return [seznam_povezav[0].vozlisce1] + [povezava.vozlisce2 for povezava in seznam_povezav]
 
-# Globalna spremenljivka ki drži informacije o vseh možnih grafih. V glavnem uporabljena v razredu Uporabnik ter Iskanje.
+# Globalna spremenljivka ki drži informacije o vseh možnih grafih.
 global vsi_grafi
 vsi_grafi = Model.iz_datoteke("podatki_grafov.json").grafi
 
 # 1 Uporabnik: N iskanj
 class Uporabnik: 
     
-    def __init__(self, ime, prejsna_iskanja=[], stevilke_linij=[]):
+    # TODO: Ugotovi, če res potrebuješ spremenljivki prejsna_iskanja ter stevilke_linij
+    def __init__(self, ime, zasifrirano_geslo, prejsna_iskanja=[], stevilke_linij=[]):
         self.ime = ime
         self.prejsna_iskanja = prejsna_iskanja # Evidenca iskanj. Kronološko urejene. Vsak element je objekt razreda iskanje.
         self.stevilke_linij = stevilke_linij # Pove nam, po katerih omrežjih se fura uporabnik
         # Pozoren gledalec opazi, da to vsi_grafi niso argument v funkciji inicializacije, temveč globalna spremenljivka 10 vrstic višje
         self.vsi_grafi = vsi_grafi
+        self.zasifrirano_geslo = zasifrirano_geslo
 
     def v_slovar(self):
         return {
+            "zasifrirano_geslo": self.zasifrirano_geslo,
             "stevilke_linij": self.stevilke_linij,
             "ime": self.ime, 
             "prejsna_iskanja": [iskanje.v_slovar() for iskanje in self.prejsna_iskanja]
@@ -282,6 +294,7 @@ class Uporabnik:
     def iz_slovarja(slovar):
         return Uporabnik(
             ime=slovar["ime"],
+            zasifrirano_geslo=slovar["zasifrirano_geslo"],
             prejsna_iskanja=[Iskanje.iz_slovarja(prejsno_iskanje) for prejsno_iskanje in slovar["prejsna_iskanja"]],
             stevilke_linij=[int(stevilka_linije) for stevilka_linije in slovar["stevilke_linij"]]
         )
@@ -296,7 +309,7 @@ class Uporabnik:
     
     @staticmethod
     def dobi_ime_datoteke(ime):
-        return ime + ".json"
+        return f"{ime}.json"
     
     @staticmethod
     def iz_datoteke(ime):
@@ -304,10 +317,16 @@ class Uporabnik:
         Uporabnikove podatke prebere iz datoteke. 
         Ime datoteke se ne zahteva, saj ima vsak uporabnik rezervirano svojo datoteko pod imenom "<njegovo/njeno ime>.json"
         '''
-        with open(Uporabnik.dobi_ime_datoteke(ime), "r") as datoteka:
+        with open(Uporabnik.dobi_ime_datoteke(ime)) as datoteka:
             slovar = json.load(datoteka)
             return Uporabnik.iz_slovarja(slovar)
     
+    def preveri_geslo(self, geslo_v_cistopisu): 
+        return self.zasifrirano_geslo == zasifriraj_geslo(geslo_v_cistopisu)
+
+    def nastavi_geslo(self, geslo_v_cistopisu):
+        self.zasifrirano_geslo = zasifriraj_geslo(geslo_v_cistopisu)
+
     def dodaj_iskanje(self, start_vozlisce_ime, end_vozlisce_ime, stevilka_linije, cas_vpogleda=datetime.now()):
         ''' 
         Doda nov objekt Iskanje v odvisnosti od zgornjih parametrov.
@@ -332,7 +351,7 @@ class Uporabnik:
             return self.vsi_grafi[stevilka_linije]
         return None # Sicer, taka linija kar ne obstaja.
 
-    def dobi_grafe_in_stevilk_linij(self):
+    def dobi_grafe_iz_stevilk_linij(self):
         ''' Vrne nam podmnozico slovarja vsi_grafi --> samo tiste, po katerih se naš uporabnik vozi '''
         # Key - številka linije; Value - Objekt graf
         return {graf.stevilka_linije : graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij}
