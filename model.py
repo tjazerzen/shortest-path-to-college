@@ -138,11 +138,11 @@ class Graf:
         return Graf(stevilka_linije=int(slovar["stevilka_linije"]), tocke=tocke, uporabniki={})
 
     def dobi_ime_linije(self):
-        return f"Linija{self.stevilka_linije}"
+        return f"Linija{self.stevilka_linije}".upper()
     
     def izpis_linije(self):
         ''' Funkcija, ki nam bo služila v front-endu. Izpiše nam vse povezave v tem grafu'''
-        return f"{self.dobi_ime_linije()}: {'  '.join([str(_) for _ in self.tocke.keys()])}"
+        return f"{self.dobi_ime_linije()}: {' - '.join([str(_) for _ in self.tocke.keys()])}"
 
     def v_slovar(self):
         ''' Funkcija, uporabljena za zapis informacij grafa v slovar. '''

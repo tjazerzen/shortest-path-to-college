@@ -1,16 +1,16 @@
 % zavihki = [
-%     'proracun',
+%     'najkrajsa_voznja',
 %     'analiza',
 %     'pomoc'
 % ]
 % oznaka_zavihka = {
-%     'proracun': 'Vodenje proračuna',
-%     'analiza': 'Analiza porabe',
+%     'najkrajsa_voznja': 'Dobi najkrajšo vožnjo',
+%     'analiza': 'Analiza prevoznikov',
 %     'pomoc': 'Pomoč'
 % }
 % ikona_zavihka = {
-%     'proracun': 'fas fa-wallet',
-%     'analiza': 'fas fa-chart-line',
+%     'najkrajsa_voznja': 'fas fa-truck-monster',
+%     'analiza': 'fas fa-hourglass',
 %     'pomoc': 'far fa-question-circle'
 % }
 <!DOCTYPE html>
@@ -18,10 +18,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    % if defined('izbrani_zavihek'):
-    <title>Kuverte – {{oznaka_zavihka[izbrani_zavihek]}}</title>
+    % if False:#defined('izbrani_zavihek'):
+    <title>Najkrajša vožnja – {{oznaka_zavihka[izbrani_zavihek]}}</title>
     % else:
-    <title>Kuverte</title>
+    <title>Najkrajša vožnja</title>
     % end
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
@@ -33,9 +33,9 @@
         <div class="navbar-brand">
           <span class="navbar-item">
             <span class="icon">
-              <i class="fas fa-money-bill-wave"></i>
+              <i class=""></i>
             </span>
-            <strong>Kuverte</strong>
+            Prikaži vse vozne linije
           </span>
         </div>
         <div class="navbar-start">
