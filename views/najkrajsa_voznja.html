@@ -1,0 +1,146 @@
+<h1>Pozdravljen {{uporabnik.ime}}</h1>
+
+<div class="columns">
+    <div class="column is-one-fifth">
+      <nav class="panel">
+        <p class="panel-heading">
+          <i class="fas fa-exchange-alt"></i>
+          Išči:
+        </p>
+        % include('_prikaz_stanja.html', ime='nerazporejeno', stanje=15)
+        % # To je hardcodano, namestanjenjeno testiranju. Kanseje bom spremenil.
+        <div class="panel-block">
+          <form action="/premakni-denar/" method="POST">
+
+
+            <div class="control has-icons-left">
+                <div class="select is-fullwidth is-small">
+                  <select name="polje_stevilka_linije">
+                    % if defined('oznaka'):
+                      <option disabled selected>Številka linije</option>
+                    % end
+                    <option value="">
+                      Številka linije
+                    </option>
+                    % for i in range(1, 5): # To bom spremenil
+                      <option value="stevilka_linije">
+                        {{i}}
+                      </option>
+                    % end
+                  </select>
+                </div>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-sign-out-alt"></i>
+                </span>
+              </div>
+
+            <div class="field">
+              % include('_izberi_kuverto.html', name='kraj_zacetka', oznaka='Vstop', icon='fas fa-sign-out-alt')
+            </div>
+            <div class="field">
+              % include('_izberi_kuverto.html', name='kraj_konca', oznaka='Izstop', icon='fas fa-sign-in-alt')
+            </div>
+            <div class="field">
+                % include('_izberi_cas_odhoda.html', name='najbolj_zgoden_cas_odhoda')
+              </div>
+            <div class="field has-addons">
+              <div class="control">
+                
+              </div>
+              <div class="control">
+                <button class="button is-info is-small">premakni</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </nav>
+
+      <nav class="panel">
+        <p class="panel-heading">
+          <i class="fas fa-piggy-bank"></i>
+          Tvoje vozne linije *Tukaj bodo podatki o voznih linijah, ki si jih je posameznik dodal*
+        </p>
+        % for racun in [5, 6, 7, 8, 9]:
+        % include('_prikaz_stanja.html', ime=str(racun*racun) + " test", stanje=100)
+        % end
+        <div class="panel-block">
+          <form action="/dodaj-racun/" method="POST">
+            <div class="field has-addons">
+              <div class="control">
+                <input class="input is-small" type="text" placeholder="dodaj novo vozno linijo" name="stevilka_nove_linije">
+                <!-- Tukaj bi lahko prišle izbire linij, ki so še preostale-->
+              </div>
+              <div class="control">
+                <input type="submit" class="button is-small" value="dodaj">
+              </div>
+            </div>
+          </form>
+        </div>
+      </nav>
+    </div>
+    Evidenca tvojih preteklih iskanj
+
+    <div class="column">
+        <table class="table is-hoverable is-fullwidth">
+          <thead>
+            <tr>
+              <th>datum</th>
+              <th>račun</th>
+              <th>kuverta</th>
+              <th>znesek</th>
+              <th>opis</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <form action="/dodaj-preliv/" method="POST">
+              <tr>
+                <td></td>
+                <td>
+                  % include('_izberi_racun.html', name='racun')
+                </td>
+                <td>
+                  % include('_izberi_kuverto.html', name='kuverta', icon='fas fa-envelope')
+                </td>
+                <td>
+                  % include('_izberi_znesek.html', name='znesek')
+                </td>
+                <td>
+                  <div class="control has-icons-left">
+                    <input class="input is-small" type="text" name="opis" placeholder="opis">
+                    <span class="icon is-small is-left">
+                      <i class="far fa-sticky-note"></i>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div class="control">
+                    <button class="button is-info is-small">dodaj</button>
+                  </div>
+                </td>
+              </tr>
+            </form>
+            % for preliv in sorted(proracun.prelivi, reverse=True):
+            <tr>
+              <td>{{preliv.datum}}</td>
+              <td>{{preliv.racun.ime}}</td>
+              <td>
+                % if preliv.kuverta is None:
+                nerazporejeno
+                % else:
+                {{preliv.kuverta.ime}}
+                % end
+              </td>
+              <td>
+                % include('_prikaz_zneska.html', znesek=preliv.znesek)
+              </td>
+              <td>{{preliv.opis}}</td>
+              <td></td>
+            </tr>
+            % end
+          </tbody>
+        </table>
+      </div>
+
+
+</div>
