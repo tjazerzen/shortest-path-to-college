@@ -1,18 +1,16 @@
-<h1>Pozdravljen {{uporabnik.ime}}</h1>
+<b>Pozdravljen, {{uporabnik.ime}}</b>
 
 <div class="columns">
     <div class="column is-one-fifth">
       <nav class="panel">
         <p class="panel-heading">
           <i class="fas fa-exchange-alt"></i>
-          Išči:
+          <!--Išči:-->
         </p>
-        % include('_prikaz_stanja.html', ime='nerazporejeno', stanje=15)
-        % # To je hardcodano, namestanjenjeno testiranju. Kanseje bom spremenil.
+        <!--% include('_prikaz_stanja.html', ime='nerazporejeno', stanje=15)-->
+        Kam potuješ danes?
         <div class="panel-block">
           <form action="/premakni-denar/" method="POST">
-
-
             <div class="control has-icons-left">
                 <div class="select is-fullwidth is-small">
                   <select name="polje_stevilka_linije">
@@ -20,9 +18,9 @@
                       <option disabled selected>Številka linije</option>
                     % end
                     <option value="">
-                      Številka linije
+                      Številka vozne linije
                     </option>
-                    % for i in range(1, 5): # To bom spremenil
+                    % for i in range(1, len(uporabnik.vsi_grafi) + 1): # To bom spremenil
                       <option value="stevilka_linije">
                         {{i}}
                       </option>
@@ -78,6 +76,7 @@
         </div>
       </nav>
     </div>
+
     Evidenca tvojih preteklih iskanj
 
     <div class="column">
@@ -97,13 +96,14 @@
               <tr>
                 <td></td>
                 <td>
-                  % include('_izberi_racun.html', name='racun')
+                  % include('_izberi_racun.html', name='racun') # datoteko sem modificiral, da se ne sesuje
                 </td>
                 <td>
-                  % include('_izberi_kuverto.html', name='kuverta', icon='fas fa-envelope')
+                  % #include('_izberi_kuverto.html', name='kuverta', icon='fas fa-envelope') # datoteko sem modificiral, da se ne sesuje
+                  % #TODO: Spremeni
                 </td>
                 <td>
-                  % include('_izberi_znesek.html', name='znesek')
+                  % include('_izberi_znesek.html', name='znesek') # Mislim, da se ne bo sesulo, še vseeno pa gre poskusiti
                 </td>
                 <td>
                   <div class="control has-icons-left">
@@ -120,21 +120,21 @@
                 </td>
               </tr>
             </form>
-            % for preliv in sorted(proracun.prelivi, reverse=True):
+            % for i in range(20):
             <tr>
-              <td>{{preliv.datum}}</td>
-              <td>{{preliv.racun.ime}}</td>
+              <td>{{2*i - 12}}</td>  <!--Bom spremenil-->
+              <td>{{4*i}}</td> <!--Bom spremenil-->
               <td>
-                % if preliv.kuverta is None:
+                % if True: # Bom spremenil
                 nerazporejeno
                 % else:
                 {{preliv.kuverta.ime}}
                 % end
               </td>
               <td>
-                % include('_prikaz_zneska.html', znesek=preliv.znesek)
+                % include('_prikaz_zneska.html', znesek=64)
               </td>
-              <td>{{preliv.opis}}</td>
+              <td>Za enkrat imam samo eno vozno linijo</td>
               <td></td>
             </tr>
             % end
