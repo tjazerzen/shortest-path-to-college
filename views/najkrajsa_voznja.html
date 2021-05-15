@@ -8,35 +8,49 @@
           <!--Išči:-->
         </p>
         <!--% include('_prikaz_stanja.html', ime='nerazporejeno', stanje=15)-->
-        Kam potuješ danes?
+        
+      </nav>
+
+      <nav class="panel">
+        <p class="panel-heading">
+          <i class="fas fa-piggy-bank"></i>
+          Tvoje izbrane vozne linije
+        </p>
+        
+        % for graf in uporabnik.vsi_grafi:
+            {{graf.izpis_linije()}}
+        % end
         <div class="panel-block">
-          <form action="/premakni-denar/" method="POST">
+
+          <form action="/dodaj_linijo/" method="POST">
             <div class="control has-icons-left">
                 <div class="select is-fullwidth is-small">
+                    
                   <select name="polje_stevilka_linije">
                     % if defined('oznaka'):
                       <option disabled selected>Številka linije</option>
                     % end
-                    <option value="">
-                      Številka vozne linije
-                    </option>
-                    % for i in range(1, len(uporabnik.vsi_grafi) + 1): # To bom spremenil
-                      <option value="stevilka_linije">
-                        {{i}}
-                      </option>
+                    <option value="">Dodaj nov peron</option>
+                    % for graf in uporabnik.vsi_grafi: # To bom spremenil
+                      <option value="stevilka_linije">{{graf.stevilka_linije}}</option>
                     % end
                   </select>
+                  <div class="control"><input type="submit" class="button is-small" value="dodaj"></div>
                 </div>
-                <span class="icon is-small is-left">
-                  <i class="fas fa-sign-out-alt"></i>
-                </span>
-              </div>
+                <span class="icon is-small is-left"><i class="fas fa-sign-out-alt"></i></span>
+            </div>
+          </form>
+        </div>
 
+        <div class="panel-block">
+          <form action="/premakni-denar/" method="POST">
+              
+            Kam pa danes potuješ? Izberi postajališči iz istih linij!
             <div class="field">
-              % include('_izberi_kuverto.html', name='kraj_zacetka', oznaka='Vstop', icon='fas fa-sign-out-alt')
+              % include('_izberi_tocko.html', name='kraj_zacetka', oznaka='Vstop', icon='fas fa-sign-out-alt')
             </div>
             <div class="field">
-              % include('_izberi_kuverto.html', name='kraj_konca', oznaka='Izstop', icon='fas fa-sign-in-alt')
+              % include('_izberi_tocko.html', name='kraj_konca', oznaka='Izstop', icon='fas fa-sign-in-alt')
             </div>
             <div class="field">
                 % include('_izberi_cas_odhoda.html', name='najbolj_zgoden_cas_odhoda')
@@ -46,49 +60,27 @@
                 
               </div>
               <div class="control">
-                <button class="button is-info is-small">premakni</button>
+                <button class="button is-info is-small">Išči</button>
               </div>
             </div>
           </form>
         </div>
-      </nav>
 
-      <nav class="panel">
-        <p class="panel-heading">
-          <i class="fas fa-piggy-bank"></i>
-          Tvoje vozne linije *Tukaj bodo podatki o voznih linijah, ki si jih je posameznik dodal*
-        </p>
-        % for racun in [5, 6, 7, 8, 9]:
-        % include('_prikaz_stanja.html', ime=str(racun*racun) + " test", stanje=100)
-        % end
-        <div class="panel-block">
-          <form action="/dodaj-racun/" method="POST">
-            <div class="field has-addons">
-              <div class="control">
-                <input class="input is-small" type="text" placeholder="dodaj novo vozno linijo" name="stevilka_nove_linije">
-                <!-- Tukaj bi lahko prišle izbire linij, ki so še preostale-->
-              </div>
-              <div class="control">
-                <input type="submit" class="button is-small" value="dodaj">
-              </div>
-            </div>
-          </form>
-        </div>
       </nav>
     </div>
 
-    Evidenca tvojih preteklih iskanj
+    <h3>Evidenca tvojih preteklih iskanj</h3>
 
     <div class="column">
         <table class="table is-hoverable is-fullwidth">
           <thead>
             <tr>
-              <th>datum</th>
-              <th>račun</th>
-              <th>kuverta</th>
-              <th>znesek</th>
-              <th>opis</th>
-              <th></th>
+              <th>Datum</th>
+              <th>Številka relacije</th>
+              <th>Začetek</th>
+              <th>Konec</th>
+              <th>Trajanje potovanja</th>
+              <th>Najhitrejša pot</th>
             </tr>
           </thead>
           <tbody>
@@ -120,7 +112,7 @@
                 </td>
               </tr>
             </form>
-            % for i in range(20):
+            % for i in range(len(uporabnik.prejsna_iskanja) + 4):
             <tr>
               <td>{{2*i - 12}}</td>  <!--Bom spremenil-->
               <td>{{4*i}}</td> <!--Bom spremenil-->

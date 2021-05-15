@@ -139,6 +139,10 @@ class Graf:
 
     def dobi_ime_linije(self):
         return f"Linija{self.stevilka_linije}"
+    
+    def izpis_linije(self):
+        ''' Funkcija, ki nam bo služila v front-endu. Izpiše nam vse povezave v tem grafu'''
+        return f"{self.dobi_ime_linije()}: {'  '.join([str(_) for _ in self.tocke.keys()])}"
 
     def v_slovar(self):
         ''' Funkcija, uporabljena za zapis informacij grafa v slovar. '''
@@ -275,7 +279,16 @@ class Graf:
 
 # Globalna spremenljivka ki drži informacije o vseh možnih grafih.
 global vsi_grafi
-vsi_grafi = Model.iz_datoteke("podatki_grafov.json").grafi
+vsi_grafi = Model.iz_datoteke("podatki_grafov.json").grafi.values()
+
+global vse_tocke
+vse_tocke = []
+for graf in vsi_grafi:
+    vse_tocke += graf.tocke.keys()
+
+
+#global vsi_grafi_dict
+#vsi_grafi_dict = {graf.stevilka_linije : graf for graf in vsi_grafi}
 
 
 # 1 Uporabnik: N iskanj
@@ -289,6 +302,7 @@ class Uporabnik:
         # Pozoren gledalec opazi, da to vsi_grafi niso argument v funkciji inicializacije, temveč globalna spremenljivka 10 vrstic višje
         self.vsi_grafi = vsi_grafi
         self.zasifrirano_geslo = zasifrirano_geslo
+        self.vse_tocke = vse_tocke
 
     def v_slovar(self):
         return {
@@ -367,6 +381,9 @@ class Uporabnik:
         ''' Vrne nam podmnozico slovarja vsi_grafi --> samo tiste, po katerih se naš uporabnik vozi '''
         # Key - številka linije; Value - Objekt graf
         return {graf.stevilka_linije: graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij}
+    
+    def dobi_svoje_sezname_grafov(self):
+        return [graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij]
 
 
 # 1 Uporabnik: N iskanj

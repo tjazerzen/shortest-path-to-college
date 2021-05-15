@@ -4,12 +4,10 @@
         % if defined('oznaka'):
           <option disabled selected>{{oznaka}}</option>
         % end
-        <option value="">
-          nerazporejeno
-        </option>
-        % for i in range(10): # To bom spremenil
+        
+        % for tocka in uporabnik.vse_tocke: # To bom spremenil
           <option value="Tukaj bi moralo biti ime kuverte">
-            {{i*i}}
+            {{tocka.ime}}
           </option>
         % end
       </select>
