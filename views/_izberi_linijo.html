@@ -1,9 +1,20 @@
-330 572
-430 672
-530 772
-630 874
-730 975
-830 1071
-930 1170
-1030 1276
-1130 1372
+<div class="control has-icons-left">
+    <div class="select is-fullwidth is-small">
+      <select name="{{name}}">
+        % if defined('oznaka'):
+          <option disabled selected>{{oznaka}}</option>
+        % end
+        <option value="">
+          nerazporejeno
+        </option>
+        % for i in range(10): # To bom spremenil
+          <option value="Tukaj bi moralo biti ime kuverte">
+            {{i*i}}
+          </option>
+        % end
+      </select>
+    </div>
+    <span class="icon is-small is-left">
+      <i class="{{icon}}"></i>
+    </span>
+  </div>

@@ -1,9 +1,158 @@
-330 567
-430 670
-530 770
-630 873
-730 975
-830 1070
-930 1171
-1030 1272
-1130 1369
+% rebase('base.html', izbrani_zavihek='najkrajsa_voznja')
+
+<div class="columns">
+    <div class="column is-one-third">
+        <nav class="panel">
+            <p class="panel-heading">Pozdravljen, {{uporabnik.ime}}!</p>
+
+        </nav>
+
+        <nav class="panel">
+            <p class="panel-heading">Tvoje izbrane vozne linije</p>
+            <div class="panel-block">
+                <div class="content is-medium">
+                    Tvoje najljubše vozne linije so:<br>
+                    <ul>
+                        % for graf in uporabnik.vsi_grafi:
+                        % if graf.stevilka_linije == 1:
+                        <li>{{graf.izpis_linije()}}. FMF pa najljubša destinacija, jasno :D</li>
+                        % else:
+                        <li>{{graf.izpis_linije()}}</li>
+                        %end
+                    </ul>
+                </div>
+                % end
+
+            </div>
+        </nav>
+
+        <nav class="panel">
+            <p class="panel-heading">Dodaj nov peron</p>
+            <div class="panel-block">
+                <form action="/dodaj_linijo/" method="POST">
+
+                    <div class="control has-icons-left">
+                        <div class="select is-fullwidth is-small">
+                            <select name="polje_stevilka_linije">
+                                % if defined('oznaka'):
+                                <option disabled selected>Številka linije</option>
+                                % end
+                                <option value="stevilka_novega_perona">Dodaj nov peron</option>
+                                % for graf in uporabnik.vsi_grafi: # To bom spremenil
+                                <option value="stevilka_linije">{{graf.stevilka_linije}}</option>
+                                % end
+                            </select>
+                            <div class="field"><input type="submit" class="button is-small" value="dodaj"></div>
+                            <button class="button is-info is-small">Išči</button>
+                            <span class="icon is-small is-left"><i class="fas fa-plus"></i></span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </nav>
+
+
+
+
+        <nav class="panel">
+            <p class="panel-heading">išči!</p>
+            <div class="panel-block">
+
+                <form action="/premakni-denar/" method="POST">
+
+                    Kam pa danes potuješ? Izberi postajališči iz istih linij!
+                    <div class="field">
+                        % include('_izberi_tocko.html', name='kraj_zacetka', oznaka='Vstop', icon='fas fa-sign-out-alt')
+                    </div>
+                    <div class="field">
+                        % include('_izberi_tocko.html', name='kraj_konca', oznaka='Izstop', icon='fas fa-sign-in-alt')
+                    </div>
+                    <div class="field">
+                        % include('_izberi_cas_odhoda.html', name='najbolj_zgoden_cas_odhoda')
+                    </div>
+                    <div class="field has-addons">
+                        <div class="control">
+
+                        </div>
+                        <div class="control">
+                            <button class="button is-info is-small">Išči</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </nav>
+    </div>
+
+    <!--<h3>Evidenca tvojih preteklih iskanj</h3>-->
+
+    <div class="column">
+        <table class="table is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Številka relacije</th>
+                    <th>Začetek</th>
+                    <th>Konec</th>
+                    <th>Trajanje potovanja</th>
+                    <th>Najhitrejša pot</th>
+                </tr>
+            </thead>
+            <tbody>
+                <form action="/dodaj-preliv/" method="POST">
+                    <tr>
+                        <td></td>
+                        <td>
+                            % include('_izberi_racun.html', name='racun') # datoteko sem modificiral, da se ne sesuje
+                        </td>
+                        <td>
+                            % #include('_izberi_kuverto.html', name='kuverta', icon='fas fa-envelope') # datoteko sem
+                            modificiral, da se ne sesuje
+                            % #TODO: Spremeni
+                        </td>
+                        <td>
+                            % include('_izberi_znesek.html', name='znesek') # Mislim, da se ne bo sesulo, še vseeno pa
+                            gre poskusiti
+                        </td>
+                        <td>
+                            <div class="control has-icons-left">
+                                <input class="input is-small" type="text" name="opis" placeholder="opis">
+                                <span class="icon is-small is-left">
+                                    <i class="far fa-sticky-note"></i>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="control">
+                                <button class="button is-info is-small">dodaj</button>
+                            </div>
+                        </td>
+                    </tr>
+                </form>
+                % for i in range(len(uporabnik.prejsna_iskanja) + 4):
+                <tr>
+                    <td>{{2*i - 12}}</td>
+                    <!--Bom spremenil-->
+                    <td>{{4*i}}</td>
+                    <!--Bom spremenil-->
+                    <td>
+                        % if True: # Bom spremenil
+                        nerazporejeno
+                        % else:
+                        {{preliv.kuverta.ime}}
+                        % end
+                    </td>
+                    <td>
+                        % include('_prikaz_zneska.html', znesek=64)
+                    </td>
+                    <td>Za enkrat imam samo eno vozno linijo</td>
+                    <td></td>
+                </tr>
+                % end
+            </tbody>
+        </table>
+    </div>
+
+
+</div>

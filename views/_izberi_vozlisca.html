@@ -1,9 +1,20 @@
-330 570
-430 667
-530 769
-630 873
-730 975
-830 1067
-930 1173
-1030 1274
-1130 1368
+<div class="control has-icons-left">
+    <div class="select is-fullwidth is-small">
+      <select name="{{name}}">
+        % if defined('oznaka'):
+          <option disabled selected>{{oznaka}}</option>
+        % end
+        <option value="">
+          nerazporejeno
+        </option>
+        % for ime_tocke in vsi_grafi: # To bom spremenil
+          <option value="Tukaj bi moralo biti ime kuverte">
+            {{i*i}}
+          </option>
+        % end
+      </select>
+    </div>
+    <span class="icon is-small is-left">
+      <i class="{{icon}}"></i>
+    </span>
+  </div>

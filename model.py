@@ -195,7 +195,7 @@ class Graf:
             return self.tocke[tocka]
         return []
 
-    def dodaj_neusmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez_povezave):
+    def dodaj_neusmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez_povezave=-1):
         ''' 
         V graf doda neusmerjeno povezavo med vozliščema 1 in 2. 
         Ta ukaz bo generiral povezave za vožnjo s kolesom in hojo peš, kjer bo cena povezave v obe smeri enaka ter od časa vpogleda neodvisna. 

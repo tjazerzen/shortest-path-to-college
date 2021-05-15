@@ -1,9 +1,14 @@
-330 572
-430 667
-530 768
-630 872
-730 970
-830 1068
-930 1176
-1030 1270
-1130 1373
+<div class="control has-icons-left">
+    <div class="select is-fullwidth is-small">
+      <select name="{{name}}">
+        % for i in range(10):
+        <option value="Tukaj bi moralo biti ime računa">
+          {{i^3}}
+        </option>
+        % end
+      </select>
+    </div>
+    <span class="icon is-small is-left">
+      <i class="fas fa-piggy-bank"></i>
+    </span>
+  </div>
