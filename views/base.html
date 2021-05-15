@@ -1,71 +1,9 @@
-% zavihki = [
-%     'najkrajsa_voznja',
-%     'analiza',
-%     'pomoc'
-% ]
-% oznaka_zavihka = {
-%     'najkrajsa_voznja': 'Dobi najkrajšo vožnjo',
-%     'analiza': 'Analiza prevoznikov',
-%     'pomoc': 'Pomoč'
-% }
-% ikona_zavihka = {
-%     'najkrajsa_voznja': 'fas fa-truck-monster',
-%     'analiza': 'fas fa-hourglass',
-%     'pomoc': 'far fa-question-circle'
-% }
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    % if False:#defined('izbrani_zavihek'):
-    <title>Najkrajša vožnja – {{oznaka_zavihka[izbrani_zavihek]}}</title>
-    % else:
-    <title>Najkrajša vožnja</title>
-    % end
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-  </head>
-
-  <body>
-    <nav class="navbar is-light">
-      <div class="container">
-        <div class="navbar-brand">
-          <span class="navbar-item">
-            <span class="icon">
-              <i class=""></i>
-            </span>
-            Prikaži vse vozne linije
-          </span>
-        </div>
-        <div class="navbar-start">
-          % if defined('izbrani_zavihek'):
-            % for zavihek in zavihki:
-            % if zavihek == izbrani_zavihek:
-              <a class="navbar-item is-active" href="/{{zavihek}}/">
-            % else:
-              <a class="navbar-item" href="/{{zavihek}}/">
-            % end
-              <span class="icon">
-                <i class="{{ikona_zavihka[zavihek]}}"></i>
-              </span>
-            <span>{{oznaka_zavihka[zavihek]}}</span>
-            </a>
-            % end
-          % end
-        </div>
-        <div class="navbar-end">
-            <a class="navbar-item" href="https://github.com/tjazerzen">
-            <span class="icon">
-              <i class="fab fa-github"></i>
-            </span>
-          <span>GitHub</span>
-          </a>
-        </div>
-      </div>
-    </nav>
-    <section class="section">
-      {{!base}}
-    </section>
-  </body>
-</html>
+330 571
+430 670
+530 771
+630 871
+730 974
+830 1067
+930 1170
+1030 1270
+1130 1369

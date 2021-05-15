@@ -29,6 +29,7 @@ def vpisi_podatke(od_kdaj, do_kdaj, cas_voznje, korak):
     return s
 
 
+print("ali to dela")
 
 for full_path in lst:
     with open(full_path, "w") as f:
@@ -92,6 +93,57 @@ for full_path in lst:
             do_kdaj = 1380
             cas_voznje = 13
             korak = 10
+
+        elif "Bled-BohinjskaBistrica" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 40
+            korak = 45
+        elif "BohinjskaBistrica-Bled" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 40
+            korak = 45
+        elif "Bled-LjubljanaTivoli" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 90
+            korak = 30
+        elif "LjubljanaTivoli-Bled" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 90
+            korak = 30
+        elif "Bled-Kranj" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 45
+            korak = 30
+        elif "Kranj-Bled" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 45
+            korak = 30
+        elif "Tolmin-LjubljanaTivoli" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 240
+            korak = 100
+        elif "LjubljanaTivoli-Tolmin" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 240
+            korak = 100
+        elif "Kobarid-Tolmin" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 20
+            korak = 30
+        elif "Tolmin-Kobarid" in full_path:
+            od_kdaj = 330
+            do_kdaj = 1260
+            cas_voznje = 20
+            korak = 30
         
         s = vpisi_podatke(od_kdaj, do_kdaj, cas_voznje, korak)
         f.write(s)
