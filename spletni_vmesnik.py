@@ -115,10 +115,10 @@ def isci():
     bottle.redirect("/")
 
 
-@bottle.post("/analiza-postajalisc/")
+@bottle.get("/analiza-postajalisc/")
 def analiziraj_postajalisca():
     uporabnik = trenutni_uporabnik()
-    bottle.redirect("/")
+    return bottle.template("analiza-postajalisc.html")
 
 
 bottle.run(debug=True, reloader=True)
