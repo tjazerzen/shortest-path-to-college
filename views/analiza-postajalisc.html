@@ -2,6 +2,16 @@
 
 % tabela_fraz = ["Prva", "Druga", "Tretja", "Četrta", "Peta"]
 
+% tabela_stilov = ["progress is-link", "progress is-info", "progress is-success", "progress is-warning", "progress is-danger"]
+
+
+<!--
+<progress class="progress is-link" value="30" max="100">30%</progress>
+<progress class="progress is-info" value="45" max="100">45%</progress>
+<progress class="progress is-success" value="60" max="100">60%</progress>
+<progress class="progress is-warning" value="75" max="100">75%</progress>
+<progress class="progress is-danger" value="90" max="100">90%</progress>
+-->
 
 <div class="columns">
 
@@ -15,16 +25,20 @@
                 <ul>
                     <div class="content is-medium">
                     <li><b>Prek našega portala si našel informacije o {{vsota_frekvenc_uporabnika}} postajah ter 
-                        optimalni poti med {{len(uporabnik.prejsna_iskanja) * 2}} mesti!</b>
+                         poiskal optimalno relacijo kar {{len(uporabnik.prejsna_iskanja)}}-krat!</b>
                     </li>
                     % for i in range(5):
                         <li>
                                 {{tabela_fraz[i]}} najbolj popularna destinacija:
-                                 <b>{{popularna_vozlisca_uporabnika[i].ime}}: Obiskal {{popularna_vozlisca_uporabnika[i].frekvenca_obiskov}}-krat</b>
+                                % delez = int(100*float(popularna_vozlisca_uporabnika[i].frekvenca_obiskov / vsota_frekvenc_uporabnika))
+                                 <b>{{popularna_vozlisca_uporabnika[i].ime}} -> se pojavi na {{delez}}% vseh iskanj!</b>
                         </li>
                         <li>
-                            delez = 
-                            <progress class="progress is-link" value="60" max="100">30%</progress>
+                            % delez = delez + 30
+                            % delez = min(99, delez)
+                            % index = delez // 20
+                            {{delez}}
+                            <progress class="{{tabela_stilov[index]}}" value="{{delez}}" max="100">42%</progress>
                         </li>
                     %end
                 </div>
@@ -44,36 +58,29 @@
             </p>
             <div class="panel-block">
                 <ul>
+                    <div class="content is-medium">
+                    <li><b>Vsi uporabniki skupaj smo prepotovali kar {{vsota_frekvenc_vseh}} mest! Pravijo, da se počasi daleč pride.</b>
+                    </li>
                     % for i in range(5):
                         <li>
-                            <div class="content is-medium">
-                                {{tabela_fraz[i]}} najbolj popularna destinacija: <b>{{popularna_vozlisca_vseh[i].ime}}</b>
-                            </div>
+                                {{tabela_fraz[i]}} najbolj popularna destinacija:
+                                 <b>{{popularna_vozlisca_vseh[i].ime}}, ki se pojavi na {{popularna_vozlisca_vseh[i].frekvenca_obiskov}} iskanjih.</b>
                         </li>
                         <li>
-                            <progress class="progress is-link" value="30" max="100">30%</progress>
+                            % delez = int(100*float(popularna_vozlisca_vseh[i].frekvenca_obiskov / vsota_frekvenc_vseh)) + 30
+                            % delez = min(99, delez)
+                            % index = delez // 20
+                            {{delez}}
+                            <progress class="{{tabela_stilov[index]}}" value="{{delez}}" max="100">42%</progress>
                         </li>
                     %end
+                </div>
+
                 </ul>  
             </div>
         </nav>
 
     </div>
 
-
-
-    <div class="column">
-        <div class="box">
-            
-            <progress class="progress is-link" value="30" max="100">30%</progress>
-            <progress class="progress is-info" value="45" max="100">45%</progress>
-            <progress class="progress is-success" value="60" max="100">60%</progress>
-            <progress class="progress is-warning" value="75" max="100">75%</progress>
-            <progress class="progress is-danger" value="90" max="100">90%</progress>
-            <p>
-                To bi bilo treba dodati, če bi želeli 10.
-            </p>
-        </div>
-    </div>
 
 </div>

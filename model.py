@@ -444,15 +444,16 @@ class Uporabnik:
             slovar = json.load(datoteka)
         prejsna_iskanja = slovar["prejsna_iskanja"]
         lst = []
+        slovar_frekvenc = {tocka.ime : 0 for tocka in vse_tocke}
         vsota_frekvenc = 0
         for prejsno_iskanje in prejsna_iskanja:
             najkrajsa_pot = prejsno_iskanje["najkrajsa_pot"]
             for slovar_vozlisca in najkrajsa_pot:
-                vozlisce = Vozlisce.iz_slovarja(slovar_vozlisca)
-                frekvenca = vozlisce.frekvenca_obiskov
+                frekvenca = int(slovar_vozlisca["frekvenca_obiskov"])
+                slovar_frekvenc[slovar_vozlisca["ime"]] += frekvenca
                 vsota_frekvenc += frekvenca
-                lst.append((frekvenca, vozlisce))
-
+        
+        lst = [(value, Vozlisce(ime=key, frekvenca_obiskov=value)) for key, value in slovar_frekvenc.items()]
         return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
 
 

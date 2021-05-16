@@ -1,0 +1,30 @@
+{
+    "zasifrirano_geslo": "786a02f742015903c6c6fd852552d272912f4740e15847618a86e217f71f5419d25e1031afee585313896444934eb04b903a685b1448b755d56f701afe9be2ce",
+    "stevilke_linij": [],
+    "ime": "bojan",
+    "prejsna_iskanja": [
+        {
+            "zacetek": {
+                "ime": "Tolmin",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "Kobarid",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 36,
+            "najkrajsa_pot": [
+                {
+                    "ime": "Tolmin",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Kobarid",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 2
+        }
+    ]
+}

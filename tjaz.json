@@ -218,6 +218,52 @@
                 }
             ],
             "stevilka_linije": 3
+        },
+        {
+            "zacetek": {
+                "ime": "Piran",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "Izola",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 20,
+            "najkrajsa_pot": [
+                {
+                    "ime": "Piran",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Izola",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 4
+        },
+        {
+            "zacetek": {
+                "ime": "KranjAP",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "BritofKR",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 346,
+            "najkrajsa_pot": [
+                {
+                    "ime": "KranjAP",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "BritofKR",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 1
         }
     ]
 }

@@ -1,0 +1,147 @@
+{
+    "zasifrirano_geslo": "5fd0d3135a2eb9ed4c9343b3ba7279c4f1f4b280d5090ea721fb39db6b5286443f845dbb8100978d3c1078410b0a00082ab34445944ffb73bfd2cbe9af9a79e0",
+    "stevilke_linij": [
+        2
+    ],
+    "ime": "meta",
+    "prejsna_iskanja": [
+        {
+            "zacetek": {
+                "ime": "Izola",
+                "frekvenca_obiskov": 3
+            },
+            "konec": {
+                "ime": "Piran",
+                "frekvenca_obiskov": 2
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 20,
+            "najkrajsa_pot": [
+                {
+                    "ime": "Izola",
+                    "frekvenca_obiskov": 3
+                },
+                {
+                    "ime": "Piran",
+                    "frekvenca_obiskov": 2
+                }
+            ],
+            "stevilka_linije": 4
+        },
+        {
+            "zacetek": {
+                "ime": "Izola",
+                "frekvenca_obiskov": 0
+            },
+            "konec": {
+                "ime": "SlovenskiJeruzalem",
+                "frekvenca_obiskov": 0
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": -1,
+            "najkrajsa_pot": [
+                {
+                    "ime": "--- Direktna relacija ne obstaja ---",
+                    "frekvenca_obiskov": 0
+                }
+            ],
+            "stevilka_linije": -1
+        },
+        {
+            "zacetek": {
+                "ime": "FMF",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "KranjZelezniska",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 366,
+            "najkrajsa_pot": [
+                {
+                    "ime": "FMF",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "LjubljanaZelezniska",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "KranjZelezniska",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": {
+                "ime": "Kobarid",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "Tolmin",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 35,
+            "najkrajsa_pot": [
+                {
+                    "ime": "Kobarid",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Tolmin",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 2
+        },
+        {
+            "zacetek": {
+                "ime": "Piran",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "Koper",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 43,
+            "najkrajsa_pot": [
+                {
+                    "ime": "Piran",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Koper",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 4
+        },
+        {
+            "zacetek": {
+                "ime": "Bled",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "BohinjskaBistrica",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 69,
+            "najkrajsa_pot": [
+                {
+                    "ime": "Bled",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "BohinjskaBistrica",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 2
+        }
+    ]
+}
