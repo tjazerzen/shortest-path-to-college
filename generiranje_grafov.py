@@ -2,8 +2,10 @@ from model import Model, Graf
 import json
 from model import vse_tocke
 
-dict_tock = {}
+
 '''
+dict_tock = {}
+
 for tocka in set(vse_tocke):
     if tocka.ime not in dict_tock.keys():
         dict_tock[tocka.ime] = tocka
