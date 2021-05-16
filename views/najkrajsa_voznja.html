@@ -8,21 +8,26 @@
         </nav>
 
         <nav class="panel">
-            <p class="panel-heading">Tvoje izbrane vozne linije</p>
+            <p class="panel-heading">Tvoje izbrane poti</p>
             <div class="panel-block">
-
-                <div class="content is-small">
-                    <b>Tvoje najljubše vozne linije so:</b><br>
-                    <ul>
-                        % for graf in uporabnik.dobi_seznam_svojih_grafov():
-                        % if graf.stevilka_linije == 1:
-                        <li>{{graf.izpis_linije()}} [FMF pa najljubša destinacija, jasno :D].</li>
-                        % else:
-                        <li>{{graf.izpis_linije()}}</li>
-                        %end
-                        % end
-                    </ul>
-                </div>
+                % if len(uporabnik.dobi_seznam_svojih_grafov()) > 0:
+                    <div class="content is-small">
+                        <b>Tvoje najljubše poti do FMFja so:</b><br>
+                        <ul>
+                            % for graf in uporabnik.dobi_seznam_svojih_grafov():
+                            % if graf.stevilka_linije == 1:
+                            <li>{{graf.izpis_linije()}} [FMF pa najljubša destinacija, jasno :D].</li>
+                            % else:
+                            <li>{{graf.izpis_linije()}}</li>
+                            %end
+                            % end
+                        </ul>
+                    </div>
+                % else:
+                    <div class="content is-small">
+                        <b>Trenutno nimaš nobenih priljubljenih voznih linij. Pod sekcijo "Dodaj nov peron" jih lahko dodaš.</b><br>
+                    </div>
+                % end
             </div>
         </nav>
 
@@ -30,37 +35,41 @@
             <p class="panel-heading">Dodaj nov peron</p>
             <div class="panel-block">
 
-                <form action="/dodaj-relacijo/" method="POST">
-
-                    Dodaj novo relacijo na tvoj seznam priljubljenih:
-                    <div class="field">
-                        % include('_prikazi_linijo.html', name='najbolj_zgoden_cas_odhoda')
-                    </div>
-                    <div class="field has-addons">
-                        <div class="control">
-
+                <form action="/dodaj-priljubljeno-relacijo/" method="POST">
+                    % if len(uporabnik.stevilke_linij) != len(uporabnik.vsi_grafi):
+                        Dodaj novo relacijo na tvoj seznam priljubljenih:
+                        <div class="field">
+                            % include('_izberi_priljubljeno_linijo.html', name='priljubljena_linija')
                         </div>
-                        <div class="control">
-                            <button class="button is-info is-small">Dodaj</button>
+                        <div class="field has-addons">
+                            <div class="control">
+
+                            </div>
+                            <div class="control">
+                                <button class="button is-info is-small">Dodaj</button>
+                            </div>
                         </div>
-                    </div>
+                    % else:
+                        Vse poti do faksa imaš rad, {{uporabnik.ime}}!
+                    %end
                 </form>
             </div>
 
         </nav>
 
         <nav class="panel">
-            <p class="panel-heading">išči!</p>
+            <p class="panel-heading">Išči</p>
             <div class="panel-block">
 
                 <form action="/premakni-denar/" method="POST">
-
-                    Kam pa danes potuješ? Izberi postajališči iz istih linij!
-                    <div class="field">
-                        % include('_izberi_tocko.html', name='kraj_zacetka', oznaka='Vstop', icon='fas fa-sign-out-alt')
+                    <div class="contenet is-small">
+                    Kam pa danes potuješ? Izberi postajališči iz istih linij, sicer se nikamor ne pride!
                     </div>
                     <div class="field">
-                        % include('_izberi_tocko.html', name='kraj_konca', oznaka='Izstop', icon='fas fa-sign-in-alt')
+                        % include('_izberi_tocko.html', name='kraj_zacetka', oznaka='Vstop', icon='fas fa-sign-in-alt')
+                    </div>
+                    <div class="field">
+                        % include('_izberi_tocko.html', name='kraj_konca', oznaka='Izstop', icon='fas fa-sign-out-alt')
                     </div>
                     <!--
                     <div class="field">

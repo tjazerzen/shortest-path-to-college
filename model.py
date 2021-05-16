@@ -352,7 +352,6 @@ class Uporabnik:
         Uporabnikove podatke prebere iz datoteke. 
         Ime datoteke se ne zahteva, saj ima vsak uporabnik rezervirano svojo datoteko pod imenom "<njegovo/njeno ime>.json"
         '''
-        print("Preusmerjen na funkcijo Uporabnik.iz_datoteke()")
         with open(Uporabnik.dobi_ime_datoteke(ime)) as datoteka:
             slovar = json.load(datoteka)
             return Uporabnik.iz_slovarja(slovar)
