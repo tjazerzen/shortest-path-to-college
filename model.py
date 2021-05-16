@@ -11,13 +11,15 @@ def zasifriraj_geslo(geslo_v_cistopisu):
 
 
 # 1 Model: N tranportnih linij = grafov
+
 # TODO: Ustvari funkcijo, ki se iz modela sprehodi po vseh grafih, znotraj njega po vseh uporabnikih ter potem vrne
-#       najbolj popularna iskanja
+#       najbolj popularna iskanja.
+
 class Model:
     ''' Krovni objekt, ki povezuje moj program.'''
 
     def __init__(self, grafi=[]):
-        # Pozorni čitalec bo opazil, da se model inicializira z seznamom, razredna spremenljivka pa je slovar.
+        # TODO: Ne muti tako z slovarji kot seznami!
         self.grafi = {graf.stevilka_linije: graf for graf in grafi}
 
     def v_slovar(self):
@@ -47,12 +49,14 @@ class Model:
         return self.grafi[graf.stevilka_linije]  # In ga vrni.
     
     def vrni_grafe(self, vozlisce_ime):
-        ''' vrne nam mnozico grafov, ki vsebujejo ime tega vozlisca '''
+        ''' vrne nam mnozico grafov, ki vsebujejo ime tega vozlisca. Helper metoda k Model.vozlisci_isti_graf!()'''
         return {graf for graf in self.grafi.values() if graf.tocka(vozlisce_ime)}
 
-
     def vozlisci_isti_grafQ(self, vozlisce1_ime, vozlisce2_ime):
-        ''' Vrne nam presek (množico) grafov, ki vsebujejo tako vozlisce pod imenom vozlisce1_ime kot vozlisce2_ime'''
+        ''' 
+        Vrne nam presek (množico) grafov, ki vsebujejo tako vozlisce pod imenom vozlisce1_ime kot vozlisce2_ime. 
+        Uporabljena v spletnem vmesniku.
+        '''
         return self.vrni_grafe(vozlisce1_ime).intersection(self.vrni_grafe(vozlisce2_ime))
 
 # 1 Graf: V vozlišč
@@ -106,15 +110,13 @@ class Povezava:
                 if trenutni_odhod > minute:
                     self.utez = trenutni_prihod - minute
                     return self
-            # Ura je preveč, da bi peljal še kakšen avtobus. Kar počakat na prvega naslednji dan ;)
-            # print(input_file.readlines())
-            self.utez = 24 * 60 - minute + 300  # TODO: Tole 300 spremeni na čas odhoda prvega avtobusa ta dan.
-            return self
-
-            # TODO: Pazi, da to še vedno deluje pri branju iz datotek
+            # Ura je preveč, da bi peljal še kakšen avtobus. Kar počakat na prvega naslednji dan ob 05:00 --> to je 300 min od polnoči
+            self.utez = 24 * 60 - minute + 300 
+            return self # Vrne sebe, ker bo ta metoda poklicana v objektu Graf.
 
     @staticmethod
     def dobi_minute_iz_casa(datum: datetime = datetime.now()):
+        ''' Helper '''
         return int(datum.strftime("%H")) * 60 + int(datum.strftime("%M"))
 
     def __str__(self):
@@ -122,13 +124,16 @@ class Povezava:
 
 
 # 1 Graf: V vozlišč; 1 Graf: E povezav; N grafov: M uporabnikov
-# TODO: Ustvari več tekstovnih datotek in več grafov.
 class Graf:
-    ''' Objekt, ki povezuje objekta Vozlisce in Povezave na eni strani, ter objekt Uporabnik na drugi. '''
 
+    ''' Objekt, ki povezuje objekta Vozlisce in Povezave na eni strani, ter objekt Uporabnik na drugi. '''
     def __init__(self, stevilka_linije, tocke={}, uporabniki={}, ):
         self.tocke = tocke  # {Key: Točka; Value: množica povezav z začetkom v tej točki}
-        self.uporabniki = uporabniki  # SLOVAR --> Key: Ime; Value: <Objekt Uporabnik>
+        self.uporabniki = uporabniki  # SLOVAR --> {Key: Ime; Value: <Objekt Uporabnik>
+
+        # TODO: Ponucaj spremenljivko self.uporabniki.
+        # TODO: Zapiši spremenljivko self.uporabniki v datoteko.
+
         # vsak graf bo imel M uporabnikov. Toda tudi vsak uporabnik se lahko vozi po večih grafih.
         self.stevilka_linije = stevilka_linije
 
@@ -146,7 +151,7 @@ class Graf:
         return Graf(stevilka_linije=int(slovar["stevilka_linije"]), tocke=tocke, uporabniki={})
 
     def dobi_ime_linije(self):
-        return f"Linija{self.stevilka_linije}".upper()
+        return f"LINIJA{self.stevilka_linije}"
     
     def izpis_linije(self):
         ''' Funkcija, ki nam bo služila v front-endu. Izpiše nam vse povezave v tem grafu'''
@@ -244,8 +249,8 @@ class Graf:
 
     def dijkstra(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, cas_iskanja=datetime.now()):
         '''
-        Poišče najkrajšo pot od start_vertex do vseh ostalih.
-        Vrne nov objekt Iskanje, ki drži informacije o začetnem in končnem vozlišču, casu vpogleda, ceni sprehoda v grafu ter končni poti v grafu.
+        Poišče najkrajšo pot od start_vertex do vseh ostalih. Vrne nov objekt Iskanje, 
+        ki drži informacije o začetnem in končnem vozlišču, casu vpogleda, ceni sprehoda v grafu ter končni poti v grafu.
         '''
         # Najprej posodobi uteži na povezavah
         self.tocke = self.nastavi_vse_povezave(cas_vpogleda=cas_iskanja)
@@ -282,6 +287,8 @@ class Graf:
     def dobi_pot_iz_povezav(seznam_povezav):
         ''' Iz seznama prepotovanih poti vrne seznam imen prepotovanih vozlišč. Helper funkcija k outputu za funkcijo dikstra '''
         return [seznam_povezav[0].vozlisce1] + [povezava.vozlisce2 for povezava in seznam_povezav]
+
+
 
 
 # Globalna spremenljivka ki drži informacije o vseh možnih grafih.
@@ -401,6 +408,7 @@ class Iskanje:
         self.stevilka_linije = stevilka_linije
 
     def v_slovar(self):
+
         return {
             "zacetek": self.vozlisce1.ime,
             "konec": self.vozlisce2.ime,
