@@ -1,0 +1,76 @@
+{
+    "vse_tocke": [
+        {
+            "ime": "ZgornjiKaselj",
+            "frekvenca_obiskov": 0
+        },
+        {
+            "ime": "LjubljanaTivoli",
+            "frekvenca_obiskov": 2
+        },
+        {
+            "ime": "OsnovnaSolaKaselj",
+            "frekvenca_obiskov": 0
+        },
+        {
+            "ime": "PostajaJadranska",
+            "frekvenca_obiskov": 2
+        },
+        {
+            "ime": "FMF",
+            "frekvenca_obiskov": 2
+        },
+        {
+            "ime": "Bled",
+            "frekvenca_obiskov": 4
+        },
+        {
+            "ime": "BohinjskaBistrica",
+            "frekvenca_obiskov": 1
+        },
+        {
+            "ime": "KranjAP",
+            "frekvenca_obiskov": 0
+        },
+        {
+            "ime": "Tolmin",
+            "frekvenca_obiskov": 0
+        },
+        {
+            "ime": "Kobarid",
+            "frekvenca_obiskov": 0
+        },
+        {
+            "ime": "BritofKR",
+            "frekvenca_obiskov": 1
+        },
+        {
+            "ime": "Koper",
+            "frekvenca_obiskov": 1
+        },
+        {
+            "ime": "Piran",
+            "frekvenca_obiskov": 1
+        },
+        {
+            "ime": "LjubljanaZelezniska",
+            "frekvenca_obiskov": 0
+        },
+        {
+            "ime": "Izola",
+            "frekvenca_obiskov": 1
+        },
+        {
+            "ime": "KranjZelezniska",
+            "frekvenca_obiskov": 0
+        },
+        {
+            "ime": "Portoroz",
+            "frekvenca_obiskov": 0
+        },
+        {
+            "ime": "SlovenskiJeruzalem",
+            "frekvenca_obiskov": 0
+        }
+    ]
+}

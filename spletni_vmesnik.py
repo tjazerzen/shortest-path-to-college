@@ -90,7 +90,6 @@ def isci():
     skupni_grafi = moj_model.vozlisci_isti_grafQ(vozlisce1_ime, vozlisce2_ime)
     zmagovalno_iskanje = None
     if skupni_grafi != set():
-        print(vozlisce1_ime, vozlisce2_ime)
         # Lahko je v tem preseku več grafov. Izmed teh grafov mi iščemo tistega, po katerem je trenutno najcenejša pot.
         for trenuten_graf in skupni_grafi:
             trenutno_iskanje = trenuten_graf.dijkstra(

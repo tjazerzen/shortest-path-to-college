@@ -288,7 +288,8 @@ class Graf:
                         slovar_povezav[sosednje_vozlisce] = slovar_povezav[trenutno_vozlisce] + [sosednja_povezava]
         
         najkrajsa_pot=self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end])
-        najkrajsa_pot=[vozlisce.obisk() for vozlisce in najkrajsa_pot]
+        Graf.posodobi_frekvenco(najkrajsa_pot) # Posodobi frekvenco za vse uporabnike
+        najkrajsa_pot=[vozlisce.obisk() for vozlisce in najkrajsa_pot] # Posodobi frekvenco za trenutnega uporabnika
         return Iskanje(
             vozlisce1=vozlisce_start,
             vozlisce2=vozlisce_end,
@@ -311,18 +312,17 @@ class Graf:
         '''
         imena_vozlisc = [vozlisce.ime for vozlisce in seznam_vozlisc]
         IME_DATOTEKE = "frekvenca_obiskov.json"
-        with open(IME_DATOTEKE, "w") as datoteka:
+
+        with open(IME_DATOTEKE, "r") as datoteka:
             slovar = json.load(datoteka)
-            slovar_vseh_tock = slovar["vse_tocke"]
-            for slovar_vozlisca in slovar_vseh_tock:
-                ime_vozlisca = slovar_vozlisca["ime"]
-                if ime_vozlisca in imena_vozlisc:
-                    prejsna_frekvenca = int(slovar_vozlisca["frekvenca_obiskov"])
-                    slovar_vozlisca["frekvenca_obiskov"] = prejsna_frekvenca + 1
-            json.dump(slovar, dat, ensure_ascii=False, indent=4)
-
-
-
+        
+        for index, slovar_vozlisca in enumerate(slovar["vse_tocke"]):
+            if slovar_vozlisca["ime"] in imena_vozlisc:
+                nova_frekvenca = int(slovar_vozlisca["frekvenca_obiskov"]) + 1
+                slovar["vse_tocke"][index]["frekvenca_obiskov"] = nova_frekvenca
+        
+        with open(IME_DATOTEKE, "w") as datoteka:
+            json.dump(slovar, datoteka, ensure_ascii=False, indent=4)
 
 
 # Globalna spremenljivka ki drži informacije o vseh možnih grafih.
@@ -334,11 +334,8 @@ vse_tocke = []
 for graf in vsi_grafi:
     vse_tocke += graf.tocke.keys()
 
-
 global vsi_grafi_dict
 vsi_grafi_dict = {graf.stevilka_linije : graf for graf in vsi_grafi}
-
-
 
 # 1 Uporabnik: N iskanj
 class Uporabnik:

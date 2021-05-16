@@ -1,0 +1,34 @@
+{
+    "zasifrirano_geslo": "acd711a443f15e761a75085e5a19a8b03c6885def850e17ba15d071307fa75920ad46227f1f3a5dd31ae9d21805b3955659ec1c2a39de01a1e387e25846c9292",
+    "stevilke_linij": [],
+    "ime": "tjaz",
+    "prejsna_iskanja": [
+        {
+            "zacetek": {
+                "ime": "PostajaJadranska",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "Bled",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 116,
+            "najkrajsa_pot": [
+                {
+                    "ime": "PostajaJadranska",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "LjubljanaTivoli",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Bled",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 2
+        }
+    ]
+}
