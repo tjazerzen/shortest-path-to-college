@@ -27,13 +27,8 @@ class Model:
 
     @staticmethod
     def iz_slovarja(slovar):
+        #return Model(grafi=[Graf.iz_slovarja(slovar_grafa) for slovar_grafa in slovar["grafi"]])
         return Model(grafi=[Graf.iz_slovarja(slovar_grafa) for slovar_grafa in slovar["grafi"]])
-        #return Model(grafi=[Graf.iz_slovarja(graf) for graf in slovar["grafi"]])
-
-    def __str__(self):
-        for graf in self.grafi.values():
-            print(graf)
-        return None
 
     def v_datoteko(self, ime_datoteke="podatki_grafov.json"):
         ''' Funkcija uporabljena za zapis podatkov graf v datoteko. '''
@@ -72,7 +67,8 @@ class Vozlisce:
         self.frekvenca_obiskov = frekvenca_obiskov
 
     def __str__(self):
-        return f"VOZLIŠČE: - Ime: {self.ime}; Frekvenca obiskov: {self.frekvenca_obiskov}"
+        #return f"VOZLIŠČE: - Ime: {self.ime}; Frekvenca obiskov: {self.frekvenca_obiskov}"
+        return self.ime
     
     def v_slovar(self):
         return {"ime": self.ime, "frekvenca_obiskov": self.frekvenca_obiskov}
@@ -82,8 +78,9 @@ class Vozlisce:
         return Vozlisce(ime=slovar["ime"], frekvenca_obiskov=int(slovar["frekvenca_obiskov"]))
     
     def obisk(self):
-        ''' V algoritmu dijkstra bo metoda poklicana, ko bo vozlišče obiskano. ni preveč za razlagati :) '''
+        ''' V algoritmu dijkstra bo metoda poklicana, ko bo vozlišče obiskano. '''
         self.frekvenca_obiskov += 1
+        return self
 
 
 # 1 Graf: E povezav
@@ -155,17 +152,26 @@ class Graf:
         # vsak graf bo imel M uporabnikov. Toda tudi vsak uporabnik se lahko vozi po večih grafih.
         self.stevilka_linije = stevilka_linije
 
+
+    def iz_slovarja_helper_metoda(ime_tocke, slovar): # slovar: key --> objekt tocka; value --> {...}
+        ''' Točno to kar pove ime. ;)'''
+        for tocka in slovar.keys():
+            if tocka.ime == ime_tocke:
+                return tocka
+        return None
+
     @staticmethod
     def iz_slovarja(slovar):
         ''' Konstruira graf iz "podslovarja" iz datoteke podatki_grafov.json '''
-        nov_graf = Graf(stevilka_linije=int(slovar["stevilka_linije"]))
-        nov_graf.dodaj_tocke([Vozlisce.iz_slovarja(slovar_vozlisca) for slovar_vozlisca in slovar["vozlisca"]])
+        stevilka_linije=int(slovar["stevilka_linije"])
+        vozlisca_grafa = [Vozlisce.iz_slovarja(slovar_vozlisca) for slovar_vozlisca in slovar["vozlisca"]]
+        tocke = {vozlisce: set() for vozlisce in vozlisca_grafa}
         for slovar_povezave in slovar["povezave"]:
-            vozlisce1 = nov_graf.tocka(slovar_povezave["zacetek_povezave"])
-            vozlisce2 = nov_graf.tocka(slovar_povezave["konec_povezave"])
+            vozlisce1 = Graf.iz_slovarja_helper_metoda(slovar_povezave["zacetek_povezave"], tocke)
+            vozlisce2 = Graf.iz_slovarja_helper_metoda(slovar_povezave["konec_povezave"], tocke)
             utez=int(slovar_povezave["utez"])
-            nov_graf.dodaj_usmerjeno_povezavo(vozlisce1, vozlisce2, utez)
-        return nov_graf
+            tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez))
+        return Graf(stevilka_linije, tocke=tocke)
 
     def dobi_ime_linije(self):
         return f"LINIJA{self.stevilka_linije}"
@@ -296,6 +302,27 @@ class Graf:
     def dobi_pot_iz_povezav(seznam_povezav):
         ''' Iz seznama prepotovanih poti vrne seznam imen prepotovanih vozlišč. Helper funkcija k outputu za funkcijo dikstra '''
         return [seznam_povezav[0].vozlisce1] + [povezava.vozlisce2 for povezava in seznam_povezav]
+    
+    @staticmethod
+    def posodobi_frekvenco(seznam_vozlisc):
+        ''' 
+        Statična metoda, ki nam bo pomagala beležiti frekvenco ustavljanj na nekek postajališču (vozlišču)
+        Podatke (zagotovo) preberemo iz frekvenca_obiskov.json ter nato posodobimo frekvenco, kjer je to pač treba
+        '''
+        imena_vozlisc = [vozlisce.ime for vozlisce in seznam_vozlisc]
+        IME_DATOTEKE = "frekvenca_obiskov.json"
+        with open(IME_DATOTEKE, "w") as datoteka:
+            slovar = json.load(datoteka)
+            slovar_vseh_tock = slovar["vse_tocke"]
+            for slovar_vozlisca in slovar_vseh_tock:
+                ime_vozlisca = slovar_vozlisca["ime"]
+                if ime_vozlisca in imena_vozlisc:
+                    prejsna_frekvenca = int(slovar_vozlisca["frekvenca_obiskov"])
+                    slovar_vozlisca["frekvenca_obiskov"] = prejsna_frekvenca + 1
+            json.dump(slovar, dat, ensure_ascii=False, indent=4)
+
+
+
 
 
 # Globalna spremenljivka ki drži informacije o vseh možnih grafih.
@@ -310,6 +337,7 @@ for graf in vsi_grafi:
 
 global vsi_grafi_dict
 vsi_grafi_dict = {graf.stevilka_linije : graf for graf in vsi_grafi}
+
 
 
 # 1 Uporabnik: N iskanj
@@ -409,7 +437,7 @@ class Iskanje:
             "konec": self.vozlisce2.v_slovar(),
             "cas_evidence": date.isoformat(self.cas_vpogleda),
             "cena_potovanja": self.cena_potovanja,  # Enota so minute
-            "najkrajsa_pot": [vozlisce.ime for vozlisce in self.najkrajsa_pot],
+            "najkrajsa_pot": [vozlisce.v_slovar() for vozlisce in self.najkrajsa_pot],
             "stevilka_linije": self.stevilka_linije
         }
 
