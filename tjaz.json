@@ -1,11 +1,14 @@
 {
-    "zasifrirano_geslo": "acd711a443f15e761a75085e5a19a8b03c6885def850e17ba15d071307fa75920ad46227f1f3a5dd31ae9d21805b3955659ec1c2a39de01a1e387e25846c9292",
-    "stevilke_linij": [],
+    "zasifrirano_geslo": "adae4c820f7a4d818a876e181c17fa9e802ead85fd7b3c31bf1c0957b5a0e7223d2873dee6d0493788b4373b4b3cfcea079134715bace5c7ac07540a0e19152f",
+    "stevilke_linij": [
+        1,
+        3
+    ],
     "ime": "tjaz",
     "prejsna_iskanja": [
         {
             "zacetek": {
-                "ime": "PostajaJadranska",
+                "ime": "LjubljanaTivoli",
                 "frekvenca_obiskov": 1
             },
             "konec": {
@@ -13,12 +16,8 @@
                 "frekvenca_obiskov": 1
             },
             "cas_evidence": "2021-05-16",
-            "cena_potovanja": 116,
+            "cena_potovanja": 101,
             "najkrajsa_pot": [
-                {
-                    "ime": "PostajaJadranska",
-                    "frekvenca_obiskov": 1
-                },
                 {
                     "ime": "LjubljanaTivoli",
                     "frekvenca_obiskov": 1
