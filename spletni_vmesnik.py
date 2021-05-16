@@ -118,7 +118,19 @@ def isci():
 @bottle.get("/analiza-postajalisc/")
 def analiziraj_postajalisca():
     uporabnik = trenutni_uporabnik()
-    return bottle.template("analiza-postajalisc.html")
+    popularna_vozlisca_uporabnika, vsota_frekvenc_uporabnika = uporabnik.dobi_popularna_vozlisca_uporabnika()
+    popularna_vozlisca_vseh, vsota_frekvenc_vseh = Graf.dobi_popularna_vozlisca_vseh()
+    stevilo_prikazov = min(len(popularna_vozlisca_vseh), len(popularna_vozlisca_uporabnika), 5)
+    return bottle.template(
+        "analiza-postajalisc.html", 
+        popularna_vozlisca_vseh=popularna_vozlisca_vseh[:stevilo_prikazov],
+        popularna_vozlisca_uporabnika=popularna_vozlisca_uporabnika[:stevilo_prikazov],
+        stevilo_prikazov=stevilo_prikazov,
+        vsota_frekvenc_uporabnika=vsota_frekvenc_uporabnika,
+        vsota_frekvenc_vseh=vsota_frekvenc_vseh,
+        uporabnik=uporabnik
+        )
+
 
 
 bottle.run(debug=True, reloader=True)

@@ -2,7 +2,8 @@
     "zasifrirano_geslo": "adae4c820f7a4d818a876e181c17fa9e802ead85fd7b3c31bf1c0957b5a0e7223d2873dee6d0493788b4373b4b3cfcea079134715bace5c7ac07540a0e19152f",
     "stevilke_linij": [
         1,
-        3
+        3,
+        2
     ],
     "ime": "tjaz",
     "prejsna_iskanja": [
@@ -28,6 +29,195 @@
                 }
             ],
             "stevilka_linije": 2
+        },
+        {
+            "zacetek": {
+                "ime": "PostajaJadranska",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "LjubljanaZelezniska",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 17,
+            "najkrajsa_pot": [
+                {
+                    "ime": "PostajaJadranska",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "LjubljanaZelezniska",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": {
+                "ime": "LjubljanaTivoli",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "Portoroz",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 137,
+            "najkrajsa_pot": [
+                {
+                    "ime": "LjubljanaTivoli",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Piran",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Portoroz",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 4
+        },
+        {
+            "zacetek": {
+                "ime": "KranjAP",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "BritofKR",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 451,
+            "najkrajsa_pot": [
+                {
+                    "ime": "KranjAP",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "BritofKR",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": {
+                "ime": "KranjZelezniska",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "LjubljanaZelezniska",
+                "frekvenca_obiskov": 2
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 985,
+            "najkrajsa_pot": [
+                {
+                    "ime": "KranjZelezniska",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "BritofKR",
+                    "frekvenca_obiskov": 2
+                },
+                {
+                    "ime": "KranjAP",
+                    "frekvenca_obiskov": 2
+                },
+                {
+                    "ime": "LjubljanaTivoli",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "PostajaJadranska",
+                    "frekvenca_obiskov": 2
+                },
+                {
+                    "ime": "LjubljanaZelezniska",
+                    "frekvenca_obiskov": 2
+                }
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": {
+                "ime": "Koper",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "Portoroz",
+                "frekvenca_obiskov": 2
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 50,
+            "najkrajsa_pot": [
+                {
+                    "ime": "Koper",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Piran",
+                    "frekvenca_obiskov": 2
+                },
+                {
+                    "ime": "Portoroz",
+                    "frekvenca_obiskov": 2
+                }
+            ],
+            "stevilka_linije": 4
+        },
+        {
+            "zacetek": {
+                "ime": "FMF",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "KranjAP",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 78,
+            "najkrajsa_pot": [
+                {
+                    "ime": "FMF",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "LjubljanaTivoli",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "KranjAP",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": {
+                "ime": "PostajaJadranska",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "FMF",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 2,
+            "najkrajsa_pot": [
+                {
+                    "ime": "PostajaJadranska",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "FMF",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 3
         }
     ]
 }

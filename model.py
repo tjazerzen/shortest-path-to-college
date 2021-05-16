@@ -81,6 +81,10 @@ class Vozlisce:
         ''' V algoritmu dijkstra bo metoda poklicana, ko bo vozlišče obiskano. '''
         self.frekvenca_obiskov += 1
         return self
+    
+    def __lt__(self, other):
+        ''' Primerja dve vozlišči med sabo glede na frekvenco obiskov. Če sta frekvenci enaki, mi je vseeno, zato kar vrnem prvega. '''
+        return self.frekvenca_obiskov >= other.frekvenca_obiskov
 
 
 # 1 Graf: E povezav
@@ -325,8 +329,22 @@ class Graf:
             json.dump(slovar, datoteka, ensure_ascii=False, indent=4)
     
     @staticmethod
-    def dobi_popularna_vozlisca():
-        pass
+    def dobi_popularna_vozlisca_vseh():
+        ''' Funkcija nam vrne seznam petih najbolj popularnih vozlišč po padajočem vrnstnem redu glede na parameter frekvenca obiskov'''
+        IME_DATOTEKE = "frekvenca_obiskov.json"
+
+        with open(IME_DATOTEKE, "r") as datoteka:
+            slovar = json.load(datoteka)
+        
+        lst = []
+        vsota_frekvenc = 0
+        for index, slovar_vozlisca in enumerate(slovar["vse_tocke"]):
+            vozlisce = Vozlisce.iz_slovarja(slovar_vozlisca)
+            frekvenca = vozlisce.frekvenca_obiskov
+            lst.append((frekvenca, vozlisce))
+            vsota_frekvenc += frekvenca
+        
+        return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
 
 
 # Globalna spremenljivka ki drži informacije o vseh možnih grafih.
@@ -340,6 +358,7 @@ for graf in vsi_grafi:
 
 global vsi_grafi_dict
 vsi_grafi_dict = {graf.stevilka_linije : graf for graf in vsi_grafi}
+
 
 # 1 Uporabnik: N iskanj
 class Uporabnik:
@@ -418,6 +437,23 @@ class Uporabnik:
     
     def dobi_seznam_svojih_grafov(self):
         return [graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij]
+    
+    def dobi_popularna_vozlisca_uporabnika(self):
+        ''' '''
+        with open(Uporabnik.dobi_ime_datoteke(self.ime)) as datoteka:
+            slovar = json.load(datoteka)
+        prejsna_iskanja = slovar["prejsna_iskanja"]
+        lst = []
+        vsota_frekvenc = 0
+        for prejsno_iskanje in prejsna_iskanja:
+            najkrajsa_pot = prejsno_iskanje["najkrajsa_pot"]
+            for slovar_vozlisca in najkrajsa_pot:
+                vozlisce = Vozlisce.iz_slovarja(slovar_vozlisca)
+                frekvenca = vozlisce.frekvenca_obiskov
+                vsota_frekvenc += frekvenca
+                lst.append((frekvenca, vozlisce))
+
+        return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
 
 
 # 1 Uporabnik: N iskanj

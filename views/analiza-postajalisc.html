@@ -1,71 +1,70 @@
 % rebase('base.html', izbrani_zavihek='analiza-postajalisc')
 
-<label for="file">Downloading progress:</label>
+% tabela_fraz = ["Prva", "Druga", "Tretja", "Četrta", "Peta"]
+
 
 <div class="columns">
 
     <div class="column is-fullwidth">
-        <div class="box">
-            <table>
-                <tbody>
-                    <tr background-color=#f8f8f8>
-                        <td>
-                            <progress class="progress is-primary" value="15" max="100" id="file">15%</progress>
-                        </td>
-                        <td>
-                            <progress class="progress is-primary" value="15" max="100" id="file">15%</progress>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            21
-                        </td>
-                        <td>
-                            <progress class="progress is-link" value="30" max="100">30%</progress>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            31
-                        </td>
-                        <td>
-                            <progress class="progress is-info" value="45" max="100">45%</progress>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            41
-                        </td>
-                        <td>
-                            <progress class="progress is-success" value="60" max="100">60%</progress>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            51
-                        </td>
-                        <td>
-                            <progress class="progress is-warning" value="75" max="100">75%</progress>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            61
-                        </td>
-                        <td>
-                            <progress class="progress is-danger" value="90" max="100">90%</progress>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
 
-                    
-        </div>
+        <nav class="panel">
+            <p class="panel-heading">
+                Tvoje najbolj popularne destinacije
+            </p>
+            <div class="panel-block">
+                <ul>
+                    <div class="content is-medium">
+                    <li><b>Prek našega portala si našel informacije o {{vsota_frekvenc_uporabnika}} postajah ter 
+                        optimalni poti med {{len(uporabnik.prejsna_iskanja) * 2}} mesti!</b>
+                    </li>
+                    % for i in range(5):
+                        <li>
+                                {{tabela_fraz[i]}} najbolj popularna destinacija:
+                                 <b>{{popularna_vozlisca_uporabnika[i].ime}}: Obiskal {{popularna_vozlisca_uporabnika[i].frekvenca_obiskov}}-krat</b>
+                        </li>
+                        <li>
+                            delez = 
+                            <progress class="progress is-link" value="60" max="100">30%</progress>
+                        </li>
+                    %end
+                </div>
+
+                </ul>  
+            </div>
+        </nav>
+
     </div>
+
+
+    <div class="column">
+
+        <nav class="panel">
+            <p class="panel-heading">
+                Tvoje najbolj popularne destinacije
+            </p>
+            <div class="panel-block">
+                <ul>
+                    % for i in range(5):
+                        <li>
+                            <div class="content is-medium">
+                                {{tabela_fraz[i]}} najbolj popularna destinacija: <b>{{popularna_vozlisca_vseh[i].ime}}</b>
+                            </div>
+                        </li>
+                        <li>
+                            <progress class="progress is-link" value="30" max="100">30%</progress>
+                        </li>
+                    %end
+                </ul>  
+            </div>
+        </nav>
+
+    </div>
+
+
 
     <div class="column">
         <div class="box">
-            <progress class="progress is-primary" value="15" max="100">15%</progress>
+            
             <progress class="progress is-link" value="30" max="100">30%</progress>
             <progress class="progress is-info" value="45" max="100">45%</progress>
             <progress class="progress is-success" value="60" max="100">60%</progress>

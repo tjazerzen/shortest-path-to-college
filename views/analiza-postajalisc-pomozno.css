@@ -1,0 +1,22 @@
+table {
+    width: 3000px;
+}
+tr:nth-child(odd) {
+    background-color: #f8f8f8;
+}
+td {
+    border: 1px solid #ccc;
+}
+
+td {
+    position: relative;
+}
+
+.bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #8ef;
+    /*z-index: -1;*/
+}
