@@ -96,6 +96,32 @@
                 "PostajaJadranska"
             ],
             "stevilka_linije": 2
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "PostajaJadranska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 124,
+            "najkrajsa_pot": [
+                "BritofKR",
+                "KranjAP",
+                "LjubljanaTivoli",
+                "PostajaJadranska"
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": "Kobarid",
+            "konec": "PostajaJadranska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 374,
+            "najkrajsa_pot": [
+                "Kobarid",
+                "Tolmin",
+                "LjubljanaTivoli",
+                "PostajaJadranska"
+            ],
+            "stevilka_linije": 2
         }
     ]
 }
