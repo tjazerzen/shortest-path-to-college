@@ -3,8 +3,108 @@
     "stevilke_linij": [
         2,
         4,
-        3
+        3,
+        1
     ],
     "ime": "Tjaž Eržen",
-    "prejsna_iskanja": []
+    "prejsna_iskanja": [
+        {
+            "zacetek": "BritofKR",
+            "konec": "KranjAP",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 86,
+            "najkrajsa_pot": [
+                "BritofKR",
+                "KranjAP"
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": "LjubljanaTivoli",
+            "konec": "PostajaJadranska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 288,
+            "najkrajsa_pot": [
+                "LjubljanaTivoli",
+                "PostajaJadranska"
+            ],
+            "stevilka_linije": 4
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "KranjAP",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 78,
+            "najkrajsa_pot": [
+                "BritofKR",
+                "KranjAP"
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "PostajaJadranska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 162,
+            "najkrajsa_pot": [
+                "BritofKR",
+                "KranjAP",
+                "LjubljanaTivoli",
+                "FMF",
+                "PostajaJadranska"
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": "LjubljanaTivoli",
+            "konec": "PostajaJadranska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 15,
+            "najkrajsa_pot": [
+                "LjubljanaTivoli",
+                "PostajaJadranska"
+            ],
+            "stevilka_linije": 2
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "Tolmin",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 1000000,
+            "najkrajsa_pot": [
+                "BritofKRTolmin"
+            ],
+            "stevilka_linije": -1
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "Kobarid",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 1000000,
+            "najkrajsa_pot": [
+                "- Pot - Ne - Obstaja"
+            ],
+            "stevilka_linije": -1
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "Tolmin",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 1000000,
+            "najkrajsa_pot": [
+                "--- NE OBSTAJA ---"
+            ],
+            "stevilka_linije": -1
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "SlovenskiJeruzalem",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": -1,
+            "najkrajsa_pot": [
+                "--- NE OBSTAJA ---"
+            ],
+            "stevilka_linije": -1
+        }
+    ]
 }

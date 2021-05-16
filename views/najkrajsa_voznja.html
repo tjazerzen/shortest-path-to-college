@@ -3,7 +3,7 @@
 <div class="columns">
     <div class="column is-one-third">
         <nav class="panel">
-            <p class="panel-heading">Pozdravljen, {{uporabnik.ime}}!</p>
+            <p class="panel-heading">Živjo, {{uporabnik.ime}}!</p>
 
         </nav>
 
@@ -39,7 +39,7 @@
                     % if len(uporabnik.stevilke_linij) != len(uporabnik.vsi_grafi):
                         Dodaj novo relacijo na tvoj seznam priljubljenih:
                         <div class="field">
-                            % include('_izberi_priljubljeno_linijo.html', name='priljubljena_linija')
+                            % include('_izberi_priljubljeno_linijo.html', name='priljubljena_linija', oznaka='Dodaj št...')
                         </div>
                         <div class="field has-addons">
                             <div class="control">
@@ -50,7 +50,7 @@
                             </div>
                         </div>
                     % else:
-                        Vse poti do faksa imaš rad, {{uporabnik.ime}}!
+                        Vse poti do faksa so ti ljube, {{uporabnik.ime}}!
                     %end
                 </form>
             </div>
@@ -61,7 +61,7 @@
             <p class="panel-heading">Išči</p>
             <div class="panel-block">
 
-                <form action="/premakni-denar/" method="POST">
+                <form action="/isci/" method="POST">
                     <div class="contenet is-small">
                     Kam pa danes potuješ? Izberi postajališči iz istih linij, sicer se nikamor ne pride!
                     </div>

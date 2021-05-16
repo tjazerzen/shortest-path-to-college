@@ -1,0 +1,57 @@
+{
+    "zasifrirano_geslo": "3032ed6ad17b51088e81126010dd0cd5a4898398123e9991a552aca69aaf0310464af5528f5f44dfffbb0ab81049083de52739560a9760e44e2c0a9eeff53a08",
+    "stevilke_linij": [
+        2,
+        1,
+        3,
+        4
+    ],
+    "ime": "Hana",
+    "prejsna_iskanja": [
+        {
+            "zacetek": "BritofKR",
+            "konec": "FMF",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 154,
+            "najkrajsa_pot": [
+                "BritofKR",
+                "KranjAP",
+                "LjubljanaTivoli",
+                "FMF"
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": "LjubljanaTivoli",
+            "konec": "Kobarid",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 359,
+            "najkrajsa_pot": [
+                "LjubljanaTivoli",
+                "Tolmin",
+                "Kobarid"
+            ],
+            "stevilka_linije": 2
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "OsnovnaSolaKaselj",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": -1,
+            "najkrajsa_pot": [
+                "--- NE OBSTAJA ---"
+            ],
+            "stevilka_linije": -1
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "OsnovnaSolaKaselj",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": -1,
+            "najkrajsa_pot": [
+                "--- Direktna relacija ne obstaja ---"
+            ],
+            "stevilka_linije": -1
+        }
+    ]
+}

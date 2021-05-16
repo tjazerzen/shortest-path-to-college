@@ -45,7 +45,15 @@ class Model:
             return graf
         self.grafi[graf.stevilka_linije] = graf  # Sicer, ga dodaj v self.grafi
         return self.grafi[graf.stevilka_linije]  # In ga vrni.
+    
+    def vrni_grafe(self, vozlisce_ime):
+        ''' vrne nam mnozico grafov, ki vsebujejo ime tega vozlisca '''
+        return {graf for graf in self.grafi.values() if graf.tocka(vozlisce_ime)}
 
+
+    def vozlisci_isti_grafQ(self, vozlisce1_ime, vozlisce2_ime):
+        ''' Vrne nam presek (množico) grafov, ki vsebujejo tako vozlisce pod imenom vozlisce1_ime kot vozlisce2_ime'''
+        return self.vrni_grafe(vozlisce1_ime).intersection(self.vrni_grafe(vozlisce2_ime))
 
 # 1 Graf: V vozlišč
 class Vozlisce:
@@ -261,17 +269,6 @@ class Graf:
                     if slovar_razdalj[sosednje_vozlisce] > nova_razdalja_do_vozlisca:
                         slovar_razdalj[sosednje_vozlisce] = nova_razdalja_do_vozlisca
                         slovar_povezav[sosednje_vozlisce] = slovar_povezav[trenutno_vozlisce] + [sosednja_povezava]
-
-        # return najkrajsa_pot_do_vozlisca[vozlisce_end], slovar_povezav[vozlisce_end]
-        print(self)
-        print(Iskanje(
-            vozlisce1=vozlisce_start,
-            vozlisce2=vozlisce_end,
-            cas_vpogleda=cas_iskanja,
-            cena_potovanja=najkrajsa_pot_do_vozlisca[vozlisce_end],
-            najkrajsa_pot=self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end]),
-            stevilka_linije=self.stevilka_linije
-        ))
         return Iskanje(
             vozlisce1=vozlisce_start,
             vozlisce2=vozlisce_end,

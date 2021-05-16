@@ -6,6 +6,8 @@ from model import *
 PISKOTEK_UPORABNISKO_IME = "uporabnisko_ime"
 SKRIVNOST = "to je ena skrivnost"
 
+IME_DATOTEKE = "podatki_grafov.json"
+moj_model = Model.iz_datoteke(IME_DATOTEKE)
 
 def shrani_stanje(uporabnik):
     uporabnik.v_datoteko()
@@ -74,12 +76,45 @@ def najkrajsa_voznja():
 @bottle.post("/dodaj-priljubljeno-relacijo/")
 def dodaj_priljubljeno_linijo():
     uporabnik = trenutni_uporabnik()
-    print(uporabnik)
     nova_linija = int(bottle.request.forms["priljubljena_linija"])
     uporabnik.dodaj_novo_linijo(nova_linija)
-    print(uporabnik.stevilke_linij)
     shrani_stanje(uporabnik)
     bottle.redirect("/")
+
+
+@bottle.post("/isci/")
+def isci():
+    uporabnik = trenutni_uporabnik()
+    vozlisce1_ime = bottle.request.forms["kraj_zacetka"]
+    vozlisce2_ime = bottle.request.forms["kraj_konca"]
+    skupni_grafi = moj_model.vozlisci_isti_grafQ(vozlisce1_ime, vozlisce2_ime)
+    zmagovalno_iskanje = None
+    if skupni_grafi != set():
+        print(vozlisce1_ime, vozlisce2_ime)
+        # Lahko je v tem preseku več grafov. Izmed teh grafov mi iščemo tistega, po katerem je trenutno najcenejša pot.
+        for trenuten_graf in skupni_grafi:
+            trenutno_iskanje = trenuten_graf.dijkstra(
+                trenuten_graf.tocka(vozlisce1_ime),
+                trenuten_graf.tocka(vozlisce2_ime)
+            )
+            if not zmagovalno_iskanje:
+                zmagovalno_iskanje = trenutno_iskanje
+            else:
+                if trenutno_iskanje.cena_potovanja < zmagovalno_iskanje.cena_potovanja:
+                    zmagovalno_iskanje = trenutno_iskanje
+    else:
+        zmagovalno_iskanje = Iskanje(
+            vozlisce1=Vozlisce(vozlisce1_ime),
+            vozlisce2=Vozlisce(vozlisce2_ime),
+            cas_vpogleda=datetime.now(),
+            cena_potovanja=-1,
+            najkrajsa_pot=[Vozlisce("--- Direktna relacija ne obstaja ---")],
+            stevilka_linije=-1
+        )
+    uporabnik.prejsna_iskanja.append(zmagovalno_iskanje)
+    shrani_stanje(uporabnik)
+    bottle.redirect("/")
+
 
 
 bottle.run(debug=True, reloader=True)
