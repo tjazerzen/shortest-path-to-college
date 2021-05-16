@@ -2,8 +2,12 @@ from model import *
 
 model = Model.iz_datoteke(ime_datoteke="podatki_grafov.json")
 
-andrej = Uporabnik.iz_datoteke("Andrej Jamar")
+luka = Uporabnik.iz_datoteke("Luka")
 
-print(andrej)
+luka.dodaj_iskanje("BritofKR", "PostajaJadranska", 1)
+luka.dodaj_iskanje("Kobarid", "PostajaJadranska", 2)
 
-andrej.v_datoteko()
+
+luka.v_datoteko()
+
+print(luka)

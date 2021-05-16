@@ -2,7 +2,7 @@ from datetime import datetime, date
 import math
 import json
 import hashlib
-
+from dateutil import parser
 
 def zasifriraj_geslo(geslo_v_cistopisu):
     h = hashlib.blake2b()
@@ -263,12 +263,22 @@ class Graf:
                         slovar_povezav[sosednje_vozlisce] = slovar_povezav[trenutno_vozlisce] + [sosednja_povezava]
 
         # return najkrajsa_pot_do_vozlisca[vozlisce_end], slovar_povezav[vozlisce_end]
+        print(self)
+        print(Iskanje(
+            vozlisce1=vozlisce_start,
+            vozlisce2=vozlisce_end,
+            cas_vpogleda=cas_iskanja,
+            cena_potovanja=najkrajsa_pot_do_vozlisca[vozlisce_end],
+            najkrajsa_pot=self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end]),
+            stevilka_linije=self.stevilka_linije
+        ))
         return Iskanje(
             vozlisce1=vozlisce_start,
             vozlisce2=vozlisce_end,
             cas_vpogleda=cas_iskanja,
             cena_potovanja=najkrajsa_pot_do_vozlisca[vozlisce_end],
-            najkrajsa_pot=self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end])
+            najkrajsa_pot=self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end]),
+            stevilka_linije=self.stevilka_linije
         )
 
     @staticmethod
@@ -287,8 +297,8 @@ for graf in vsi_grafi:
     vse_tocke += graf.tocke.keys()
 
 
-#global vsi_grafi_dict
-#vsi_grafi_dict = {graf.stevilka_linije : graf for graf in vsi_grafi}
+global vsi_grafi_dict
+vsi_grafi_dict = {graf.stevilka_linije : graf for graf in vsi_grafi}
 
 
 # 1 Uporabnik: N iskanj
@@ -368,33 +378,31 @@ class Uporabnik:
         ''' 
         Doda novo linijo za uporabnika. Vrne pripadajoči graf s to številko 
         Če se uporabnik po tej liniji že vozi, vrne to linijo (graf).
-        Če take številke linije ni, vrne None
         '''
         if stevilka_linije in self.stevilke_linij:  # Če se po tej liniji že vozimo
-            return self.vsi_grafi[stevilka_linije]
-        if stevilka_linije in self.vsi_grafi.keys():  # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
-            self.stevilke_linij.append(stevilka_linije)
-            return self.vsi_grafi[stevilka_linije]
-        return None  # Sicer, taka linija kar ne obstaja.
+            return vsi_grafi_dict[stevilka_linije]# Če taka linija obstaja, a se do sedaj po njej še nismo vozili
+        self.stevilke_linij.append(stevilka_linije)
+        return vsi_grafi_dict[stevilka_linije]
 
     def dobi_grafe_iz_stevilk_linij(self):
         ''' Vrne nam podmnozico slovarja vsi_grafi --> samo tiste, po katerih se naš uporabnik vozi '''
         # Key - številka linije; Value - Objekt graf
         return {graf.stevilka_linije: graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij}
     
-    def dobi_svoje_sezname_grafov(self):
+    def dobi_seznam_svojih_grafov(self):
         return [graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij]
 
 
 # 1 Uporabnik: N iskanj
 class Iskanje:
 
-    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cena_potovanja, najkrajsa_pot):
+    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cena_potovanja, najkrajsa_pot, stevilka_linije):
         self.vozlisce1 = vozlisce1  # Od kod potujemo; input = objekt vozlisce
         self.vozlisce2 = vozlisce2  # Kam potujemo; input = objekt vozlisce
         self.cena_potovanja = cena_potovanja  # Cena sprehoda od "zacetek" od "konec" v nasem grafu
-        self.cas_vpogleda = cas_vpogleda  # V isoformatu
+        self.cas_vpogleda = cas_vpogleda
         self.najkrajsa_pot = najkrajsa_pot  # Seznam objektov vozlisce
+        self.stevilka_linije = stevilka_linije
 
     def v_slovar(self):
         return {
@@ -402,7 +410,8 @@ class Iskanje:
             "konec": self.vozlisce2.ime,
             "cas_evidence": date.isoformat(self.cas_vpogleda),
             "cena_potovanja": self.cena_potovanja,  # Enota so minute
-            "najkrajsa_pot": [vozlisce.ime for vozlisce in self.najkrajsa_pot]
+            "najkrajsa_pot": [vozlisce.ime for vozlisce in self.najkrajsa_pot],
+            "stevilka_linije": self.stevilka_linije
         }
 
     # TODO: Ugotovi, kako deluje Pythonov ISO format. Primer uporabe imaš pri projektu Kuverte.
@@ -411,10 +420,13 @@ class Iskanje:
         return Iskanje(
             vozlisce1=Vozlisce(slovar["zacetek"]),
             vozlisce2=Vozlisce(slovar["konec"]),
-            cas_vpogleda=slovar["cas_evidence"],  # TODO: Za tole uporabi ISO format. Ugotovi, zakaj mi zdele ne dela.
+            cas_vpogleda= parser.parse(slovar["cas_evidence"]),  # TODO: Za tole uporabi ISO format. Ugotovi, zakaj mi zdele ne dela.
             cena_potovanja=int(slovar["cena_potovanja"]),
-            najkrajsa_pot=[Vozlisce(ime_vozlisca) for ime_vozlisca in slovar["najkrajsa_pot"]]
+            najkrajsa_pot=[Vozlisce(ime_vozlisca) for ime_vozlisca in slovar["najkrajsa_pot"]],
+            stevilka_linije=(slovar["stevilka_linije"]
+            )
         )
+
 
     def __str__(self):
         ''' Sprinta nam podatke o uporabniku. Metoda, ki je prisotna zavoljo programerskih potreb. '''

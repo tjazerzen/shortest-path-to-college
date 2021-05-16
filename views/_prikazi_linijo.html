@@ -2,9 +2,11 @@
     <div class="select is-fullwidth is-small">
       <select name="{{name}}">
         % for graf in uporabnik.vsi_grafi:
-        <option value="1">
-          {{graf.stevilka_linije}}
-        </option>
+        % if graf not in uporabnik.dobi_seznam_svojih_grafov(): 
+          <option value="1">
+         {{graf.stevilka_linije}}
+          </option>
+        % end
         % end
       </select>
     </div>

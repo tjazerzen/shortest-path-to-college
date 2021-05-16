@@ -1,0 +1,105 @@
+{
+    "zasifrirano_geslo": "db24bfb4532d4461ed30c169ca3c75d2c2088b288a8b2329ebc4a8f9e7fe9073c56c425caaa4c992bd5f35b52a0c94b58c2282413e834c189197368fb0f5139b",
+    "stevilke_linij": [
+        1,
+        2
+    ],
+    "ime": "Andrej Jamar",
+    "prejsna_iskanja": [
+        {
+            "zacetek": "BritofKR",
+            "konec": "PostajaJadranska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 393,
+            "najkrajsa_pot": [
+                "BritofKR",
+                "KranjAP",
+                "LjubljanaTivoli",
+                "PostajaJadranska"
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": "Bled",
+            "konec": "BohinjskaBistrica",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 69,
+            "najkrajsa_pot": [
+                "Bled",
+                "BohinjskaBistrica"
+            ]
+        },
+        {
+            "zacetek": "Kobarid",
+            "konec": "Tolmin",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 35,
+            "najkrajsa_pot": [
+                "Kobarid",
+                "Tolmin"
+            ],
+            "stevilka_linije": 2
+        },
+        {
+            "zacetek": "LjubljanaTivoli",
+            "konec": "KranjZelezniska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 118,
+            "najkrajsa_pot": [
+                "LjubljanaTivoli",
+                "PostajaJadranska",
+                "LjubljanaZelezniska",
+                "KranjZelezniska"
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": "BritofKR",
+            "konec": "PostajaJadranska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 385,
+            "najkrajsa_pot": [
+                "BritofKR",
+                "KranjAP",
+                "LjubljanaTivoli",
+                "PostajaJadranska"
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": "Bled",
+            "konec": "BohinjskaBistrica",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 69,
+            "najkrajsa_pot": [
+                "Bled",
+                "BohinjskaBistrica"
+            ],
+            "stevilka_linije": 2
+        },
+        {
+            "zacetek": "Kobarid",
+            "konec": "Tolmin",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 35,
+            "najkrajsa_pot": [
+                "Kobarid",
+                "Tolmin"
+            ],
+            "stevilka_linije": 2
+        },
+        {
+            "zacetek": "LjubljanaTivoli",
+            "konec": "KranjZelezniska",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 116,
+            "najkrajsa_pot": [
+                "LjubljanaTivoli",
+                "FMF",
+                "LjubljanaZelezniska",
+                "KranjZelezniska"
+            ],
+            "stevilka_linije": 1
+        }
+    ]
+}

@@ -14,7 +14,7 @@
                 <div class="content is-small">
                     <b>Tvoje najljubše vozne linije so:</b><br>
                     <ul>
-                        % for graf in uporabnik.vsi_grafi:
+                        % for graf in uporabnik.dobi_seznam_svojih_grafov():
                         % if graf.stevilka_linije == 1:
                         <li>{{graf.izpis_linije()}} [FMF pa najljubša destinacija, jasno :D].</li>
                         % else:
@@ -62,9 +62,11 @@
                     <div class="field">
                         % include('_izberi_tocko.html', name='kraj_konca', oznaka='Izstop', icon='fas fa-sign-in-alt')
                     </div>
+                    <!--
                     <div class="field">
                         % include('_izberi_cas_odhoda.html', name='najbolj_zgoden_cas_odhoda')
                     </div>
+                -->
                     <div class="field has-addons">
                         <div class="control">
 
@@ -86,62 +88,22 @@
             <thead>
                 <tr>
                     <th>Datum</th>
-                    <th>Številka relacije</th>
+                    <th>Št. relacije</th>
                     <th>Začetek</th>
                     <th>Konec</th>
-                    <th>Trajanje potovanja</th>
+                    <th>Trajanje potovanja[min]</th>
                     <th>Najhitrejša pot</th>
                 </tr>
             </thead>
             <tbody>
-                <form action="/dodaj-preliv/" method="POST">
-                    <tr>
-                        <td></td>
-                        <td>
-                            % include('_izberi_racun.html', name='racun') # datoteko sem modificiral, da se ne sesuje
-                        </td>
-                        <td>
-                            % #include('_izberi_kuverto.html', name='kuverta', icon='fas fa-envelope') # datoteko sem
-                            modificiral, da se ne sesuje
-                            % #TODO: Spremeni
-                        </td>
-                        <td>
-                            % include('_izberi_znesek.html', name='znesek') # Mislim, da se ne bo sesulo, še vseeno pa
-                            gre poskusiti
-                        </td>
-                        <td>
-                            <div class="control has-icons-left">
-                                <input class="input is-small" type="text" name="opis" placeholder="opis">
-                                <span class="icon is-small is-left">
-                                    <i class="far fa-sticky-note"></i>
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="control">
-                                <button class="button is-info is-small">dodaj</button>
-                            </div>
-                        </td>
-                    </tr>
-                </form>
-                % for i in range(len(uporabnik.prejsna_iskanja) + 4):
+                % for iskanje in uporabnik.prejsna_iskanja:
                 <tr>
-                    <td>{{2*i - 12}}</td>
-                    <!--Bom spremenil-->
-                    <td>{{4*i}}</td>
-                    <!--Bom spremenil-->
-                    <td>
-                        % if True: # Bom spremenil
-                        nerazporejeno
-                        % else:
-                        {{preliv.kuverta.ime}}
-                        % end
-                    </td>
-                    <td>
-                        % include('_prikaz_zneska.html', znesek=64)
-                    </td>
-                    <td>Za enkrat imam samo eno vozno linijo</td>
-                    <td></td>
+                    <td>{{iskanje.cas_vpogleda}}</td> <!--Stolpec za datum iskanja-->
+                    <td>{{iskanje.stevilka_linije}}</td><!--Bom spremenil-->
+                    <td>{{iskanje.vozlisce1.ime}}</td>
+                    <td>{{iskanje.vozlisce2.ime}}</td>
+                    <td>{{iskanje.cena_potovanja}}</td> <!--Stolpec za ceno tega potovanja-->
+                    <td>{{" - ".join([vozlisce.ime for vozlisce in iskanje.najkrajsa_pot])}}</td> <!--Stolpec za pot tega najcenejšega sprehoda-->
                 </tr>
                 % end
             </tbody>
