@@ -323,6 +323,10 @@ class Graf:
         
         with open(IME_DATOTEKE, "w") as datoteka:
             json.dump(slovar, datoteka, ensure_ascii=False, indent=4)
+    
+    @staticmethod
+    def dobi_popularna_vozlisca():
+        pass
 
 
 # Globalna spremenljivka ki drži informacije o vseh možnih grafih.
