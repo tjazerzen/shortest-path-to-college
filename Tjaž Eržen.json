@@ -2,7 +2,6 @@
     "zasifrirano_geslo": "db24bfb4532d4461ed30c169ca3c75d2c2088b288a8b2329ebc4a8f9e7fe9073c56c425caaa4c992bd5f35b52a0c94b58c2282413e834c189197368fb0f5139b",
     "stevilke_linij": [
         2,
-        4,
         3,
         1
     ],
@@ -12,7 +11,7 @@
             "zacetek": "BritofKR",
             "konec": "KranjAP",
             "cas_evidence": "2021-05-16",
-            "cena_potovanja": 86,
+            "cena_potovanja": 80,
             "najkrajsa_pot": [
                 "BritofKR",
                 "KranjAP"
@@ -20,21 +19,24 @@
             "stevilka_linije": 1
         },
         {
-            "zacetek": "LjubljanaTivoli",
-            "konec": "PostajaJadranska",
+            "zacetek": "KranjZelezniska",
+            "konec": "FMF",
             "cas_evidence": "2021-05-16",
-            "cena_potovanja": 288,
+            "cena_potovanja": 395,
             "najkrajsa_pot": [
+                "KranjZelezniska",
+                "BritofKR",
+                "KranjAP",
                 "LjubljanaTivoli",
-                "PostajaJadranska"
+                "FMF"
             ],
-            "stevilka_linije": 4
+            "stevilka_linije": 1
         },
         {
             "zacetek": "BritofKR",
             "konec": "KranjAP",
             "cas_evidence": "2021-05-16",
-            "cena_potovanja": 78,
+            "cena_potovanja": 66,
             "najkrajsa_pot": [
                 "BritofKR",
                 "KranjAP"
@@ -43,66 +45,47 @@
         },
         {
             "zacetek": "BritofKR",
-            "konec": "PostajaJadranska",
+            "konec": "FMF",
             "cas_evidence": "2021-05-16",
-            "cena_potovanja": 162,
+            "cena_potovanja": 151,
             "najkrajsa_pot": [
                 "BritofKR",
                 "KranjAP",
                 "LjubljanaTivoli",
-                "FMF",
-                "PostajaJadranska"
+                "FMF"
             ],
             "stevilka_linije": 1
         },
         {
-            "zacetek": "LjubljanaTivoli",
-            "konec": "PostajaJadranska",
+            "zacetek": "OsnovnaSolaKaselj",
+            "konec": "ZgornjiKaselj",
             "cas_evidence": "2021-05-16",
-            "cena_potovanja": 15,
+            "cena_potovanja": 3,
             "najkrajsa_pot": [
+                "OsnovnaSolaKaselj",
+                "ZgornjiKaselj"
+            ],
+            "stevilka_linije": 3
+        },
+        {
+            "zacetek": "KranjAP",
+            "konec": "FMF",
+            "cas_evidence": "2021-05-16",
+            "cena_potovanja": 74,
+            "najkrajsa_pot": [
+                "KranjAP",
                 "LjubljanaTivoli",
-                "PostajaJadranska"
+                "FMF"
             ],
-            "stevilka_linije": 2
+            "stevilka_linije": 1
         },
         {
-            "zacetek": "BritofKR",
-            "konec": "Tolmin",
-            "cas_evidence": "2021-05-16",
-            "cena_potovanja": 1000000,
-            "najkrajsa_pot": [
-                "BritofKRTolmin"
-            ],
-            "stevilka_linije": -1
-        },
-        {
-            "zacetek": "BritofKR",
-            "konec": "Kobarid",
-            "cas_evidence": "2021-05-16",
-            "cena_potovanja": 1000000,
-            "najkrajsa_pot": [
-                "- Pot - Ne - Obstaja"
-            ],
-            "stevilka_linije": -1
-        },
-        {
-            "zacetek": "BritofKR",
-            "konec": "Tolmin",
-            "cas_evidence": "2021-05-16",
-            "cena_potovanja": 1000000,
-            "najkrajsa_pot": [
-                "--- NE OBSTAJA ---"
-            ],
-            "stevilka_linije": -1
-        },
-        {
-            "zacetek": "BritofKR",
-            "konec": "SlovenskiJeruzalem",
+            "zacetek": "SlovenskiJeruzalem",
+            "konec": "Piran",
             "cas_evidence": "2021-05-16",
             "cena_potovanja": -1,
             "najkrajsa_pot": [
-                "--- NE OBSTAJA ---"
+                "--- Direktna relacija ne obstaja ---"
             ],
             "stevilka_linije": -1
         }

@@ -1,13 +1,15 @@
 from model import *
+from datetime import datetime, date
+from dateutil import parser
 
-model = Model.iz_datoteke(ime_datoteke="podatki_grafov.json")
+cas = datetime.now()
+print(cas)
 
-luka = Uporabnik.iz_datoteke("Luka")
+cas_iso = date.isoformat(datetime.now())
+print(cas_iso)
 
-luka.dodaj_iskanje("BritofKR", "PostajaJadranska", 1)
-luka.dodaj_iskanje("Kobarid", "PostajaJadranska", 2)
+cas_iz_iso = parser.parse(cas_iso)
+print(str(cas_iz_iso).split(" "))
 
 
-luka.v_datoteko()
-
-print(luka)
+print("bla blaa blaaa".split(" "))

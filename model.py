@@ -63,9 +63,13 @@ class Model:
 class Vozlisce:
     def __init__(self, ime):
         self.ime = ime
+        self.frekvenca_obiskov = frekvenca_obiskov
 
     def __str__(self):
         return self.ime
+    
+    def v_slovar(self):
+        return {"ime": self.ime, "frekvenca_obiskov": self.frekvenca_obiskov}
 
 
 # 1 Graf: E povezav
@@ -313,7 +317,6 @@ class Uporabnik:
         self.ime = ime
         self.prejsna_iskanja = prejsna_iskanja  # Evidenca iskanj. Kronološko urejene. Vsak element je objekt razreda iskanje.
         self.stevilke_linij = stevilke_linij  # Pove nam, po katerih omrežjih se fura uporabnik
-        # Pozoren gledalec opazi, da to vsi_grafi niso argument v funkciji inicializacije, temveč globalna spremenljivka 10 vrstic višje
         self.vsi_grafi = vsi_grafi
         self.zasifrirano_geslo = zasifrirano_geslo
         self.vse_tocke = vse_tocke
@@ -366,24 +369,13 @@ class Uporabnik:
     def nastavi_geslo(self, geslo_v_cistopisu):
         self.zasifrirano_geslo = zasifriraj_geslo(geslo_v_cistopisu)
 
-    def dodaj_iskanje(self, start_vozlisce_ime, end_vozlisce_ime, stevilka_linije, cas_vpogleda=datetime.now()):
-        ''' 
-        Doda nov objekt Iskanje v odvisnosti od zgornjih parametrov.
-        Z argumentom stevilka_linije dostopamo do specifičnega grafa, potem pa na tem grafu samo pokličemo algoritem dijkstra s preostalimi parametri.
-        Vrne objekt Iskanje
-        '''
-        graf = self.dodaj_novo_linijo(stevilka_linije)
-        if not graf: return  # Če nam zgornja funkcija vrne None --> Če linije s tako številko ni
-        start_vozlisce, end_vozlisce = graf.tocka(start_vozlisce_ime), graf.tocka(end_vozlisce_ime)
-        return self.prejsna_iskanja.append(graf.dijkstra(start_vozlisce, end_vozlisce, cas_iskanja=cas_vpogleda))
-
     def dodaj_novo_linijo(self, stevilka_linije):
         ''' 
         Doda novo linijo za uporabnika. Vrne pripadajoči graf s to številko 
         Če se uporabnik po tej liniji že vozi, vrne to linijo (graf).
         '''
         if stevilka_linije in self.stevilke_linij:  # Če se po tej liniji že vozimo
-            return vsi_grafi_dict[stevilka_linije]# Če taka linija obstaja, a se do sedaj po njej še nismo vozili
+            return vsi_grafi_dict[stevilka_linije] # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
         self.stevilke_linij.append(stevilka_linije)
         return vsi_grafi_dict[stevilka_linije]
 
