@@ -1,14 +1,14 @@
 <div class="control has-icons-left">
     <div class="select is-fullwidth is-small">
       <select name="{{name}}">
-        % for i in range(10):
-        <option value="Tukaj bi moralo biti ime računa">
-          {{i^3}}
+        % for graf in uporabnik.vsi_grafi:
+        <option value="1">
+          {{graf.stevilka_linije}}
         </option>
         % end
       </select>
     </div>
     <span class="icon is-small is-left">
-      <i class="fas fa-piggy-bank"></i>
+      <i class="fas fa-map-marker"></i>
     </span>
   </div>

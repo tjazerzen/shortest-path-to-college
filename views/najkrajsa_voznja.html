@@ -10,50 +10,44 @@
         <nav class="panel">
             <p class="panel-heading">Tvoje izbrane vozne linije</p>
             <div class="panel-block">
-                <div class="content is-medium">
-                    Tvoje najljubše vozne linije so:<br>
+
+                <div class="content is-small">
+                    <b>Tvoje najljubše vozne linije so:</b><br>
                     <ul>
                         % for graf in uporabnik.vsi_grafi:
                         % if graf.stevilka_linije == 1:
-                        <li>{{graf.izpis_linije()}}. FMF pa najljubša destinacija, jasno :D</li>
+                        <li>{{graf.izpis_linije()}} [FMF pa najljubša destinacija, jasno :D].</li>
                         % else:
                         <li>{{graf.izpis_linije()}}</li>
                         %end
+                        % end
                     </ul>
                 </div>
-                % end
-
             </div>
         </nav>
 
         <nav class="panel">
             <p class="panel-heading">Dodaj nov peron</p>
             <div class="panel-block">
-                <form action="/dodaj_linijo/" method="POST">
 
-                    <div class="control has-icons-left">
-                        <div class="select is-fullwidth is-small">
-                            <select name="polje_stevilka_linije">
-                                % if defined('oznaka'):
-                                <option disabled selected>Številka linije</option>
-                                % end
-                                <option value="stevilka_novega_perona">Dodaj nov peron</option>
-                                % for graf in uporabnik.vsi_grafi: # To bom spremenil
-                                <option value="stevilka_linije">{{graf.stevilka_linije}}</option>
-                                % end
-                            </select>
-                            <div class="field"><input type="submit" class="button is-small" value="dodaj"></div>
-                            <button class="button is-info is-small">Išči</button>
-                            <span class="icon is-small is-left"><i class="fas fa-plus"></i></span>
+                <form action="/dodaj-relacijo/" method="POST">
+
+                    Dodaj novo relacijo na tvoj seznam priljubljenih:
+                    <div class="field">
+                        % include('_prikazi_linijo.html', name='najbolj_zgoden_cas_odhoda')
+                    </div>
+                    <div class="field has-addons">
+                        <div class="control">
+
+                        </div>
+                        <div class="control">
+                            <button class="button is-info is-small">Dodaj</button>
                         </div>
                     </div>
                 </form>
-
             </div>
+
         </nav>
-
-
-
 
         <nav class="panel">
             <p class="panel-heading">išči!</p>
@@ -85,9 +79,9 @@
         </nav>
     </div>
 
-    <!--<h3>Evidenca tvojih preteklih iskanj</h3>-->
 
     <div class="column">
+
         <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
