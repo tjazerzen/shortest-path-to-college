@@ -3,13 +3,34 @@
         {
             "stevilka_linije": 1,
             "vozlisca": [
-                "BritofKR",
-                "KranjAP",
-                "LjubljanaTivoli",
-                "PostajaJadranska",
-                "FMF",
-                "LjubljanaZelezniska",
-                "KranjZelezniska"
+                {
+                    "ime": "BritofKR", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "KranjAP", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "LjubljanaTivoli", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "FMF", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "PostajaJadranska", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "LjubljanaZelezniska", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "KranjZelezniska", 
+                    "frekvenca_obiskov": 0
+                }
             ],
             "povezave": [
                 {
@@ -97,15 +118,46 @@
         {
             "stevilka_linije": 2,
             "vozlisca": [
-                "Bled",
-                "BohinjskaBistrica",
-                "KranjAP",
-                "LjubljanaTivoli",
-                "PostajaJadranska",
-                "Tolmin",
-                "Kobarid",
-                "FMF",
-                "PostajaJadranska"
+                {
+                    "ime": "Bled", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "BohinjskaBistrica", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "KranjAP", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "LjubljanaTivoli", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "PostajaJadranska", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "PostajaJadranska", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "Tolmin", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "Kobarid", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "FMF", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "PostajaJadranska", 
+                    "frekvenca_obiskov": 0
+                }
             ],
             "povezave": [
                 {
@@ -193,13 +245,34 @@
         {
             "stevilka_linije": 3,
             "vozlisca": [
-                "SlovenskiJeruzalem",
-                "ZgornjiKaselj",
-                "LjubljanaTivoli",
-                "OsnovnaSolaKaselj",
-                "PostajaJadranska",
-                "FMF",
-                "PostajaJadranska"
+                {
+                    "ime": "SlovenskiJeruzalem", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "ZgornjiKaselj", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "LjubljanaTivoli", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "OsnovnaSolaKaselj", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "PostajaJadranska", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "PostajaJadranska", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "FMF", 
+                    "frekvenca_obiskov": 0
+                }
             ],
             "povezave": [
                 {
@@ -287,14 +360,34 @@
         {
             "stevilka_linije": 4,
             "vozlisca": [
-                "Koper",
-                "Piran",
-                "Izola",
-                "Portoroz",
-                "LjubljanaTivoli",
-                "PostajaJadranska",
-                "FMF",
-                "PostajaJadranska"
+                {
+                    "ime": "Koper", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "Piran", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "Izola", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "Portoroz", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "LjubljanaTivoli", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "PostajaJadranska", 
+                    "frekvenca_obiskov": 0
+                },
+                {
+                    "ime": "FMF", 
+                    "frekvenca_obiskov": 0
+                }
             ],
             "povezave": [
                 {
