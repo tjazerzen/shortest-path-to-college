@@ -37,7 +37,7 @@ V front-endu sem poskrbel za `spletno storitev, ki podpira več uporabnikov`. Vs
 
 K uporabiku sem dodal spremenljivko imenovano `številke linij`, ki nam hrani informacije o posameznikov priljubljenih relacijah. Plan je bil, da posameznik lahko išče le po teh linijah, toda sem pri implementaciji na žalost izgubil tekmo s časom.
 
-
+Naj omenim še, da program poženete tako, da poženete datoteko `spletni_vmesnik.py.`
 
 ## `Nadaljne raziskovanje`:
 
