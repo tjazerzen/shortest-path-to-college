@@ -14,14 +14,11 @@ def zasifriraj_geslo(geslo_v_cistopisu):
 
 # 1 Model: N tranportnih linij = grafov
 
-# TODO: Ustvari funkcijo, ki se iz modela sprehodi po vseh grafih, znotraj njega po vseh uporabnikih ter potem vrne
-#       najbolj popularna iskanja.
 
 class Model:
     ''' Krovni objekt, ki povezuje moj program.'''
 
     def __init__(self, grafi=[]):
-        # TODO: Ne muti tako z slovarji kot seznami!
         self.grafi = {graf.stevilka_linije: graf for graf in grafi}
 
     def v_slovar(self):
@@ -67,10 +64,6 @@ class Vozlisce:
     def __init__(self, ime, frekvenca_obiskov=0):
         self.ime = ime
         self.frekvenca_obiskov = frekvenca_obiskov
-
-    def __str__(self):
-        #return f"VOZLIŠČE: - Ime: {self.ime}; Frekvenca obiskov: {self.frekvenca_obiskov}"
-        return self.ime
     
     def v_slovar(self):
         return {"ime": self.ime, "frekvenca_obiskov": self.frekvenca_obiskov}
@@ -83,10 +76,6 @@ class Vozlisce:
         ''' V algoritmu dijkstra bo metoda poklicana, ko bo vozlišče obiskano. '''
         self.frekvenca_obiskov += 1
         return self
-    
-    def __lt__(self, other):
-        ''' Primerja dve vozlišči med sabo glede na frekvenco obiskov. Če sta frekvenci enaki, mi je vseeno, zato kar vrnem prvega. '''
-        return self.frekvenca_obiskov >= other.frekvenca_obiskov
 
 
 # 1 Graf: E povezav
@@ -119,6 +108,7 @@ class Povezava:
         Izračuna utež na grafu v odvisnosti od časa. Če je povezava fiksna, bo cena vedno ista.
         Sicer: Pošči čas od cas_vpogleda do naslednjega odhoda avtobusa ter nastavi ceno povezave na <cas do odhoda> + <cas voznje>.
         '''
+        
         if self.fiksna_utez:
             return self
 
@@ -140,9 +130,6 @@ class Povezava:
         ''' Helper '''
         return int(datum.strftime("%H")) * 60 + int(datum.strftime("%M"))
 
-    def __str__(self):
-        return f"Začetek povezave: {self.vozlisce1}; Konec povezave: {self.vozlisce2}; Fiksna: {self.fiksna_utez}; utez: {self.utez}"
-
 
 # 1 Graf: V vozlišč; 1 Graf: E povezav; N grafov: M uporabnikov
 class Graf:
@@ -150,14 +137,8 @@ class Graf:
     ''' Objekt, ki povezuje objekta Vozlisce in Povezave na eni strani, ter objekt Uporabnik na drugi. '''
     def __init__(self, stevilka_linije, tocke={}, uporabniki={}, ):
         self.tocke = tocke  # {Key: Točka; Value: množica povezav z začetkom v tej točki}
-        self.uporabniki = uporabniki  # SLOVAR --> {Key: Ime; Value: <Objekt Uporabnik>
-
-        # TODO: Ponucaj spremenljivko self.uporabniki.
-        # TODO: Zapiši spremenljivko self.uporabniki v datoteko.
-
         # vsak graf bo imel M uporabnikov. Toda tudi vsak uporabnik se lahko vozi po večih grafih.
         self.stevilka_linije = stevilka_linije
-
 
     def iz_slovarja_helper_metoda(ime_tocke, slovar): # slovar: key --> objekt tocka; value --> {...}
         ''' Točno to kar pove ime. ;)'''
@@ -209,16 +190,6 @@ class Graf:
         self.tocke[tocka] = set()
         return tocka
 
-    def dodaj_tocke(self, tocke):
-        ''' Doda nekaj novih točk v naš graf. Ne vrne ničesar. Definirano zgolj zavoljo lažje konstrukcije grafa. '''
-        for tocka in tocke:
-            self.dodaj_tocko(tocka)
-
-    # TODO: Razmisli, če to res rabiš.
-    def vrni_sosednja_vozlisca(self, tocka):
-        ''' vrne vozlišča, ki so tej točki sosednja. Če take točke ni, vrne None. Skliče se že na obstoječo funkcijo vrni_sosednje_povezave '''
-        return [sosednja_povezava.vozlisce2 for sosednja_povezava in list(self.vrni_sosednje_povezave(tocka))]
-
     def vrni_sosednje_povezave(self, tocka):
         ''' Vrne povezave, ki so tej točki sosednje. Če take točke ni, vrne None. '''
         if tocka in self.tocke.keys():
@@ -246,15 +217,6 @@ class Graf:
         # Ustvarim nov objekt. Ker se bo utež vedno znova izračunala, je lahko karkoli. Tukaj jo postavim na -1.
         # Ker utež povezave ni fiksna, je fiksna = False.
         return self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez))
-
-    def __str__(self):
-        ''' Izpiše nam podatke o našem grafu. Definirano za lažje programersko testiranje. '''
-        izpis = f"Ime grafa: " + self.dobi_ime_linije() + "\n"
-        for tocka in self.tocke.keys():
-            izpis += tocka.ime + ": [" + "; ".join(
-                [sosednja_povezava.vozlisce2.ime + ": " + str(sosednja_povezava.utez) for sosednja_povezava in
-                 self.tocke[tocka]]) + "]\n"
-        return izpis
 
     def nastavi_vse_povezave(self, cas_vpogleda: datetime = datetime.now()):
         ''' 
@@ -365,7 +327,6 @@ vsi_grafi_dict = {graf.stevilka_linije : graf for graf in vsi_grafi}
 # 1 Uporabnik: N iskanj
 class Uporabnik:
 
-    # TODO: Ugotovi, če res potrebuješ spremenljivki prejsna_iskanja ter stevilke_linij
     def __init__(self, ime, zasifrirano_geslo, prejsna_iskanja=[], stevilke_linij=[]):
         self.ime = ime
         self.prejsna_iskanja = prejsna_iskanja  # Evidenca iskanj. Kronološko urejene. Vsak element je objekt razreda iskanje.
@@ -381,9 +342,6 @@ class Uporabnik:
             "ime": self.ime,
             "prejsna_iskanja": [iskanje.v_slovar() for iskanje in self.prejsna_iskanja]
         }
-
-    def __str__(self):
-        return f"Ime: {self.ime}; Prejsna Iskanja: {'  '.join([str(_) for _ in self.prejsna_iskanja])}; Številke Linij: {' '.join([str(_) for _ in self.stevilke_linij])}"
 
     @staticmethod
     def iz_slovarja(slovar):
@@ -457,7 +415,7 @@ class Uporabnik:
                     vsota_frekvenc += frekvenca
                 except KeyError:
                     pass
-                        
+
         lst = [(value, Vozlisce(ime=key, frekvenca_obiskov=value)) for key, value in slovar_frekvenc.items()]
         return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
 
@@ -484,22 +442,14 @@ class Iskanje:
             "stevilka_linije": self.stevilka_linije
         }
 
-    # TODO: Ugotovi, kako deluje Pythonov ISO format. Primer uporabe imaš pri projektu Kuverte.
     @staticmethod
     def iz_slovarja(slovar):
         return Iskanje(
             vozlisce1=Vozlisce.iz_slovarja(slovar["zacetek"]),
             vozlisce2=Vozlisce.iz_slovarja(slovar["konec"]),
-            cas_vpogleda= parser.parse(slovar["cas_evidence"]),  # TODO: Za tole uporabi ISO format. Ugotovi, zakaj mi zdele ne dela.
+            cas_vpogleda= parser.parse(slovar["cas_evidence"]),
             cena_potovanja=int(slovar["cena_potovanja"]),
             najkrajsa_pot=[Vozlisce.iz_slovarja(slovar_vozlisca) for slovar_vozlisca in slovar["najkrajsa_pot"]],
             stevilka_linije=(slovar["stevilka_linije"]
             )
         )
-
-
-    def __str__(self):
-        ''' Sprinta nam podatke o uporabniku. Metoda, ki je prisotna zavoljo programerskih potreb. '''
-        output1 = f"Začetno vozlišče: {self.vozlisce1.ime}; Končno vozlišče: {self.vozlisce2.ime}; Cas vpogleda {self.cas_vpogleda};"
-        output2 = f"Cena sprehoda: {self.cena_potovanja}; Najkrajša pot: {' '.join([vozlisce.ime for vozlisce in self.najkrajsa_pot])}"
-        return output1 + output2

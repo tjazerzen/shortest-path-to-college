@@ -1,10 +1,11 @@
-from datetime import date
+from datetime import date, datetime
 import bottle
-from model import *
+from model import Model, Uporabnik, zasifriraj_geslo, Vozlisce, Iskanje, Graf
 
 
 PISKOTEK_UPORABNISKO_IME = "uporabnisko_ime"
 SKRIVNOST = "to je ena skrivnost"
+RELACIJA_NE_OBSTAJA = "Direktna relacija ne obstaja!"
 
 IME_DATOTEKE = "podatki_grafov.json"
 moj_model = Model.iz_datoteke(IME_DATOTEKE)
@@ -107,7 +108,7 @@ def isci():
             vozlisce2=Vozlisce(vozlisce2_ime),
             cas_vpogleda=datetime.now(),
             cena_potovanja=-1,
-            najkrajsa_pot=[Vozlisce("Direktna relacija ne obstaja ---"), -1],
+            najkrajsa_pot=[Vozlisce(RELACIJA_NE_OBSTAJA, frekvenca_obiskov=-1)],
             stevilka_linije=-1
         )
     uporabnik.prejsna_iskanja.append(zmagovalno_iskanje)

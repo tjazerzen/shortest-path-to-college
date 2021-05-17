@@ -35,9 +35,8 @@
                         </li>
                         <li>
                             % delez = delez + 30
-                            % delez = min(99, delez)
+                            % delez = min(99, delez + 15)
                             % index = delez // 20
-                            {{delez}}
                             <progress class="{{tabela_stilov[index]}}" value="{{delez}}" max="100">42%</progress>
                         </li>
                     %end
@@ -70,7 +69,6 @@
                             % delez = int(100*float(popularna_vozlisca_vseh[i].frekvenca_obiskov / vsota_frekvenc_vseh)) + 30
                             % delez = min(99, delez)
                             % index = delez // 20
-                            {{delez}}
                             <progress class="{{tabela_stilov[index]}}" value="{{delez}}" max="100">42%</progress>
                         </li>
                     %end
