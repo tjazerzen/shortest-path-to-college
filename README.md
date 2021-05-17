@@ -2,10 +2,10 @@
 
 Vse poti vodijo do faksa! :D
 
-Bolj natančno, po postaje na Jadranski, toda vprašajmo se: 
+Bolj natančno, do postaje na Jadranski, toda vprašajmo se: 
 - Kako še vseeno najhitreje priti od domače avtobusne postaje do iskanega avtobusnega postajališča? 
 - Se do našega cilja sploh da priti z direktno povezavo? 
-- Če se da, koliko časa bi potreboval in kaj bi bila optimalna pot? 
+- Če se da, koliko časa bi potreboval in katera bi bila optimalna pot? 
 
 Pričujoči projekt poskuša odgovoriti na ta vprašanja.
 
@@ -13,10 +13,10 @@ Pričujoči projekt poskuša odgovoriti na ta vprašanja.
 
 Jasno je, da neki množici cestnih povezav ter postajališč lahko priredimo vozlišča ter obtežene povezave, le-tem pa priredimo obtežen graf. Zato je za iskanje najkrajše poti od enega postajališča dobra ideja shraniti podatke v obliki nekega grafa (datoteka podatki grafov.json), katerega uteži pa niso nujno neodvisne od časa iskanja po grafu.
 
-Naloga tega projekta je najti optimalno pot med dvema vozliščema v grafu z večimi komponentami s postajališčem FMF kot edinim skupnim med temi vsemi.
+Naloga tega projekta je najti optimalno pot med dvema vozliščema v grafu z več komponentami s postajališčem FMF kot edinim skupnim med temi vsemi.
 
 Po nekaterih povezavah se lahko sprehajamo oz. vozimo s kolesom, spet po drugih pa se vozimo z avtobusom. Zato svoje povezave delim na 2 dela: 
-1. Povezave s nefiksno utežjo (v datoteki podatki_grafov so shranjene z vrednostjo uteži -1). Ko bomo iskali najcenejšo pot, bo vsakič znova iz tekstovnih datotek (shranjenih v folderju PodatkiOdhodov) treba izračunati trenutno utež te povezave.
+1. Povezave s nefiksno utežjo (v datoteki podatki_grafov so shranjene z vrednostjo uteži -1). Ko bomo iskali najcenejšo pot, bo vsakič znova iz tekstovnih datotek (shranjenih v mapi PodatkiOdhodov) treba izračunati trenutno utež te povezave.
 2. Povezave s fiksno utežjo (v datoteki podatki_grafov so shranjene s kakršno koli pozitivno vrednostjo)
 
 V datoteki model.py sem se lotil programiranja objektov, ki v mojem programu nastopajo:
@@ -31,7 +31,7 @@ V datoteki model.py sem se lotil programiranja objektov, ki v mojem programu nas
 
 Za popestritev uporabniške izkušnje sem nato vsako vozlišče opremil s parametrom frekvenca iskanj, ki sem ga uporabil za prikaz uporabnikovih najbolj priljubljenih vozlišč (vozlišče je priljubljeno, če ga je že velikokrat obiskal). Isto sem naredil za vse uporabnike hkrati, nato pa rezultata primerjal pod sekcijo analiza-postajališč.
 
-V font-endu sem poskrbel za spletno storitev, ki podpira več uporabnikov. Vsak uporabnik do svojega stanja dostopa preko gesla ter uporabniškega imena. Naj omenim še, da so vsi zgoraj omenjeni objekti opremljeni z metodami za shranjevanje in branje podatkov. Zato lahko uporabnik program zapre, se naslednji dan vrne ter še vedno vidi svoja prejšna iskanja.
+V front-endu sem poskrbel za spletno storitev, ki podpira več uporabnikov. Vsak uporabnik do svojega stanja dostopa preko gesla ter uporabniškega imena. Naj omenim še, da so vsi zgoraj omenjeni objekti opremljeni z metodami za shranjevanje in branje podatkov. Zato lahko uporabnik program zapre, se naslednji dan vrne ter še vedno vidi svoja prejšna iskanja.
 
 K uporabiku sem dodal parameter številke_linij, ki nam hrani informacije o posameznikov priljubljenih relacijah. Plan je bil, da posameznik lahko išče le po teh linijah, toda me je pri implementaciji na žalost premagal čas.
 
