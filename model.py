@@ -4,6 +4,8 @@ import json
 import hashlib
 from dateutil import parser
 
+RELACIJA_NE_OBSTAJA = "Direktna relacija ne obstaja"
+
 def zasifriraj_geslo(geslo_v_cistopisu):
     h = hashlib.blake2b()
     h.update(geslo_v_cistopisu.encode(encoding="utf-8"))
@@ -344,7 +346,7 @@ class Graf:
             lst.append((frekvenca, vozlisce))
             vsota_frekvenc += frekvenca
         
-        return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
+        return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0]) if val2.ime != RELACIJA_NE_OBSTAJA], vsota_frekvenc
 
 
 # Globalna spremenljivka ki drži informacije o vseh možnih grafih.
@@ -444,15 +446,18 @@ class Uporabnik:
             slovar = json.load(datoteka)
         prejsna_iskanja = slovar["prejsna_iskanja"]
         lst = []
-        slovar_frekvenc = {tocka.ime : 0 for tocka in vse_tocke}
+        slovar_frekvenc = {tocka.ime : 0 for tocka in vse_tocke if tocka.ime != RELACIJA_NE_OBSTAJA}
         vsota_frekvenc = 0
         for prejsno_iskanje in prejsna_iskanja:
             najkrajsa_pot = prejsno_iskanje["najkrajsa_pot"]
             for slovar_vozlisca in najkrajsa_pot:
-                frekvenca = int(slovar_vozlisca["frekvenca_obiskov"])
-                slovar_frekvenc[slovar_vozlisca["ime"]] += frekvenca
-                vsota_frekvenc += frekvenca
-        
+                try:
+                    frekvenca = int(slovar_vozlisca["frekvenca_obiskov"])
+                    slovar_frekvenc[slovar_vozlisca["ime"]] += frekvenca
+                    vsota_frekvenc += frekvenca
+                except KeyError:
+                    pass
+                        
         lst = [(value, Vozlisce(ime=key, frekvenca_obiskov=value)) for key, value in slovar_frekvenc.items()]
         return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
 
