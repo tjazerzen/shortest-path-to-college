@@ -6,6 +6,7 @@ from dateutil import parser
 
 RELACIJA_NE_OBSTAJA = "Direktna relacija ne obstaja"
 
+
 def zasifriraj_geslo(geslo_v_cistopisu):
     h = hashlib.blake2b()
     h.update(geslo_v_cistopisu.encode(encoding="utf-8"))
@@ -26,7 +27,7 @@ class Model:
 
     @staticmethod
     def iz_slovarja(slovar):
-        #return Model(grafi=[Graf.iz_slovarja(slovar_grafa) for slovar_grafa in slovar["grafi"]])
+        # return Model(grafi=[Graf.iz_slovarja(slovar_grafa) for slovar_grafa in slovar["grafi"]])
         return Model(grafi=[Graf.iz_slovarja(slovar_grafa) for slovar_grafa in slovar["grafi"]])
 
     def v_datoteko(self, ime_datoteke="podatki_grafov.json"):
@@ -47,7 +48,7 @@ class Model:
             return graf
         self.grafi[graf.stevilka_linije] = graf  # Sicer, ga dodaj v self.grafi
         return self.grafi[graf.stevilka_linije]  # In ga vrni.
-    
+
     def vrni_grafe(self, vozlisce_ime):
         ''' vrne nam mnozico grafov, ki vsebujejo ime tega vozlisca. Helper metoda k Model.vozlisci_isti_graf!()'''
         return {graf for graf in self.grafi.values() if graf.tocka(vozlisce_ime)}
@@ -59,19 +60,20 @@ class Model:
         '''
         return self.vrni_grafe(vozlisce1_ime).intersection(self.vrni_grafe(vozlisce2_ime))
 
+
 # 1 Graf: V vozlišč
 class Vozlisce:
     def __init__(self, ime, frekvenca_obiskov=0):
         self.ime = ime
         self.frekvenca_obiskov = frekvenca_obiskov
-    
+
     def v_slovar(self):
         return {"ime": self.ime, "frekvenca_obiskov": self.frekvenca_obiskov}
-    
+
     @staticmethod
     def iz_slovarja(slovar):
         return Vozlisce(ime=slovar["ime"], frekvenca_obiskov=int(slovar["frekvenca_obiskov"]))
-    
+
     def obisk(self):
         ''' V algoritmu dijkstra bo metoda poklicana, ko bo vozlišče obiskano. '''
         self.frekvenca_obiskov += 1
@@ -108,7 +110,7 @@ class Povezava:
         Izračuna utež na grafu v odvisnosti od časa. Če je povezava fiksna, bo cena vedno ista.
         Sicer: Pošči čas od cas_vpogleda do naslednjega odhoda avtobusa ter nastavi ceno povezave na <cas do odhoda> + <cas voznje>.
         '''
-        
+
         if self.fiksna_utez:
             return self
 
@@ -122,8 +124,8 @@ class Povezava:
                     self.utez = trenutni_prihod - minute
                     return self
             # Ura je preveč, da bi peljal še kakšen avtobus. Kar počakat na prvega naslednji dan ob 05:00 --> to je 300 min od polnoči
-            self.utez = 24 * 60 - minute + 300 
-            return self # Vrne sebe, ker bo ta metoda poklicana v objektu Graf.
+            self.utez = 24 * 60 - minute + 300
+            return self  # Vrne sebe, ker bo ta metoda poklicana v objektu Graf.
 
     @staticmethod
     def dobi_minute_iz_casa(datum: datetime = datetime.now()):
@@ -133,14 +135,14 @@ class Povezava:
 
 # 1 Graf: V vozlišč; 1 Graf: E povezav; N grafov: M uporabnikov
 class Graf:
-
     ''' Objekt, ki povezuje objekta Vozlisce in Povezave na eni strani, ter objekt Uporabnik na drugi. '''
+
     def __init__(self, stevilka_linije, tocke={}, uporabniki={}, ):
         self.tocke = tocke  # {Key: Točka; Value: množica povezav z začetkom v tej točki}
         # vsak graf bo imel M uporabnikov. Toda tudi vsak uporabnik se lahko vozi po večih grafih.
         self.stevilka_linije = stevilka_linije
 
-    def iz_slovarja_helper_metoda(ime_tocke, slovar): # slovar: key --> objekt tocka; value --> {...}
+    def iz_slovarja_helper_metoda(ime_tocke, slovar):  # slovar: key --> objekt tocka; value --> {...}
         ''' Točno to kar pove ime. ;)'''
         for tocka in slovar.keys():
             if tocka.ime == ime_tocke:
@@ -150,19 +152,19 @@ class Graf:
     @staticmethod
     def iz_slovarja(slovar):
         ''' Konstruira graf iz "podslovarja" iz datoteke podatki_grafov.json '''
-        stevilka_linije=int(slovar["stevilka_linije"])
+        stevilka_linije = int(slovar["stevilka_linije"])
         vozlisca_grafa = [Vozlisce.iz_slovarja(slovar_vozlisca) for slovar_vozlisca in slovar["vozlisca"]]
         tocke = {vozlisce: set() for vozlisce in vozlisca_grafa}
         for slovar_povezave in slovar["povezave"]:
             vozlisce1 = Graf.iz_slovarja_helper_metoda(slovar_povezave["zacetek_povezave"], tocke)
             vozlisce2 = Graf.iz_slovarja_helper_metoda(slovar_povezave["konec_povezave"], tocke)
-            utez=int(slovar_povezave["utez"])
+            utez = int(slovar_povezave["utez"])
             tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez))
         return Graf(stevilka_linije, tocke=tocke)
 
     def dobi_ime_linije(self):
         return f"LINIJA{self.stevilka_linije}"
-    
+
     def izpis_linije(self):
         ''' Funkcija, ki nam bo služila v front-endu. Izpiše nam vse povezave v tem grafu'''
         return f"{self.dobi_ime_linije()}: {' - '.join([tocka.ime for tocka in self.tocke.keys()])}"
@@ -203,7 +205,7 @@ class Graf:
         Vse neusmerjene povezave bodo imele tudi fiksno ceno potovanja.
         '''
         if vozlisce1 == vozlisce2: return None  # Trivivalen primer; zank ne bomo ustvarjali.
-        return (self.dodaj_usmerjeno_povezavo(vozlisce1, vozlisce2, utez=utez_povezave), 
+        return (self.dodaj_usmerjeno_povezavo(vozlisce1, vozlisce2, utez=utez_povezave),
                 self.dodaj_usmerjeno_povezavo(vozlisce2, vozlisce1, utez=utez_povezave)
                 )
 
@@ -254,10 +256,10 @@ class Graf:
                     if slovar_razdalj[sosednje_vozlisce] > nova_razdalja_do_vozlisca:
                         slovar_razdalj[sosednje_vozlisce] = nova_razdalja_do_vozlisca
                         slovar_povezav[sosednje_vozlisce] = slovar_povezav[trenutno_vozlisce] + [sosednja_povezava]
-        
-        najkrajsa_pot=self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end])
-        Graf.posodobi_frekvenco(najkrajsa_pot) # Posodobi frekvenco za vse uporabnike
-        najkrajsa_pot=[vozlisce.obisk() for vozlisce in najkrajsa_pot] # Posodobi frekvenco za trenutnega uporabnika
+
+        najkrajsa_pot = self.dobi_pot_iz_povezav(slovar_povezav[vozlisce_end])
+        Graf.posodobi_frekvenco(najkrajsa_pot)  # Posodobi frekvenco za vse uporabnike
+        najkrajsa_pot = [vozlisce.obisk() for vozlisce in najkrajsa_pot]  # Posodobi frekvenco za trenutnega uporabnika
         return Iskanje(
             vozlisce1=vozlisce_start,
             vozlisce2=vozlisce_end,
@@ -271,7 +273,7 @@ class Graf:
     def dobi_pot_iz_povezav(seznam_povezav):
         ''' Iz seznama prepotovanih poti vrne seznam imen prepotovanih vozlišč. Helper funkcija k outputu za funkcijo dikstra '''
         return [seznam_povezav[0].vozlisce1] + [povezava.vozlisce2 for povezava in seznam_povezav]
-    
+
     @staticmethod
     def posodobi_frekvenco(seznam_vozlisc):
         ''' 
@@ -283,15 +285,15 @@ class Graf:
 
         with open(IME_DATOTEKE, "r") as datoteka:
             slovar = json.load(datoteka)
-        
+
         for index, slovar_vozlisca in enumerate(slovar["vse_tocke"]):
             if slovar_vozlisca["ime"] in imena_vozlisc:
                 nova_frekvenca = int(slovar_vozlisca["frekvenca_obiskov"]) + 1
                 slovar["vse_tocke"][index]["frekvenca_obiskov"] = nova_frekvenca
-        
+
         with open(IME_DATOTEKE, "w") as datoteka:
             json.dump(slovar, datoteka, ensure_ascii=False, indent=4)
-    
+
     @staticmethod
     def dobi_popularna_vozlisca_vseh():
         ''' Funkcija nam vrne seznam petih najbolj popularnih vozlišč po padajočem vrnstnem redu glede na parameter frekvenca obiskov'''
@@ -299,7 +301,7 @@ class Graf:
 
         with open(IME_DATOTEKE, "r") as datoteka:
             slovar = json.load(datoteka)
-        
+
         lst = []
         vsota_frekvenc = 0
         for index, slovar_vozlisca in enumerate(slovar["vse_tocke"]):
@@ -307,8 +309,9 @@ class Graf:
             frekvenca = vozlisce.frekvenca_obiskov
             lst.append((frekvenca, vozlisce))
             vsota_frekvenc += frekvenca
-        
-        return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0]) if val2.ime != RELACIJA_NE_OBSTAJA], vsota_frekvenc
+
+        return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0]) if
+                val2.ime != RELACIJA_NE_OBSTAJA], vsota_frekvenc
 
 
 # Globalna spremenljivka ki drži informacije o vseh možnih grafih.
@@ -321,7 +324,7 @@ for graf in vsi_grafi:
     vse_tocke += graf.tocke.keys()
 
 global vsi_grafi_dict
-vsi_grafi_dict = {graf.stevilka_linije : graf for graf in vsi_grafi}
+vsi_grafi_dict = {graf.stevilka_linije: graf for graf in vsi_grafi}
 
 
 # 1 Uporabnik: N iskanj
@@ -386,7 +389,7 @@ class Uporabnik:
         Če se uporabnik po tej liniji že vozi, vrne to linijo (graf).
         '''
         if stevilka_linije in self.stevilke_linij:  # Če se po tej liniji že vozimo
-            return vsi_grafi_dict[stevilka_linije] # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
+            return vsi_grafi_dict[stevilka_linije]  # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
         self.stevilke_linij.append(stevilka_linije)
         return vsi_grafi_dict[stevilka_linije]
 
@@ -394,17 +397,17 @@ class Uporabnik:
         ''' Vrne nam podmnozico slovarja vsi_grafi --> samo tiste, po katerih se naš uporabnik vozi '''
         # Key - številka linije; Value - Objekt graf
         return {graf.stevilka_linije: graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij}
-    
+
     def dobi_seznam_svojih_grafov(self):
         return [graf for graf in self.vsi_grafi if graf.stevilka_linije in self.stevilke_linij]
-    
+
     def dobi_popularna_vozlisca_uporabnika(self):
         ''' '''
         with open(Uporabnik.dobi_ime_datoteke(self.ime)) as datoteka:
             slovar = json.load(datoteka)
         prejsna_iskanja = slovar["prejsna_iskanja"]
         lst = []
-        slovar_frekvenc = {tocka.ime : 0 for tocka in vse_tocke if tocka.ime != RELACIJA_NE_OBSTAJA}
+        slovar_frekvenc = {tocka.ime: 0 for tocka in vse_tocke if tocka.ime != RELACIJA_NE_OBSTAJA}
         vsota_frekvenc = 0
         for prejsno_iskanje in prejsna_iskanja:
             najkrajsa_pot = prejsno_iskanje["najkrajsa_pot"]
@@ -423,7 +426,8 @@ class Uporabnik:
 # 1 Uporabnik: N iskanj
 class Iskanje:
 
-    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cena_potovanja, najkrajsa_pot, stevilka_linije):
+    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cena_potovanja, najkrajsa_pot,
+                 stevilka_linije):
         self.vozlisce1 = vozlisce1  # Od kod potujemo; input = objekt vozlisce
         self.vozlisce2 = vozlisce2  # Kam potujemo; input = objekt vozlisce
         self.cena_potovanja = cena_potovanja  # Cena sprehoda od "zacetek" od "konec" v nasem grafu
@@ -432,7 +436,6 @@ class Iskanje:
         self.stevilka_linije = stevilka_linije
 
     def v_slovar(self):
-
         return {
             "zacetek": self.vozlisce1.v_slovar(),
             "konec": self.vozlisce2.v_slovar(),
@@ -447,7 +450,7 @@ class Iskanje:
         return Iskanje(
             vozlisce1=Vozlisce.iz_slovarja(slovar["zacetek"]),
             vozlisce2=Vozlisce.iz_slovarja(slovar["konec"]),
-            cas_vpogleda= parser.parse(slovar["cas_evidence"]),
+            cas_vpogleda=parser.parse(slovar["cas_evidence"]),
             cena_potovanja=int(slovar["cena_potovanja"]),
             najkrajsa_pot=[Vozlisce.iz_slovarja(slovar_vozlisca) for slovar_vozlisca in slovar["najkrajsa_pot"]],
             stevilka_linije=(slovar["stevilka_linije"]

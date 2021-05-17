@@ -11,22 +11,23 @@
             <p class="panel-heading">Tvoje izbrane poti</p>
             <div class="panel-block">
                 % if len(uporabnik.dobi_seznam_svojih_grafov()) > 0:
-                    <div class="content is-small">
-                        <b>Tvoje najljubše poti do FMFja so:</b><br>
-                        <ul>
-                            % for graf in uporabnik.dobi_seznam_svojih_grafov():
-                            % if graf.stevilka_linije == 1:
-                            <li>{{graf.izpis_linije()}} [FMF pa najljubša destinacija, jasno :D].</li>
-                            % else:
-                            <li>{{graf.izpis_linije()}}</li>
-                            %end
-                            % end
-                        </ul>
-                    </div>
+                <div class="content is-small">
+                    <b>Tvoje najljubše poti do FMFja so:</b><br>
+                    <ul>
+                        % for graf in uporabnik.dobi_seznam_svojih_grafov():
+                        % if graf.stevilka_linije == 1:
+                        <li>{{graf.izpis_linije()}} [FMF pa najljubša destinacija, jasno :D].</li>
+                        % else:
+                        <li>{{graf.izpis_linije()}}</li>
+                        %end
+                        % end
+                    </ul>
+                </div>
                 % else:
-                    <div class="content is-small">
-                        <b>Trenutno nimaš nobenih priljubljenih voznih linij. Pod sekcijo "Dodaj nov peron" jih lahko dodaš.</b><br>
-                    </div>
+                <div class="content is-small">
+                    <b>Trenutno nimaš nobenih priljubljenih voznih linij. Pod sekcijo "Dodaj nov peron" jih lahko
+                        dodaš.</b><br>
+                </div>
                 % end
             </div>
         </nav>
@@ -37,20 +38,20 @@
 
                 <form action="/dodaj-priljubljeno-relacijo/" method="POST">
                     % if len(uporabnik.stevilke_linij) != len(uporabnik.vsi_grafi):
-                        Dodaj novo relacijo na tvoj seznam priljubljenih:
-                        <div class="field">
-                            % include('_izberi_priljubljeno_linijo.html', name='priljubljena_linija', oznaka='Dodaj št...')
-                        </div>
-                        <div class="field has-addons">
-                            <div class="control">
+                    Dodaj novo relacijo na tvoj seznam priljubljenih:
+                    <div class="field">
+                        % include('_izberi_priljubljeno_linijo.html', name='priljubljena_linija', oznaka='Dodaj št...')
+                    </div>
+                    <div class="field has-addons">
+                        <div class="control">
 
-                            </div>
-                            <div class="control">
-                                <button class="button is-info is-small">Dodaj</button>
-                            </div>
                         </div>
+                        <div class="control">
+                            <button class="button is-info is-small">Dodaj</button>
+                        </div>
+                    </div>
                     % else:
-                        Vse poti do faksa so ti ljube, {{uporabnik.ime}}!
+                    Vse poti do faksa so ti ljube, {{uporabnik.ime}}!
                     %end
                 </form>
             </div>
@@ -63,7 +64,7 @@
 
                 <form action="/isci/" method="POST">
                     <div class="contenet is-small">
-                    Kam pa danes potuješ? Izberi postajališči iz istih linij, sicer se nikamor ne pride!
+                        Kam pa danes potuješ? Izberi postajališči iz istih linij, sicer se nikamor ne pride!
                     </div>
                     <div class="field">
                         % include('_izberi_tocko.html', name='kraj_zacetka', oznaka='Vstop', icon='fas fa-sign-in-alt')
@@ -90,26 +91,26 @@
 
         <table class="table is-hoverable is-fullwidth">
             <thead>
-                <tr>
-                    <th>Datum</th>
-                    <th>Št. relacije</th>
-                    <th>Začetek</th>
-                    <th>Konec</th>
-                    <th>Trajanje potovanja[min]</th>
-                    <th>Najhitrejša pot</th>
-                </tr>
+            <tr>
+                <th>Datum</th>
+                <th>Št. relacije</th>
+                <th>Začetek</th>
+                <th>Konec</th>
+                <th>Trajanje potovanja[min]</th>
+                <th>Najhitrejša pot</th>
+            </tr>
             </thead>
             <tbody>
-                % for iskanje in uporabnik.prejsna_iskanja:
-                <tr>
-                    <td>{{str(iskanje.cas_vpogleda).split(" ")[0]}}</td> 
-                    <td>{{iskanje.stevilka_linije}}</td>
-                    <td>{{iskanje.vozlisce1.ime}}</td>
-                    <td>{{iskanje.vozlisce2.ime}}</td>
-                    <td>{{iskanje.cena_potovanja}}</td>
-                    <td>{{" - ".join([vozlisce.ime for vozlisce in iskanje.najkrajsa_pot])}}</td>
-                </tr>
-                % end
+            % for iskanje in uporabnik.prejsna_iskanja:
+            <tr>
+                <td>{{str(iskanje.cas_vpogleda).split(" ")[0]}}</td>
+                <td>{{iskanje.stevilka_linije}}</td>
+                <td>{{iskanje.vozlisce1.ime}}</td>
+                <td>{{iskanje.vozlisce2.ime}}</td>
+                <td>{{iskanje.cena_potovanja}}</td>
+                <td>{{" - ".join([vozlisce.ime for vozlisce in iskanje.najkrajsa_pot])}}</td>
+            </tr>
+            % end
             </tbody>
         </table>
     </div>

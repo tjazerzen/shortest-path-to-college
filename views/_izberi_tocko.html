@@ -1,18 +1,18 @@
 <div class="control has-icons-left">
-  <div class="select is-fullwidth is-small">
-    <select name="{{name}}">
-      % if defined('oznaka'):
-        <option disabled selected>{{oznaka}}</option>
-      % end
-      
-      % for ime_tocke in set([tocka.ime for tocka in uporabnik.vse_tocke]): # To bom spremenil
-        <option value="{{ime_tocke}}">
-          {{ime_tocke}}
-        </option>
-      % end
-    </select>
-  </div>
-  <span class="icon is-small is-left">
+    <div class="select is-fullwidth is-small">
+        <select name="{{name}}">
+            % if defined('oznaka'):
+            <option disabled selected>{{oznaka}}</option>
+            % end
+
+            % for ime_tocke in set([tocka.ime for tocka in uporabnik.vse_tocke]): # To bom spremenil
+            <option value="{{ime_tocke}}">
+                {{ime_tocke}}
+            </option>
+            % end
+        </select>
+    </div>
+    <span class="icon is-small is-left">
     <i class="{{icon}}"></i>
   </span>
 </div>

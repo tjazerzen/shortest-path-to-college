@@ -2,13 +2,13 @@ from datetime import date, datetime
 import bottle
 from model import Model, Uporabnik, zasifriraj_geslo, Vozlisce, Iskanje, Graf
 
-
 PISKOTEK_UPORABNISKO_IME = "uporabnisko_ime"
 SKRIVNOST = "to je ena skrivnost"
 RELACIJA_NE_OBSTAJA = "Direktna relacija ne obstaja!"
 
 IME_DATOTEKE = "podatki_grafov.json"
 moj_model = Model.iz_datoteke(IME_DATOTEKE)
+
 
 def shrani_stanje(uporabnik):
     uporabnik.v_datoteko()
@@ -67,12 +67,14 @@ def prijava_get():
     bottle.response.delete_cookie(PISKOTEK_UPORABNISKO_IME, path="/")
     bottle.redirect("/")
 
+
 @bottle.get("/najkrajsa_voznja/")
 def najkrajsa_voznja():
     uporabnik = trenutni_uporabnik()
     return bottle.template(
         "najkrajsa_voznja.html", uporabnik=uporabnik
     )
+
 
 @bottle.post("/dodaj-priljubljeno-relacijo/")
 def dodaj_priljubljeno_linijo():
@@ -124,18 +126,20 @@ def analiziraj_postajalisca():
     stevilo_prikazov = min(len(popularna_vozlisca_vseh), len(popularna_vozlisca_uporabnika), 5)
 
     return bottle.template(
-        "analiza-postajalisc.html", 
+        "analiza-postajalisc.html",
         popularna_vozlisca_vseh=popularna_vozlisca_vseh[:stevilo_prikazov],
         popularna_vozlisca_uporabnika=popularna_vozlisca_uporabnika[:stevilo_prikazov],
         stevilo_prikazov=stevilo_prikazov,
         vsota_frekvenc_uporabnika=vsota_frekvenc_uporabnika,
         vsota_frekvenc_vseh=vsota_frekvenc_vseh,
         uporabnik=uporabnik
-        )
+    )
+
 
 @bottle.get("/dodatne-informacije/")
 def dodatne_informacije():
     uporabnik = trenutni_uporabnik()
     return bottle.template("dodatne-informacije.html")
+
 
 bottle.run(debug=True, reloader=True)
