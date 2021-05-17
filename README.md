@@ -39,7 +39,7 @@ K uporabiku sem dodal spremenljivko imenovano `številke linij`, ki nam hrani in
 
 Naj omenim še, da program poženete tako, da poženete datoteko `spletni_vmesnik.py.`
 
-## `Nadaljne raziskovanje`:
+## `Nadaljne raziskovanje`
 
 Grafovski algoritmi se (na žalost) še ne obravnajo v 1. letniku, če pa koga zanima pa bi ga preusmeril na:
 - [Algoritmska biblija](https://edutechlearners.com/download/Introduction_to_algorithms-3rd%20Edition.pdf)
