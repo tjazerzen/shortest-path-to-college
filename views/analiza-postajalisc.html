@@ -24,23 +24,26 @@
             <div class="panel-block">
                 <ul>
                     <div class="content is-medium">
-                        <li><b>Prek našega portala si našel informacije o {{vsota_frekvenc_uporabnika}} postajah ter
-                            poiskal optimalno relacijo kar {{len(uporabnik.prejsna_iskanja)}}-krat!</b>
+                        % if vsota_frekvenc_uporabnika != 0:
+                            <li><b>Prek našega portala si našel informacije o {{vsota_frekvenc_uporabnika}} postajah ter
+                                poiskal optimalno relacijo kar {{len(uporabnik.prejsna_iskanja)}}-krat!</b>
+                            </li>
+                            % for i in range(5):
+                            <li>
+                                {{tabela_fraz[i]}} najbolj popularna destinacija:
+                                % delez = int(100*float(popularna_vozlisca_uporabnika[i].frekvenca_obiskov / vsota_frekvenc_uporabnika))
+                                <b>{{popularna_vozlisca_uporabnika[i].ime}} -> se pojavi na {{delez}}% vseh iskanj!</b>
+                            </li>
+                            <li>
+                                % delez = min(99, delez + 15)
+                                % index = delez // 20
+                                <progress class="{{tabela_stilov[index]}}" value="{{delez}}" max="100">42%</progress>
+                            </li>
+                             % end
+                        % else:
+                        <li><b>Uspešno še nisi poiskal nobene poti. Pod sekcijo Dobi najkrajšo vožnjo jih lahko dodaš.</b>
                         </li>
-                        % for i in range(5):
-                        <li>
-                            {{tabela_fraz[i]}} najbolj popularna destinacija:
-                            % delez = int(100*float(popularna_vozlisca_uporabnika[i].frekvenca_obiskov /
-                            vsota_frekvenc_uporabnika))
-                            <b>{{popularna_vozlisca_uporabnika[i].ime}} -> se pojavi na {{delez}}% vseh iskanj!</b>
-                        </li>
-                        <li>
-                            % delez = delez + 30
-                            % delez = min(99, delez + 15)
-                            % index = delez // 20
-                            <progress class="{{tabela_stilov[index]}}" value="{{delez}}" max="100">42%</progress>
-                        </li>
-                        %end
+                        % end
                     </div>
 
                 </ul>
