@@ -13,7 +13,9 @@ def shrani_stanje(uporabnik):
 
 
 def trenutni_uporabnik():
-    uporabnisko_ime = bottle.request.get_cookie(PISKOTEK_UPORABNISKO_IME, secret=SKRIVNOST)
+    uporabnisko_ime = bottle.request.get_cookie(
+        PISKOTEK_UPORABNISKO_IME, secret=SKRIVNOST
+        )
     if uporabnisko_ime:
         return podatki_uporabnika(uporabnisko_ime)
     else:
