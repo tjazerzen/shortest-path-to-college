@@ -21,6 +21,8 @@ Po nekaterih povezavah se lahko sprehajamo oz. vozimo s kolesom, spet po drugih 
 1. **Povezave, ki jim utež variira s časom** (v datoteki podatki_grafov so te shranjene z vrednostjo uteži -1). Ko bomo iskali najcenejšo pot, bo vsakič znova iz tekstovnih datotek (shranjenih v mapi PodatkiOdhodov) treba izračunati trenutno utež te povezave.
 2. **Povezave s fiksno utežjo**, neodvisne od časa vpogleda (v datoteki podatki_grafov so shranjene s kakršno koli pozitivno vrednostjo)
 
+Kasneje sem vsaki povezavi dodal še atribut `tip_povezave`, ki pove, če se bo uporabnik od začetka do konca povezave prevažal z avtobusom, vlakom, šel peš, ali pa se zapeljal z lokalnim kolesom. Ta funkcionalnost je lahko vidna ob pritisku na gumb *prikaži podrobnosti -->* na osnovni strani portala.
+
 V datoteki `model.py` sem se lotil programiranja objektov, ki v mojem programu nastopajo:
 - **Model**: Krovni objekt, ki moj program povezuje. Sestavljen je iz posameznih grafov (voznih linij),
 - **Vozlišče**, ki nam predstavlja postajališče,
