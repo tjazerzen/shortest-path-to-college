@@ -6,7 +6,7 @@
         },
         {
             "ime": "LjubljanaTivoli",
-            "frekvenca_obiskov": 19
+            "frekvenca_obiskov": 23
         },
         {
             "ime": "OsnovnaSolaKaselj",
@@ -14,11 +14,11 @@
         },
         {
             "ime": "PostajaJadranska",
-            "frekvenca_obiskov": 19
+            "frekvenca_obiskov": 22
         },
         {
             "ime": "FMF",
-            "frekvenca_obiskov": 52
+            "frekvenca_obiskov": 57
         },
         {
             "ime": "Bled",
@@ -30,19 +30,19 @@
         },
         {
             "ime": "KranjAP",
-            "frekvenca_obiskov": 12
+            "frekvenca_obiskov": 15
         },
         {
             "ime": "Tolmin",
-            "frekvenca_obiskov": 7
+            "frekvenca_obiskov": 8
         },
         {
             "ime": "Kobarid",
-            "frekvenca_obiskov": 7
+            "frekvenca_obiskov": 8
         },
         {
             "ime": "BritofKR",
-            "frekvenca_obiskov": 11
+            "frekvenca_obiskov": 12
         },
         {
             "ime": "Koper",
@@ -50,15 +50,15 @@
         },
         {
             "ime": "Piran",
-            "frekvenca_obiskov": 11
+            "frekvenca_obiskov": 12
         },
         {
             "ime": "LjubljanaZelezniska",
-            "frekvenca_obiskov": 6
+            "frekvenca_obiskov": 7
         },
         {
             "ime": "Izola",
-            "frekvenca_obiskov": 11
+            "frekvenca_obiskov": 13
         },
         {
             "ime": "KranjZelezniska",
@@ -66,11 +66,11 @@
         },
         {
             "ime": "Portoroz",
-            "frekvenca_obiskov": 7
+            "frekvenca_obiskov": 8
         },
         {
             "ime": "SlovenskiJeruzalem",
-            "frekvenca_obiskov": 0
+            "frekvenca_obiskov": 1
         }
     ]
 }

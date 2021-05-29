@@ -65,15 +65,14 @@
                         <li><b>Vsi uporabniki skupaj smo prepotovali kar {{vsota_frekvenc_vseh}} mest! Pravijo, da se
                             počasi daleč pride.</b>
                         </li>
-                        % for i in range(5):
+                        % for i in range(stevilo_prikazov):
                         <li>
                             {{tabela_fraz[i]}} najbolj popularna destinacija:
                             <b>{{popularna_vozlisca_vseh[i].ime}}, ki se pojavi na
                                 {{popularna_vozlisca_vseh[i].frekvenca_obiskov}} iskanjih.</b>
                         </li>
                         <li>
-                            % delez = int(100*float(popularna_vozlisca_vseh[i].frekvenca_obiskov / vsota_frekvenc_vseh))
-                            + 30
+                            % delez = int(100*float(popularna_vozlisca_vseh[i].frekvenca_obiskov / vsota_frekvenc_vseh)) + 30
                             % delez = min(99, delez)
                             % index = delez // 20
                             <progress class="{{tabela_stilov[index]}}" value="{{delez}}" max="100">42%</progress>

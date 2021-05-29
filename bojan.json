@@ -1,0 +1,40 @@
+{
+    "zasifrirano_geslo": "c25df09e4b2d1a964dd7dfcbb596789cc251e5f213fe4d281321ea332408dc1de9fddc98619e4814f42c1ea474e582c5d085953a589b963ae9b6c7361ed37eb2",
+    "stevilke_linij": [
+        4
+    ],
+    "ime": "bojan",
+    "prejsna_iskanja": [
+        {
+            "zacetek": {
+                "ime": "Piran",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "FMF",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-29",
+            "cena_potovanja": 175,
+            "najkrajsa_pot": [
+                {
+                    "ime": "Piran",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "Izola",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "PostajaJadranska",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "FMF",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 4
+        }
+    ]
+}

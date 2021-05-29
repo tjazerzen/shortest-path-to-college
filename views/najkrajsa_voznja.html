@@ -10,11 +10,11 @@
         <nav class="panel">
             <p class="panel-heading">Tvoje izbrane poti</p>
             <div class="panel-block">
-                % if len(uporabnik.dobi_seznam_svojih_grafov()) > 0:
+                % if len(uporabnik.stevilke_linij) > 0:
                 <div class="content is-small">
                     <b>Tvoje najljubše poti do FMFja so:</b><br>
                     <ul>
-                        % for graf in uporabnik.dobi_seznam_svojih_grafov():
+                        % for graf in uporabnik.vsi_uporabnikovi_grafi.values():
                         % if graf.stevilka_linije == 1:
                         <li>{{graf.izpis_linije()}} [FMF pa najljubša destinacija, jasno :D].</li>
                         % else:
@@ -33,11 +33,11 @@
         </nav>
 
         <nav class="panel">
-            <p class="panel-heading">Dodaj nov peron</p>
+            <p class="panel-heading">Dodaj novo izbrano pot</p>
             <div class="panel-block">
 
                 <form action="/dodaj-priljubljeno-relacijo/" method="POST">
-                    % if len(uporabnik.stevilke_linij) != len(uporabnik.vsi_grafi_dict.values()):
+                    % if len(uporabnik.vsi_uporabnikovi_grafi.values()) != len(uporabnik.vsi_grafi.values()):
                     Dodaj novo relacijo na tvoj seznam priljubljenih:
                     <div class="field">
                         % include('_izberi_priljubljeno_linijo.html', name='priljubljena_linija', oznaka='Dodaj št...')
@@ -64,7 +64,8 @@
 
                 <form action="/isci/" method="POST">
                     <div class="contenet is-small">
-                        Kam pa danes potuješ? Izberi postajališči iz istih linij, sicer se nikamor ne pride!
+                        Kam pa danes potuješ? Za večje iskalne opcije si dodaj nove izbrane poti.
+                        Nasvet: Izberi postajališči iz istih linij, sicer se nikamor ne pride.
                     </div>
                     <div class="field">
                         % include('_izberi_tocko.html', name='kraj_zacetka', oznaka='Vstop', icon='fas fa-sign-in-alt')

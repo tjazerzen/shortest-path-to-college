@@ -296,6 +296,60 @@
                 }
             ],
             "stevilka_linije": 4
+        },
+        {
+            "zacetek": {
+                "ime": "FMF",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "LjubljanaZelezniska",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-29",
+            "cena_potovanja": 20,
+            "najkrajsa_pot": [
+                {
+                    "ime": "FMF",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "LjubljanaZelezniska",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": {
+                "ime": "SlovenskiJeruzalem",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "FMF",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-29",
+            "cena_potovanja": 835,
+            "najkrajsa_pot": [
+                {
+                    "ime": "SlovenskiJeruzalem",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "LjubljanaTivoli",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "PostajaJadranska",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "FMF",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 3
         }
     ]
 }

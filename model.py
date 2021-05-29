@@ -3,6 +3,7 @@ import math
 import json
 import hashlib
 from dateutil import parser
+import random
 
 RELACIJA_NE_OBSTAJA = "Direktna relacija ne obstaja"
 
@@ -29,6 +30,9 @@ def dobi_vse_tocke(grafi):
         vse_tocke += graf.tocke.keys()
     return vse_tocke
 
+def dobi_minute_iz_casa(datum: datetime = datetime.now()):
+        """ Helper k metodi Povezava.izracunaj_se() """
+        return int(datum.strftime("%H")) * 60 + int(datum.strftime("%M"))
 
 # 1 Model: N grafov
 
@@ -172,7 +176,7 @@ class Povezava:
         if self.fiksna_utez:
             return self
 
-        minute = self.dobi_minute_iz_casa(cas_vpogleda)
+        minute = dobi_minute_iz_casa(cas_vpogleda)
         ime_datoteke = self.vozlisce1.ime + "-" + self.vozlisce2.ime + ".txt" 
         # Vse tekstovne datoteke imajo isto sintakso, vsa vozlišča pa tako ime, da je ime datoteke brez težav skonstruirati
         with open("./PodatkiOdhodov/" + ime_datoteke, "r") as input_file:
@@ -186,11 +190,6 @@ class Povezava:
             # Kar počakat na prvega naslednji dan ob 05:00 --> to je 300 min od polnoči
             self.utez = 24 * 60 - minute + 300
             return self  # Vrne sebe, ker bo ta metoda poklicana v objektu Graf.
-
-    @staticmethod
-    def dobi_minute_iz_casa(datum: datetime = datetime.now()):
-        """ Helper k metodi Povezava.izracunaj_se() """
-        return int(datum.strftime("%H")) * 60 + int(datum.strftime("%M"))
 
 
 # 1 Graf: V vozlišč; 1 Graf: E povezav; N grafov: M uporabnikov
@@ -394,8 +393,9 @@ class Uporabnik:
         self.prejsna_iskanja = prejsna_iskanja  # Evidenca iskanj. Kronološko urejene. Vsak element je objekt razreda iskanje.
         self.stevilke_linij = stevilke_linij  # Pove nam, po katerih omrežjih se fura uporabnik
         self.zasifrirano_geslo = zasifrirano_geslo
-        self.vsi_grafi_dict = dobi_vse_grafe()
-        self.vse_tocke = dobi_vse_tocke(self.vsi_grafi_dict)
+        self.vsi_grafi = dobi_vse_grafe()
+        self.vsi_uporabnikovi_grafi = self.dobi_grafe_iz_stevilk_linij()
+        self.vse_tocke = dobi_vse_tocke(self.vsi_uporabnikovi_grafi)
 
     def v_slovar(self):
         return {
@@ -431,7 +431,6 @@ class Uporabnik:
         """ Uporabnikove podatke prebere iz datoteke. """
         # Ime datoteke se ne zahteva, 
         # saj ima vsak uporabnik rezervirano svojo datoteko pod imenom "<njegovo/njeno ime>.json"
-        
         with open(Uporabnik.dobi_ime_datoteke(ime)) as datoteka:
             slovar = json.load(datoteka)
             return Uporabnik.iz_slovarja(slovar)
@@ -448,17 +447,15 @@ class Uporabnik:
         Če se uporabnik po tej liniji že vozi, vrne to linijo (graf).
         """
         if stevilka_linije in self.stevilke_linij:  # Če se po tej liniji že vozimo
-            return self.vsi_grafi_dict[stevilka_linije]  # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
+            return self.vsi_uporabnikovi_grafi[stevilka_linije]  # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
         self.stevilke_linij.append(stevilka_linije)
-        return self.vsi_grafi_dict[stevilka_linije]
+        self.vsi_uporabnikovi_grafi[stevilka_linije] = self.vsi_grafi[stevilka_linije]
+        return self.vsi_uporabnikovi_grafi[stevilka_linije]
 
     def dobi_grafe_iz_stevilk_linij(self):
         """ Vrne nam podmnozico slovarja vsi_grafi --> samo tiste, po katerih se naš uporabnik vozi """
         # Key - številka linije; Value - Objekt graf
-        return {graf.stevilka_linije: graf for graf in self.vsi_grafi_dict.values() if graf.stevilka_linije in self.stevilke_linij}
-
-    def dobi_seznam_svojih_grafov(self):
-        return [graf for graf in self.vsi_grafi_dict.values() if graf.stevilka_linije in self.stevilke_linij]
+        return {graf.stevilka_linije: graf for graf in self.vsi_grafi.values() if graf.stevilka_linije in self.stevilke_linij}
 
     def dobi_popularna_vozlisca_uporabnika(self):
         """ """
@@ -466,7 +463,7 @@ class Uporabnik:
             slovar = json.load(datoteka)
         prejsna_iskanja = slovar["prejsna_iskanja"]
         lst = []
-        slovar_frekvenc = {tocka.ime: 0 for tocka in vse_tocke if tocka.ime != RELACIJA_NE_OBSTAJA}
+        slovar_frekvenc = {tocka.ime: 0 for tocka in self.vse_tocke if tocka.ime != RELACIJA_NE_OBSTAJA}
         vsota_frekvenc = 0
         for prejsno_iskanje in prejsna_iskanja:
             najkrajsa_pot = prejsno_iskanje["najkrajsa_pot"]
@@ -480,6 +477,16 @@ class Uporabnik:
 
         lst = [(value, Vozlisce(ime=key, frekvenca_obiskov=value)) for key, value in slovar_frekvenc.items()]
         return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
+
+    """
+    def _zasifriraj_geslo(geslo_v_cistopisu, sol=None):
+        if sol is None:
+            sol = str(random.getrandbits(32))
+        posoljeno_geslo = sol + geslo_v_cistopisu
+        h = hashlib.blake2b()
+        h.update(posoljeno_geslo.encode(encoding="utf-8"))
+        return f"{sol}${h.hexdigest()}"
+    """
 
 
 # 1 Uporabnik: N iskanj
