@@ -156,6 +156,8 @@ class Povezava:
         """
         self.vozlisce1 = vozlisce1
         self.vozlisce2 = vozlisce2
+
+        
         if utez == -1:
             self.fiksna_utez = False
         else:

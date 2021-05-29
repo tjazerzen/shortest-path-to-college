@@ -36,87 +36,104 @@
                 {
                     "zacetek_povezave": "BritofKR",
                     "konec_povezave": "KranjAP",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "BritofKR",
                     "konec_povezave": "KranjZelezniska",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "KranjAP",
                     "konec_povezave": "BritofKR",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "KranjAP",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "FMF",
-                    "utez": 17
+                    "utez": 17,
+                    "tip_povezave": 1
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "KranjAP",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "FMF",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 2
+                    "utez": 2,
+                    "tip_povezave": 1
                 },
                 {
                     "zacetek_povezave": "FMF",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 17
+                    "utez": 17,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "FMF",
                     "konec_povezave": "LjubljanaZelezniska",
-                    "utez": 20
+                    "utez": 20,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "FMF",
-                    "utez": 2
+                    "utez": 2,
+                    "tip_povezave": 1
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "LjubljanaZelezniska",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "LjubljanaZelezniska",
                     "konec_povezave": "FMF",
-                    "utez": 20
+                    "utez": 20,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "LjubljanaZelezniska",
                     "konec_povezave": "KranjZelezniska",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "KranjZelezniska",
                     "konec_povezave": "LjubljanaZelezniska",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "KranjZelezniska",
                     "konec_povezave": "BritofKR",
-                    "utez": -1
+                    "utez": -1,
+                    "tip_povezave": 0
                 }
             ]
         },
@@ -168,82 +185,98 @@
                 {
                     "zacetek_povezave": "Bled",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 105
+                    "utez": 105,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Bled",
                     "konec_povezave": "BohinjskaBistrica",
-                    "utez": 69
+                    "utez": 69,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Bled",
                     "konec_povezave": "KranjAP",
-                    "utez": 68
+                    "utez": 68,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "BohinjskaBistrica",
                     "konec_povezave": "Bled",
-                    "utez": 67
+                    "utez": 67,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "KranjAP",
                     "konec_povezave": "Bled",
-                    "utez": 323
+                    "utez": 323,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "KranjAP",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 323
+                    "utez": 323,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "Tolmin",
-                    "utez": 323
+                    "utez": 323,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 15
+                    "utez": 15,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "KranjAP",
-                    "utez": 71
+                    "utez": 71,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "Bled",
-                    "utez": 101
+                    "utez": 101,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "FMF",
-                    "utez": 2
+                    "utez": 2,
+                    "tip_povezave": 1
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 15
+                    "utez": 15,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "Tolmin",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 324
+                    "utez": 324,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Tolmin",
                     "konec_povezave": "Kobarid",
-                    "utez": 36
+                    "utez": 36,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Kobarid",
                     "konec_povezave": "Tolmin",
-                    "utez": 35
+                    "utez": 35,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "FMF",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 2
+                    "utez": 2,
+                    "tip_povezave": 1
                 }
             ]
         },
@@ -283,82 +316,98 @@
                 {
                     "zacetek_povezave": "SlovenskiJeruzalem",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 537
+                    "utez": 537,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "ZgornjiKaselj",
                     "konec_povezave": "OsnovnaSolaKaselj",
-                    "utez": 3
+                    "utez": 3,
+                    "tip_povezave": 1
                 },
                 {
                     "zacetek_povezave": "ZgornjiKaselj",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 341
+                    "utez": 341,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "ZgornjiKaselj",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 341
+                    "utez": 341,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "ZgornjiKaselj",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 308
+                    "utez": 308,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "ZgornjiKaselj",
-                    "utez": 232
+                    "utez": 232,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 296
+                    "utez": 296,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "ZgornjiKaselj",
-                    "utez": 232
+                    "utez": 232,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "SlovenskiJeruzalem",
-                    "utez": 532
+                    "utez": 532,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "OsnovnaSolaKaselj",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 304
+                    "utez": 304,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "OsnovnaSolaKaselj",
                     "konec_povezave": "ZgornjiKaselj",
-                    "utez": 3
+                    "utez": 3,
+                    "tip_povezave": 1
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "OsnovnaSolaKaselj",
-                    "utez": 332
+                    "utez": 332,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "FMF",
-                    "utez": 2
+                    "utez": 2,
+                    "tip_povezave": 1
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "ZgornjiKaselj",
-                    "utez": 313
+                    "utez": 313,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 298
+                    "utez": 298,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "FMF",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 2
+                    "utez": 2,
+                    "tip_povezave": 1
                 }
             ]
         },
@@ -398,92 +447,110 @@
                 {
                     "zacetek_povezave": "Koper",
                     "konec_povezave": "Piran",
-                    "utez": 43
+                    "utez": 43,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Piran",
                     "konec_povezave": "Portoroz",
-                    "utez": 7
+                    "utez": 7,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Piran",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 130
+                    "utez": 130,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Piran",
                     "konec_povezave": "Koper",
-                    "utez": 43
+                    "utez": 43,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Piran",
                     "konec_povezave": "Izola",
-                    "utez": 20
+                    "utez": 20,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Izola",
                     "konec_povezave": "Piran",
-                    "utez": 20
+                    "utez": 20,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Izola",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 153
+                    "utez": 153,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Izola",
                     "konec_povezave": "Portoroz",
-                    "utez": 13
+                    "utez": 13,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Portoroz",
                     "konec_povezave": "Piran",
-                    "utez": 7
+                    "utez": 7,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Portoroz",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 180
+                    "utez": 180,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "Portoroz",
                     "konec_povezave": "Izola",
-                    "utez": 13
+                    "utez": 13,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 288
+                    "utez": 288,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "Portoroz",
-                    "utez": 180
+                    "utez": 180,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "LjubljanaTivoli",
                     "konec_povezave": "Piran",
-                    "utez": 130
+                    "utez": 130,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "FMF",
-                    "utez": 2
+                    "utez": 2,
+                    "tip_povezave": 1
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "Izola",
-                    "utez": 153
+                    "utez": 153,
+                    "tip_povezave": 0
                 },
                 {
                     "zacetek_povezave": "PostajaJadranska",
                     "konec_povezave": "LjubljanaTivoli",
-                    "utez": 290
+                    "utez": 290,
+                    "tip_povezave": 3
                 },
                 {
                     "zacetek_povezave": "FMF",
                     "konec_povezave": "PostajaJadranska",
-                    "utez": 2
+                    "utez": 2,
+                    "tip_povezave": 1
                 }
             ]
         }
