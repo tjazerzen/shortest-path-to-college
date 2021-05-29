@@ -4,10 +4,8 @@ from model import Model, Uporabnik, zasifriraj_geslo, Vozlisce, Iskanje, Graf
 
 PISKOTEK_UPORABNISKO_IME = "uporabnisko_ime"
 SKRIVNOST = "to je ena skrivnost"
-RELACIJA_NE_OBSTAJA = "Direktna relacija ne obstaja!"
 
-IME_DATOTEKE = "podatki_grafov.json"
-moj_model = Model.iz_datoteke(IME_DATOTEKE)
+moj_model = Model.iz_datoteke()
 
 
 def shrani_stanje(uporabnik):
@@ -90,29 +88,7 @@ def isci():
     uporabnik = trenutni_uporabnik()
     vozlisce1_ime = bottle.request.forms["kraj_zacetka"]
     vozlisce2_ime = bottle.request.forms["kraj_konca"]
-    skupni_grafi = moj_model.vozlisci_isti_grafQ(vozlisce1_ime, vozlisce2_ime)
-    zmagovalno_iskanje = None
-    if skupni_grafi != set():
-        # Lahko je v tem preseku več grafov. Izmed teh grafov mi iščemo tistega, po katerem je trenutno najcenejša pot.
-        for trenuten_graf in skupni_grafi:
-            trenutno_iskanje = trenuten_graf.dijkstra(
-                trenuten_graf.tocka(vozlisce1_ime),
-                trenuten_graf.tocka(vozlisce2_ime)
-            )
-            if not zmagovalno_iskanje:
-                zmagovalno_iskanje = trenutno_iskanje
-            else:
-                if trenutno_iskanje.cena_potovanja < zmagovalno_iskanje.cena_potovanja:
-                    zmagovalno_iskanje = trenutno_iskanje
-    else:
-        zmagovalno_iskanje = Iskanje(
-            vozlisce1=Vozlisce(vozlisce1_ime),
-            vozlisce2=Vozlisce(vozlisce2_ime),
-            cas_vpogleda=datetime.now(),
-            cena_potovanja=-1,
-            najkrajsa_pot=[Vozlisce(RELACIJA_NE_OBSTAJA, frekvenca_obiskov=-1)],
-            stevilka_linije=-1
-        )
+    zmagovalno_iskanje = moj_model.dobi_zmagovalno_iskanje(vozlisce1_ime, vozlisce2_ime)
     uporabnik.prejsna_iskanja.append(zmagovalno_iskanje)
     shrani_stanje(uporabnik)
     bottle.redirect("/")

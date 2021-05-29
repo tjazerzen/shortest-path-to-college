@@ -5,7 +5,7 @@
             <option disabled selected>{{oznaka}}</option>
             % end
 
-            % for ime_tocke in set([tocka.ime for tocka in uporabnik.vse_tocke]): # To bom spremenil
+            % for ime_tocke in set([tocka.ime for tocka in uporabnik.vse_tocke]):
             <option value="{{ime_tocke}}">
                 {{ime_tocke}}
             </option>

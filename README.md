@@ -18,7 +18,7 @@ Naloga tega projekta je najti optimalno pot med dvema vozliščema v grafu z ve�
 
 Po nekaterih povezavah se lahko sprehajamo oz. vozimo s kolesom, spet po drugih pa se vozimo z avtobusom. Zato svoje *povezave delim na 2 dela*: 
 
-1. **Povezave, ki jim utež variira s časom** (v datoteki podatki_grafov so te shranjene z vrednostjo uteži -1). Ko bomo iskali najcenejšo pot, bo vsakič znova iz tekstovnih datotek (shranjenih v mapi PodatkiOdhodov) treba izračunati trenutno utež te povezave.
+1. **Povezave, ki jim utežPlan je bil, da posameznik lahko išče le po teh linijah, toda sem pri implementaciji na žalost izgubil tekmo s časom. variira s časom** (v datoteki podatki_grafov so te shranjene z vrednostjo uteži -1). Ko bomo iskali najcenejšo pot, bo vsakič znova iz tekstovnih datotek (shranjenih v mapi PodatkiOdhodov) treba izračunati trenutno utež te povezave.
 2. **Povezave s fiksno utežjo**, neodvisne od časa vpogleda (v datoteki podatki_grafov so shranjene s kakršno koli pozitivno vrednostjo)
 
 V datoteki `model.py` sem se lotil programiranja objektov, ki v mojem programu nastopajo:

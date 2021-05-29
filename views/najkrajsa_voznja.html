@@ -37,7 +37,7 @@
             <div class="panel-block">
 
                 <form action="/dodaj-priljubljeno-relacijo/" method="POST">
-                    % if len(uporabnik.stevilke_linij) != len(uporabnik.vsi_grafi):
+                    % if len(uporabnik.stevilke_linij) != len(uporabnik.vsi_grafi_dict.values()):
                     Dodaj novo relacijo na tvoj seznam priljubljenih:
                     <div class="field">
                         % include('_izberi_priljubljeno_linijo.html', name='priljubljena_linija', oznaka='Dodaj št...')

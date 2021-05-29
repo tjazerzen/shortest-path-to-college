@@ -4,7 +4,7 @@
             % if defined('oznaka'):
             <option disabled selected>{{oznaka}}</option>
             % end
-            % for graf in uporabnik.vsi_grafi:
+            % for graf in uporabnik.vsi_grafi_dict.values():
             % if graf not in uporabnik.dobi_seznam_svojih_grafov():
             <option value="{{graf.stevilka_linije}}">
                 {{graf.izpis_linije()}}

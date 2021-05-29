@@ -1,0 +1,72 @@
+{
+    "zasifrirano_geslo": "f2e7f3553d85764aec4e8617e0e1a66d0dd6ef1a7115a8674a58c2c78b9a490e3e9c1a7eefe91900f6f39409c867348e8baa4abc29aca912f72b27fb59e477d8",
+    "stevilke_linij": [
+        2,
+        3
+    ],
+    "ime": "te",
+    "prejsna_iskanja": [
+        {
+            "zacetek": {
+                "ime": "KranjAP",
+                "frekvenca_obiskov": 1
+            },
+            "konec": {
+                "ime": "FMF",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-19",
+            "cena_potovanja": 87,
+            "najkrajsa_pot": [
+                {
+                    "ime": "KranjAP",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "LjubljanaTivoli",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "FMF",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 1
+        },
+        {
+            "zacetek": {
+                "ime": "FMF",
+                "frekvenca_obiskov": 2
+            },
+            "konec": {
+                "ime": "BohinjskaBistrica",
+                "frekvenca_obiskov": 1
+            },
+            "cas_evidence": "2021-05-19",
+            "cena_potovanja": 187,
+            "najkrajsa_pot": [
+                {
+                    "ime": "FMF",
+                    "frekvenca_obiskov": 2
+                },
+                {
+                    "ime": "PostajaJadranska",
+                    "frekvenca_obiskov": 2
+                },
+                {
+                    "ime": "LjubljanaTivoli",
+                    "frekvenca_obiskov": 2
+                },
+                {
+                    "ime": "Bled",
+                    "frekvenca_obiskov": 1
+                },
+                {
+                    "ime": "BohinjskaBistrica",
+                    "frekvenca_obiskov": 1
+                }
+            ],
+            "stevilka_linije": 2
+        }
+    ]
+}
