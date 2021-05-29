@@ -99,6 +99,7 @@
                 <th>Konec</th>
                 <th>Trajanje potovanja[min]</th>
                 <th>Najhitrejša pot</th>
+                <th>Podrobnosti potovanja</th>
             </tr>
             </thead>
             <tbody>
@@ -110,6 +111,19 @@
                 <td>{{iskanje.vozlisce2.ime}}</td>
                 <td>{{iskanje.cena_potovanja}}</td>
                 <td>{{" - ".join([vozlisce.ime for vozlisce in iskanje.najkrajsa_pot])}}</td>
+                <td>
+                    <form action="/najkrajsa_voznja/isci/{{iskanje.vozlisce1.ime}}-{{iskanje.vozlisce2.ime}}/"
+                          method="GET">
+                        <div class="field has-addons">
+                            <div class="control">
+
+                            </div>
+                            <div class="control">
+                                <button class="button is-info is-small">Prikaži podrobnosti --></button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
             </tr>
             % end
             </tbody>

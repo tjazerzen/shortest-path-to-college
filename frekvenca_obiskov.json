@@ -6,43 +6,43 @@
         },
         {
             "ime": "LjubljanaTivoli",
-            "frekvenca_obiskov": 33
+            "frekvenca_obiskov": 55
         },
         {
             "ime": "OsnovnaSolaKaselj",
-            "frekvenca_obiskov": 4
+            "frekvenca_obiskov": 5
         },
         {
             "ime": "PostajaJadranska",
-            "frekvenca_obiskov": 28
+            "frekvenca_obiskov": 45
         },
         {
             "ime": "FMF",
-            "frekvenca_obiskov": 65
+            "frekvenca_obiskov": 85
         },
         {
             "ime": "Bled",
-            "frekvenca_obiskov": 11
+            "frekvenca_obiskov": 16
         },
         {
             "ime": "BohinjskaBistrica",
-            "frekvenca_obiskov": 6
-        },
-        {
-            "ime": "KranjAP",
-            "frekvenca_obiskov": 19
-        },
-        {
-            "ime": "Tolmin",
-            "frekvenca_obiskov": 10
-        },
-        {
-            "ime": "Kobarid",
             "frekvenca_obiskov": 9
         },
         {
+            "ime": "KranjAP",
+            "frekvenca_obiskov": 26
+        },
+        {
+            "ime": "Tolmin",
+            "frekvenca_obiskov": 12
+        },
+        {
+            "ime": "Kobarid",
+            "frekvenca_obiskov": 10
+        },
+        {
             "ime": "BritofKR",
-            "frekvenca_obiskov": 16
+            "frekvenca_obiskov": 18
         },
         {
             "ime": "Koper",
@@ -54,7 +54,7 @@
         },
         {
             "ime": "LjubljanaZelezniska",
-            "frekvenca_obiskov": 8
+            "frekvenca_obiskov": 11
         },
         {
             "ime": "Izola",
@@ -62,7 +62,7 @@
         },
         {
             "ime": "KranjZelezniska",
-            "frekvenca_obiskov": 9
+            "frekvenca_obiskov": 11
         },
         {
             "ime": "Portoroz",
@@ -70,7 +70,7 @@
         },
         {
             "ime": "SlovenskiJeruzalem",
-            "frekvenca_obiskov": 1
+            "frekvenca_obiskov": 3
         }
     ]
 }

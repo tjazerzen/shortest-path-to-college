@@ -1,0 +1,59 @@
+% rebase('base.html', izbrani_zavihek='najkrajsa_voznja')
+
+<div class="columns">
+
+    <div class="column is-one-third">
+        <p class="panel-heading">Čas potovanja</p>
+        <p class="panel-block">
+            Svojo pot boš začel na postajališču {{iskanje.vozlisce1.ime}} ter končal na postaji
+            {{iskanje.vozlisce2.ime}}.
+            Svetujem ti, da za svojo potovanje ubereš linijo št. {{iskanje.stevilka_linije}}, saj ti bo od vseh
+            vzela najmanj časa. Če od doma odrineš zdaj, ti bo vse skupaj vzelo
+            % ure = iskanje.cena_potovanja // 60
+            % minute = iskanje.cena_potovanja % 60
+            % if ure == 0:
+            {{minute}} minut.
+            % elif ure == 1:
+            eno uro in {{minute}} minut.
+            % else:
+            {{ure}} ur in {{minute}} minut.
+            %end
+        </p>
+    </div>
+
+    <div class="column is-one-third">
+        <p class="panel-heading">Pot potovanja</p>
+        <p class="panel-block">
+        <table class="table is-hoverable">
+            <thead>
+            <tr>
+                <th>Ime povezave</th>
+                <th>Prevozno sredstvo</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            % for povezava in iskanje.najkrajsa_povezava:
+            <tr>
+                <td>{{povezava.vozlisce1.ime}} - {{povezava.vozlisce2.ime}}</td>
+                <td>
+                    % if povezava.tip_povezave == 0:
+                    Avtobus
+                    % elif povezava.tip_povezave == 1:
+                    Hoja
+                    % elif povezava.tip_povezave == 2:
+                    Vlak
+                    % else:
+                    Kolo
+                    %end
+                </td>
+            </tr>
+
+
+            %end
+            </tbody>
+        </table>
+        </p>
+    </div>
+
+</div>

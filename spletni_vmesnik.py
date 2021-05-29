@@ -108,6 +108,10 @@ def isci():
     vozlisce1_ime = bottle.request.forms["kraj_zacetka"]
     vozlisce2_ime = bottle.request.forms["kraj_konca"]
     zmagovalno_iskanje = moj_model.dobi_zmagovalno_iskanje(vozlisce1_ime, vozlisce2_ime)
+
+    for povezava in zmagovalno_iskanje.najkrajsa_povezava:
+        print(povezava.vozlisce1.ime, povezava.vozlisce2.ime)
+
     uporabnik.prejsna_iskanja.insert(0, zmagovalno_iskanje)
     shrani_stanje(uporabnik)
     bottle.redirect("/")
@@ -134,6 +138,17 @@ def analiziraj_postajalisca():
 def dodatne_informacije():
     uporabnik = trenutni_uporabnik()
     return bottle.template("dodatne-informacije.html")
+
+
+@bottle.get("/najkrajsa_voznja/isci/<zacetek_iskanja>-<konec_iskanja>/")
+def prikazi_podrobnosti(zacetek_iskanja, konec_iskanja):
+    uporabnik = trenutni_uporabnik()
+    iskanje = uporabnik.najdi_to_iskanje(zacetek_iskanja, konec_iskanja)
+    return bottle.template(
+        "informacije_iskanja.html",
+        zacetek_iskanja=zacetek_iskanja,
+        konec_iskanja=konec_iskanja,
+        iskanje=iskanje)
 
 
 bottle.run(debug=True, reloader=True)

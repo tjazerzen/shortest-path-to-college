@@ -114,7 +114,8 @@ class Model:
                 cas_vpogleda=datetime.now(),
                 cena_potovanja=-1,
                 najkrajsa_pot=[Vozlisce(RELACIJA_NE_OBSTAJA, frekvenca_obiskov=-1)],
-                stevilka_linije=-1
+                stevilka_linije=-1,
+                najkrajsa_povezava=[]
             )
         return zmagovalno_iskanje
 
@@ -145,7 +146,7 @@ class Povezava:
     Za ustvarjanje neusmerjene povezave bom ustvaril dva enosmerna objekta. 
     """
 
-    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez=-1):
+    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, tip_povezave, utez=-1):
         """
         vozlisce1 je zacetek povezave, vozlisce2 je konec povezave.
         fiksna_utez nam pove, če bo čas potovanja odvisen od časa vpogleda.
@@ -156,16 +157,27 @@ class Povezava:
         """
         self.vozlisce1 = vozlisce1
         self.vozlisce2 = vozlisce2
-
-        
         if utez == -1:
             self.fiksna_utez = False
         else:
             self.fiksna_utez = True
         self.utez = utez
+        '''
+        Vsaka povezava zaseda enega izmed štirih tipov, ki nam dajo informacijo o vrsti prevažanja po tej povezavi:
+            - 0 = Avtobus
+            - 1 = Hoja
+            - 2 = Vlak
+            - 3 = Kolo
+        '''
+        self.tip_povezave = tip_povezave
 
     def v_slovar(self):
-        return {"zacetek_povezave": self.vozlisce1.ime, "konec_povezave": self.vozlisce2.ime, "utez": self.utez}
+        return {
+            "zacetek_povezave": self.vozlisce1.v_slovar(),
+            "konec_povezave": self.vozlisce2.v_slovar(),
+            "utez": self.utez,
+            "tip_povezave": self.tip_povezave
+        }
 
     def izracunaj_se(self, cas_vpogleda: datetime = datetime.now()):
         """ 
@@ -177,6 +189,7 @@ class Povezava:
             return self
         minute = dobi_minute_iz_casa(cas_vpogleda)
         ime_datoteke = self.vozlisce1.ime + "-" + self.vozlisce2.ime + ".txt"
+        print("./PodatkiOdhodov/" + ime_datoteke)
         # Vse tekstovne datoteke imajo isto sintakso, vsa vozlišča pa tako ime, da je ime datoteke brez težav skonstruirati
         with open("./PodatkiOdhodov/" + ime_datoteke, "r") as input_file:
             for line in input_file.readlines():
@@ -190,14 +203,22 @@ class Povezava:
             self.utez = 24 * 60 - minute + 300
             return self  # Vrne sebe, ker bo ta metoda poklicana v objektu Graf.
 
+    @staticmethod
+    def iz_slovarja(slovar):
+        return Povezava(
+            vozlisce1=Vozlisce.iz_slovarja(slovar["zacetek_povezave"]),
+            vozlisce2=Vozlisce.iz_slovarja(slovar["konec_povezave"]),
+            tip_povezave=int(slovar["tip_povezave"]),
+            utez=int(slovar["utez"])
+        )
+
 
 # 1 Graf: V vozlišč; 1 Graf: E povezav; N grafov: M uporabnikov
 class Graf:
     """ Objekt, ki povezuje objekta Vozlisce in Povezave na eni strani, ter objekt Uporabnik na drugi. """
 
-    def __init__(self, stevilka_linije, tocke={}, uporabniki={}, ):
+    def __init__(self, stevilka_linije, tocke={}):
         self.tocke = tocke  # {Key: Točka; Value: množica povezav z začetkom v tej točki}
-        # vsak graf bo imel M uporabnikov. Toda tudi vsak uporabnik se lahko vozi po večih grafih.
         self.stevilka_linije = stevilka_linije
 
     def iz_slovarja_helper_metoda(ime_tocke, slovar):  # slovar: key --> objekt tocka; value --> {...}
@@ -217,7 +238,8 @@ class Graf:
             vozlisce1 = Graf.iz_slovarja_helper_metoda(slovar_povezave["zacetek_povezave"], tocke)
             vozlisce2 = Graf.iz_slovarja_helper_metoda(slovar_povezave["konec_povezave"], tocke)
             utez = int(slovar_povezave["utez"])
-            tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez))
+            tip_povezave = int(slovar_povezave["tip_povezave"])
+            tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, tip_povezave, utez))
         return Graf(stevilka_linije, tocke=tocke)
 
     def dobi_ime_linije(self):
@@ -268,7 +290,7 @@ class Graf:
                 self.dodaj_usmerjeno_povezavo(vozlisce2, vozlisce1, utez=utez_povezave)
                 )
 
-    def dodaj_usmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez=-1):
+    def dodaj_usmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, tip_povezave, utez=-1):
         """ 
         V graf doda usmerjeno povezavo od vozlisce1 do vozlisce2.
         Ta ukaz bo generiral povezave za vožnjo s trolo in avtobusom, 
@@ -279,7 +301,7 @@ class Graf:
         # Ustvarim nov objekt. Ker se bo utež vedno znova izračunala, je lahko karkoli. 
         # Tukaj jo postavim na -1.
         # Ker utež povezave ni fiksna, je fiksna = False.
-        return self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, utez))
+        return self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, tip_povezave, utez))
 
     def nastavi_vse_povezave(self, cas_vpogleda: datetime = datetime.now()):
         """ 
@@ -330,7 +352,8 @@ class Graf:
             cas_vpogleda=cas_iskanja,
             cena_potovanja=najkrajsa_pot_do_vozlisca[vozlisce_end],
             najkrajsa_pot=najkrajsa_pot,
-            stevilka_linije=self.stevilka_linije
+            stevilka_linije=self.stevilka_linije,
+            najkrajsa_povezava=slovar_povezav[vozlisce_end]
         )
 
     @staticmethod
@@ -441,6 +464,16 @@ class Uporabnik:
         sol, _ = self.zasifrirano_geslo.split("$")
         return self.zasifrirano_geslo == Uporabnik._zasifriraj_geslo(geslo_v_cistopisu, sol)
 
+    def najdi_to_iskanje(self, zacetek_iskanja, konec_iskanja):
+        """
+        Vrne nam iskanje, ki se zacne v zacetek_iskanja ter konča v konec_iskanja.
+        Izjem (da tako iskanje ne obstaja) zagotovo ne bo.
+        """
+        for prejsno_iskanje in self.prejsna_iskanja:
+            if prejsno_iskanje.vozlisce1.ime == zacetek_iskanja and prejsno_iskanje.vozlisce2.ime == konec_iskanja:
+                return prejsno_iskanje
+        return None
+
     def dodaj_novo_linijo(self, stevilka_linije):
         """ 
         Doda novo linijo za uporabnika. Vrne pripadajoči graf s to številko 
@@ -460,7 +493,6 @@ class Uporabnik:
                 graf.stevilka_linije in self.stevilke_linij}
 
     def dobi_popularna_vozlisca_uporabnika(self):
-        """ """
         with open(Uporabnik.dobi_ime_datoteke(self.ime)) as datoteka:
             slovar = json.load(datoteka)
         prejsna_iskanja = slovar["prejsna_iskanja"]
@@ -513,13 +545,14 @@ class Uporabnik:
 class Iskanje:
 
     def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cena_potovanja, najkrajsa_pot,
-                 stevilka_linije):
+                 stevilka_linije, najkrajsa_povezava):
         self.vozlisce1 = vozlisce1  # Od kod potujemo; input = objekt vozlisce
         self.vozlisce2 = vozlisce2  # Kam potujemo; input = objekt vozlisce
         self.cena_potovanja = cena_potovanja  # Cena sprehoda od "zacetek" od "konec" v nasem grafu
         self.cas_vpogleda = cas_vpogleda
         self.najkrajsa_pot = najkrajsa_pot  # Seznam objektov vozlisce
         self.stevilka_linije = stevilka_linije
+        self.najkrajsa_povezava = najkrajsa_povezava
 
     def v_slovar(self):
         return {
@@ -528,7 +561,8 @@ class Iskanje:
             "cas_evidence": date.isoformat(self.cas_vpogleda),
             "cena_potovanja": self.cena_potovanja,  # Enota so minute
             "najkrajsa_pot": [vozlisce.v_slovar() for vozlisce in self.najkrajsa_pot],
-            "stevilka_linije": self.stevilka_linije
+            "stevilka_linije": self.stevilka_linije,
+            "najkrajsa_povezava": [povezava.v_slovar() for povezava in self.najkrajsa_povezava]
         }
 
     @staticmethod
@@ -539,6 +573,7 @@ class Iskanje:
             cas_vpogleda=parser.parse(slovar["cas_evidence"]),
             cena_potovanja=int(slovar["cena_potovanja"]),
             najkrajsa_pot=[Vozlisce.iz_slovarja(slovar_vozlisca) for slovar_vozlisca in slovar["najkrajsa_pot"]],
-            stevilka_linije=(slovar["stevilka_linije"]
-            )
+            stevilka_linije=int(slovar["stevilka_linije"]),
+            najkrajsa_povezava=[Povezava.iz_slovarja(slovar_povezave) for slovar_povezave in
+                                slovar["najkrajsa_povezava"]]
         )
