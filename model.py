@@ -5,13 +5,9 @@ import hashlib
 from dateutil import parser
 import random
 
+# Konstanta, uporabljena za izpis, ko ni direktne povezave med dvema vozliščema
 RELACIJA_NE_OBSTAJA = "Direktna relacija ne obstaja"
 
-
-def zasifriraj_geslo(geslo_v_cistopisu):
-    h = hashlib.blake2b()
-    h.update(geslo_v_cistopisu.encode(encoding="utf-8"))
-    return h.hexdigest()
 
 def dobi_vse_grafe():
     """
@@ -19,6 +15,7 @@ def dobi_vse_grafe():
     Uporabljena v razredu Uporabnik.
     """
     return Model.iz_datoteke("podatki_grafov.json").grafi
+
 
 def dobi_vse_tocke(grafi):
     """
@@ -30,9 +27,11 @@ def dobi_vse_tocke(grafi):
         vse_tocke += graf.tocke.keys()
     return vse_tocke
 
+
 def dobi_minute_iz_casa(datum: datetime = datetime.now()):
-        """ Helper k metodi Povezava.izracunaj_se() """
-        return int(datum.strftime("%H")) * 60 + int(datum.strftime("%M"))
+    """ Helper k metodi Povezava.izracunaj_se() """
+    return int(datum.strftime("%H")) * 60 + int(datum.strftime("%M"))
+
 
 # 1 Model: N grafov
 
@@ -86,7 +85,7 @@ class Model:
         Uporabljena v metodi dobi_zmagovalno_iskanje(...).
         """
         return self.vrni_grafe(vozlisce1_ime).intersection(self.vrni_grafe(vozlisce2_ime))
-    
+
     def dobi_zmagovalno_iskanje(self, vozlisce1_ime, vozlisce2_ime):
         """
         Funkcija, ki iz imen dveh vozlišč najprej ugotovi, če obstaja direktna povezava.
@@ -172,12 +171,10 @@ class Povezava:
         Sicer:  (1): Pošči čas od cas_vpogleda do naslednjega odhoda avtobusa;
                 (2): nastavi ceno povezave na <cas do odhoda> + <cas voznje>.
         """
-
         if self.fiksna_utez:
             return self
-
         minute = dobi_minute_iz_casa(cas_vpogleda)
-        ime_datoteke = self.vozlisce1.ime + "-" + self.vozlisce2.ime + ".txt" 
+        ime_datoteke = self.vozlisce1.ime + "-" + self.vozlisce2.ime + ".txt"
         # Vse tekstovne datoteke imajo isto sintakso, vsa vozlišča pa tako ime, da je ime datoteke brez težav skonstruirati
         with open("./PodatkiOdhodov/" + ime_datoteke, "r") as input_file:
             for line in input_file.readlines():
@@ -381,7 +378,7 @@ class Graf:
             lst.append((frekvenca, vozlisce))
             vsota_frekvenc += frekvenca
 
-        return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0]) if
+        return [val2 for (_, val2) in sorted(lst, reverse=True, key=lambda x: x[0]) if
                 val2.ime != RELACIJA_NE_OBSTAJA], vsota_frekvenc
 
 
@@ -418,7 +415,7 @@ class Uporabnik:
         """ Uporabnikove podatke shrani v datoteko. """
         # Ime datoteke se ne zahteva, 
         # saj ima vsak uporabnik rezervirano svojo datoteko pod imenom "<njegovo/njeno ime>.json"
-        
+
         with open(Uporabnik.dobi_ime_datoteke(self.ime), "w") as datoteka:
             json.dump(self.v_slovar(), datoteka, ensure_ascii=False, indent=4)
 
@@ -431,15 +428,16 @@ class Uporabnik:
         """ Uporabnikove podatke prebere iz datoteke. """
         # Ime datoteke se ne zahteva, 
         # saj ima vsak uporabnik rezervirano svojo datoteko pod imenom "<njegovo/njeno ime>.json"
-        with open(Uporabnik.dobi_ime_datoteke(ime)) as datoteka:
-            slovar = json.load(datoteka)
-            return Uporabnik.iz_slovarja(slovar)
+        try:
+            with open(Uporabnik.dobi_ime_datoteke(ime)) as datoteka:
+                slovar = json.load(datoteka)
+                return Uporabnik.iz_slovarja(slovar)
+        except FileNotFoundError:
+            return None
 
     def preveri_geslo(self, geslo_v_cistopisu):
-        return self.zasifrirano_geslo == zasifriraj_geslo(geslo_v_cistopisu)
-
-    def nastavi_geslo(self, geslo_v_cistopisu):
-        self.zasifrirano_geslo = zasifriraj_geslo(geslo_v_cistopisu)
+        sol, _ = self.zasifrirano_geslo.split("$")
+        return self.zasifrirano_geslo == Uporabnik._zasifriraj_geslo(geslo_v_cistopisu, sol)
 
     def dodaj_novo_linijo(self, stevilka_linije):
         """ 
@@ -447,7 +445,8 @@ class Uporabnik:
         Če se uporabnik po tej liniji že vozi, vrne to linijo (graf).
         """
         if stevilka_linije in self.stevilke_linij:  # Če se po tej liniji že vozimo
-            return self.vsi_uporabnikovi_grafi[stevilka_linije]  # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
+            return self.vsi_uporabnikovi_grafi[
+                stevilka_linije]  # Če taka linija obstaja, a se do sedaj po njej še nismo vozili
         self.stevilke_linij.append(stevilka_linije)
         self.vsi_uporabnikovi_grafi[stevilka_linije] = self.vsi_grafi[stevilka_linije]
         return self.vsi_uporabnikovi_grafi[stevilka_linije]
@@ -455,7 +454,8 @@ class Uporabnik:
     def dobi_grafe_iz_stevilk_linij(self):
         """ Vrne nam podmnozico slovarja vsi_grafi --> samo tiste, po katerih se naš uporabnik vozi """
         # Key - številka linije; Value - Objekt graf
-        return {graf.stevilka_linije: graf for graf in self.vsi_grafi.values() if graf.stevilka_linije in self.stevilke_linij}
+        return {graf.stevilka_linije: graf for graf in self.vsi_grafi.values() if
+                graf.stevilka_linije in self.stevilke_linij}
 
     def dobi_popularna_vozlisca_uporabnika(self):
         """ """
@@ -476,9 +476,28 @@ class Uporabnik:
                     pass
 
         lst = [(value, Vozlisce(ime=key, frekvenca_obiskov=value)) for key, value in slovar_frekvenc.items()]
-        return [val2 for (val1, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
+        return [val2 for (_, val2) in sorted(lst, reverse=True, key=lambda x: x[0])], vsota_frekvenc
 
-    """
+    @staticmethod
+    def prijava(uporabnisko_ime, geslo_v_cistopisu):
+        uporabnik = Uporabnik.iz_datoteke(uporabnisko_ime)
+        if uporabnik is None:
+            raise ValueError("Uporabniško ime ne obstaja")
+        elif uporabnik.preveri_geslo(geslo_v_cistopisu):
+            return uporabnik
+        else:
+            raise ValueError("Geslo je napačno")
+
+    @staticmethod
+    def registracija(uporabnisko_ime, geslo_v_cistopisu):
+        if Uporabnik.iz_datoteke(uporabnisko_ime) is not None:
+            raise ValueError("Uporabniško ime že obstaja")
+        else:
+            zasifrirano_geslo = Uporabnik._zasifriraj_geslo(geslo_v_cistopisu)
+            uporabnik = Uporabnik(uporabnisko_ime, zasifrirano_geslo)
+            uporabnik.v_datoteko()
+            return uporabnik
+
     def _zasifriraj_geslo(geslo_v_cistopisu, sol=None):
         if sol is None:
             sol = str(random.getrandbits(32))
@@ -486,7 +505,6 @@ class Uporabnik:
         h = hashlib.blake2b()
         h.update(posoljeno_geslo.encode(encoding="utf-8"))
         return f"{sol}${h.hexdigest()}"
-    """
 
 
 # 1 Uporabnik: N iskanj

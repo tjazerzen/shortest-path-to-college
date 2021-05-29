@@ -2,18 +2,15 @@
 %     'najkrajsa_voznja',
 %     'analiza-postajalisc',
 %     'dodatne-informacije',
-%     'odjava'
 % ]
 % oznaka_zavihka = {
 %     'najkrajsa_voznja': ' Najdi najkrajšo vožnjo',
 %     'analiza-postajalisc': 'Analiza postajališč',
-%     'odjava': 'Odjava',
 %     'dodatne-informacije': 'Dodatne informacije'
 % }
 % ikona_zavihka = {
 %     'najkrajsa_voznja': 'fas fa-truck-monster',
 %     'analiza-postajalisc': 'fas fa-hourglass',
-%     'odjava': 'fas fa-sign-out-alt',
 %     'dodatne-informacije': 'fas fa-info-circle'
 % }
 <!DOCTYPE html>
@@ -55,16 +52,37 @@
                     <span>{{oznaka_zavihka[zavihek]}}</span>
                 </a>
                 % end
-                % end
+              % end
         </div>
+
         <div class="navbar-end">
-            <a class="navbar-item" href="https://github.com/tjazerzen">
+          <div class="navbar-item">
+            <div class="buttons">
+              % if defined('uporabnik'):
+              <form method="POST" action="/odjava/">
+                <button class="button is-light">
+                  Odjavi se
+                </button>
+              </form>
+              % else:
+              <a class="button is-primary" href="/registracija/">
+                <strong>Registriraj se</strong>
+              </a>
+              <a class="button is-light" href="/prijava/">
+                Prijavi se
+              </a>
+              % end
+            </div>
+          </div>
+          <a class="navbar-item" href="https://github.com/matijapretnar/uvod-v-programiranje/tree/master/projekti/kuverte">
             <span class="icon">
               <i class="fab fa-github"></i>
             </span>
-                <span>GitHub</span>
-            </a>
+          <span>GitHub</span>
+          </a>
         </div>
+
+
     </div>
 </nav>
 <section class="section">

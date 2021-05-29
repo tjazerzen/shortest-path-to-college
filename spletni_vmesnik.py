@@ -1,6 +1,5 @@
-from datetime import date, datetime
 import bottle
-from model import Model, Uporabnik, zasifriraj_geslo, Vozlisce, Iskanje, Graf
+from model import Model, Uporabnik, Graf
 
 PISKOTEK_UPORABNISKO_IME = "uporabnisko_ime"
 SKRIVNOST = "to je ena skrivnost"
@@ -15,7 +14,7 @@ def shrani_stanje(uporabnik):
 def trenutni_uporabnik():
     uporabnisko_ime = bottle.request.get_cookie(
         PISKOTEK_UPORABNISKO_IME, secret=SKRIVNOST
-        )
+    )
     if uporabnisko_ime:
         return podatki_uporabnika(uporabnisko_ime)
     else:
@@ -34,6 +33,29 @@ def zacetna_stran():
     bottle.redirect("/najkrajsa_voznja/")
 
 
+@bottle.get("/registracija/")
+def registracija_get():
+    return bottle.template("registracija.html", napaka=None)
+
+
+@bottle.post("/registracija/")
+def registracija_post():
+    uporabnisko_ime = bottle.request.forms.getunicode("uporabnisko_ime")
+    geslo_v_cistopisu = bottle.request.forms.getunicode("geslo")
+    if not uporabnisko_ime:
+        return bottle.template("registracija.html", napaka="Vnesi uporabniško ime!")
+    try:
+        Uporabnik.registracija(uporabnisko_ime, geslo_v_cistopisu)
+        bottle.response.set_cookie(
+            PISKOTEK_UPORABNISKO_IME, uporabnisko_ime, path="/", secret=SKRIVNOST
+        )
+        bottle.redirect("/")
+    except ValueError as e:
+        return bottle.template(
+            "registracija.html", napaka=e.args[0]
+        )
+
+
 @bottle.get("/prijava/")
 def prijava_get():
     return bottle.template("prijava.html", napaka=None)
@@ -43,27 +65,22 @@ def prijava_get():
 def prijava_post():
     uporabnisko_ime = bottle.request.forms.getunicode("uporabnisko_ime")
     geslo_v_cistopisu = bottle.request.forms.getunicode("geslo")
-    if uporabnisko_ime:
-        try:
-            uporabnik = Uporabnik.iz_datoteke(uporabnisko_ime)
-        except FileNotFoundError:
-            uporabnik = Uporabnik(uporabnisko_ime, zasifriraj_geslo(geslo_v_cistopisu))
-            shrani_stanje(uporabnik)
-        if uporabnik.preveri_geslo(geslo_v_cistopisu):
-            bottle.response.set_cookie(
-                PISKOTEK_UPORABNISKO_IME, uporabnisko_ime, path="/", secret=SKRIVNOST
-            )
-            bottle.redirect("/")
-        else:
-            return bottle.template(
-                "prijava.html", napaka="Podatki za prijavo so napačni!"
-            )
-    else:
-        return bottle.template("prijava.html", napaka="Vnesi uporabniško ime!")
+    if not uporabnisko_ime:
+        return bottle.template("registracija.html", napaka="Vnesi uporabniško ime!")
+    try:
+        Uporabnik.prijava(uporabnisko_ime, geslo_v_cistopisu)
+        bottle.response.set_cookie(
+            PISKOTEK_UPORABNISKO_IME, uporabnisko_ime, path="/", secret=SKRIVNOST
+        )
+        bottle.redirect("/")
+    except ValueError as e:
+        return bottle.template(
+            "prijava.html", napaka=e.args[0]
+        )
 
 
-@bottle.get("/odjava/")
-def prijava_get():
+@bottle.post("/odjava/")
+def odjava():
     bottle.response.delete_cookie(PISKOTEK_UPORABNISKO_IME, path="/")
     bottle.redirect("/")
 
@@ -91,7 +108,7 @@ def isci():
     vozlisce1_ime = bottle.request.forms["kraj_zacetka"]
     vozlisce2_ime = bottle.request.forms["kraj_konca"]
     zmagovalno_iskanje = moj_model.dobi_zmagovalno_iskanje(vozlisce1_ime, vozlisce2_ime)
-    uporabnik.prejsna_iskanja.append(zmagovalno_iskanje)
+    uporabnik.prejsna_iskanja.insert(0, zmagovalno_iskanje)
     shrani_stanje(uporabnik)
     bottle.redirect("/")
 
@@ -112,9 +129,11 @@ def analiziraj_postajalisca():
         uporabnik=uporabnik
     )
 
+
 @bottle.get("/dodatne-informacije/")
 def dodatne_informacije():
     uporabnik = trenutni_uporabnik()
     return bottle.template("dodatne-informacije.html")
+
 
 bottle.run(debug=True, reloader=True)

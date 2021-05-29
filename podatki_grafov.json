@@ -110,6 +110,11 @@
                 },
                 {
                     "zacetek_povezave": "KranjZelezniska",
+                    "konec_povezave": "LjubljanaZelezniska",
+                    "utez": -1
+                },
+                {
+                    "zacetek_povezave": "KranjZelezniska",
                     "konec_povezave": "BritofKR",
                     "utez": -1
                 }
