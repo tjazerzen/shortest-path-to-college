@@ -100,7 +100,6 @@ def analiziraj_postajalisca():
     popularna_vozlisca_uporabnika, vsota_frekvenc_uporabnika = uporabnik.dobi_popularna_vozlisca_uporabnika()
     popularna_vozlisca_vseh, vsota_frekvenc_vseh = Graf.dobi_popularna_vozlisca_vseh()
     stevilo_prikazov = min(len(popularna_vozlisca_vseh), len(popularna_vozlisca_uporabnika), 5)
-
     return bottle.template(
         "analiza-postajalisc.html",
         popularna_vozlisca_vseh=popularna_vozlisca_vseh[:stevilo_prikazov],
@@ -111,11 +110,9 @@ def analiziraj_postajalisca():
         uporabnik=uporabnik
     )
 
-
 @bottle.get("/dodatne-informacije/")
 def dodatne_informacije():
     uporabnik = trenutni_uporabnik()
     return bottle.template("dodatne-informacije.html")
-
 
 bottle.run(debug=True, reloader=True)
