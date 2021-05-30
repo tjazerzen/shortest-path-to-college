@@ -46,7 +46,6 @@ class Model:
 
     @staticmethod
     def iz_slovarja(slovar):
-        # return Model(grafi=[Graf.iz_slovarja(slovar_grafa) for slovar_grafa in slovar["grafi"]])
         return Model(grafi=[Graf.iz_slovarja(slovar_grafa) for slovar_grafa in slovar["grafi"]])
 
     def v_datoteko(self, ime_datoteke="podatki_grafov.json"):
