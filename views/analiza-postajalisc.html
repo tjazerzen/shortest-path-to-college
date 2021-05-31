@@ -31,8 +31,7 @@
                         % for i in range(5):
                         <li>
                             {{tabela_fraz[i]}} najbolj popularna destinacija:
-                            % delez = int(100*float(popularna_vozlisca_uporabnika[i].frekvenca_obiskov /
-                            vsota_frekvenc_uporabnika))
+                            % delez = int(100*float(popularna_vozlisca_uporabnika[i].frekvenca_obiskov / vsota_frekvenc_uporabnika))
                             <b>{{popularna_vozlisca_uporabnika[i].ime}} -> se pojavi na {{delez}}% vseh iskanj!</b>
                         </li>
                         <li>
