@@ -7,6 +7,12 @@ import random
 
 # Konstanta, uporabljena za izpis, ko ni direktne povezave med dvema vozliščema
 RELACIJA_NE_OBSTAJA = "Direktna relacija ne obstaja"
+AVTOBUS = 0
+HOJA = 1
+VLAK = 2
+KOLO = 3
+PODATKI_ODHODOV_FOLDER = "./PodatkiOdhodov/"
+FREKVENCA_OBISKOV_DAT = "frekvenca_obiskov.json"
 
 
 def dobi_vse_grafe():
@@ -28,8 +34,10 @@ def dobi_vse_tocke(grafi):
     return vse_tocke
 
 
-def dobi_minute_iz_casa(datum: datetime = datetime.now()):
+def dobi_minute_iz_casa(datum=None):
     """ Helper k metodi Povezava.izracunaj_se() """
+    if datum is None:
+        datum = datetime.now()
     return int(datum.strftime("%H")) * 60 + int(datum.strftime("%M"))
 
 
@@ -37,8 +45,7 @@ def dobi_minute_iz_casa(datum: datetime = datetime.now()):
 
 class Model:
     """ Krovni objekt, ki povezuje moj program."""
-
-    def __init__(self, grafi=[]):
+    def __init__(self, grafi):
         self.grafi = {graf.stevilka_linije: graf for graf in grafi}
 
     def v_slovar(self):
@@ -78,28 +85,28 @@ class Model:
         """
         return {graf for graf in self.grafi.values() if graf.tocka(vozlisce_ime)}
 
-    def vozlisci_isti_grafQ(self, vozlisce1_ime, vozlisce2_ime):
+    def vozlisci_isti_grafQ(self, vozlisce_start_ime, vozlisce_end_ime):
         """ 
-        Vrne nam presek (množico) grafov, ki vsebujejo tako vozlisce pod imenom vozlisce1_ime kot vozlisce2_ime. 
+        Vrne nam presek (množico) grafov, ki vsebujejo tako vozlisce pod imenom vozlisce_start_ime kot vozlisce_end_ime. 
         Uporabljena v metodi dobi_zmagovalno_iskanje(...).
         """
-        return self.vrni_grafe(vozlisce1_ime).intersection(self.vrni_grafe(vozlisce2_ime))
+        return self.vrni_grafe(vozlisce_start_ime).intersection(self.vrni_grafe(vozlisce_end_ime))
 
-    def dobi_zmagovalno_iskanje(self, vozlisce1_ime, vozlisce2_ime):
+    def dobi_zmagovalno_iskanje(self, vozlisce_start_ime, vozlisce_end_ime):
         """
         Funkcija, ki iz imen dveh vozlišč najprej ugotovi, če obstaja direktna povezava.
         Če ne obstaja, vrne izpis, da taka direktna relacija ne obstaja, kar bo potem prikazano v spletnem vmesniku.
-        Sicer pa nam program poišče vse možno direktne povezave od kraja "vozlisce1_ime" do "vozlisce2_ime",
+        Sicer pa nam program poišče vse možno direktne povezave od kraja "vozlisce_start_ime" do "vozlisce_end_ime",
         izračuna vse cene iskanj ter nato vrne najcenejše iskanje. Tega imenujem zmagovalno_iskanje
         """
-        skupni_grafi = self.vozlisci_isti_grafQ(vozlisce1_ime, vozlisce2_ime)
+        skupni_grafi = self.vozlisci_isti_grafQ(vozlisce_start_ime, vozlisce_end_ime)
         zmagovalno_iskanje = None
         if skupni_grafi != set():
             # Lahko je v tem preseku več grafov. Izmed teh grafov mi iščemo tistega, po katerem je trenutno najcenejša pot.
             for trenuten_graf in skupni_grafi:
                 trenutno_iskanje = trenuten_graf.dijkstra(
-                    trenuten_graf.tocka(vozlisce1_ime),
-                    trenuten_graf.tocka(vozlisce2_ime)
+                    trenuten_graf.tocka(vozlisce_start_ime),
+                    trenuten_graf.tocka(vozlisce_end_ime)
                 )
                 if not zmagovalno_iskanje:
                     zmagovalno_iskanje = trenutno_iskanje
@@ -108,8 +115,8 @@ class Model:
                         zmagovalno_iskanje = trenutno_iskanje
         else:
             zmagovalno_iskanje = Iskanje(
-                vozlisce1=Vozlisce(vozlisce1_ime),
-                vozlisce2=Vozlisce(vozlisce2_ime),
+                vozlisce_start=Vozlisce(vozlisce_start_ime),
+                vozlisce_end=Vozlisce(vozlisce_end_ime),
                 cas_vpogleda=datetime.now(),
                 cena_potovanja=-1,
                 najkrajsa_pot=[Vozlisce(RELACIJA_NE_OBSTAJA, frekvenca_obiskov=-1)],
@@ -137,25 +144,24 @@ class Vozlisce:
         self.frekvenca_obiskov += 1
         return self
 
-
 # 1 Graf: E povezav
 class Povezava:
     """ 
-    Konstruira novo usmerjeno povezavo od vozlisce1 do vozlisce2.
+    Konstruira novo usmerjeno povezavo od vozlisce_start do vozlisce_end.
     Za ustvarjanje neusmerjene povezave bom ustvaril dva enosmerna objekta. 
     """
 
-    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, tip_povezave, utez=-1):
+    def __init__(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, tip_povezave, utez=-1):
         """
-        vozlisce1 je zacetek povezave, vozlisce2 je konec povezave.
+        vozlisce_start je zacetek povezave, vozlisce_end je konec povezave.
         fiksna_utez nam pove, če bo čas potovanja odvisen od časa vpogleda.
-        Ta atribut imajo tiste povezave, po katerih se lahko sprehajamo/ vozimo s kolesom.
+        Ta atribut imajo natanko tiste povezave, po katerih se lahko sprehajamo/ vozimo s kolesom. 
         če je fiksna_utez = False, bo objekt povezave skonstruiran z specificirano utezjo. Sicer je utež = -1.
         fiksna_utez == False --> Ceno povezave JE treba izračunati vedno znova.
         fiksna_utez == True --> Cene povezave NI treba izračunati vedno znova.
         """
-        self.vozlisce1 = vozlisce1
-        self.vozlisce2 = vozlisce2
+        self.vozlisce_start = vozlisce_start
+        self.vozlisce_end = vozlisce_end
         if utez == -1:
             self.fiksna_utez = False
         else:
@@ -167,30 +173,33 @@ class Povezava:
             - 1 = Hoja
             - 2 = Vlak
             - 3 = Kolo
+        Te vrednosti so definirane v tej datoteki, nadaljno pa uporabljene v dodatne-informacije.html
         '''
         self.tip_povezave = tip_povezave
 
     def v_slovar(self):
         return {
-            "zacetek_povezave": self.vozlisce1.v_slovar(),
-            "konec_povezave": self.vozlisce2.v_slovar(),
+            "zacetek_povezave": self.vozlisce_start.v_slovar(),
+            "konec_povezave": self.vozlisce_end.v_slovar(),
             "utez": self.utez,
             "tip_povezave": self.tip_povezave
         }
 
-    def izracunaj_se(self, cas_vpogleda: datetime = datetime.now()):
+    def izracunaj_se(self, cas_vpogleda=None):
         """ 
         Izračuna utež na grafu v odvisnosti od časa. Če je povezava fiksna, bo cena vedno ista.
         Sicer:  (1): Pošči čas od cas_vpogleda do naslednjega odhoda avtobusa;
                 (2): nastavi ceno povezave na <cas do odhoda> + <cas voznje>.
         """
+        if cas_vpogleda is None:
+            cas_vpogleda = datetime.now()
         if self.fiksna_utez:
             return self
         minute = dobi_minute_iz_casa(cas_vpogleda)
-        ime_datoteke = self.vozlisce1.ime + "-" + self.vozlisce2.ime + ".txt"
-        print("./PodatkiOdhodov/" + ime_datoteke)
+        ime_datoteke = self.vozlisce_start.ime + "-" + self.vozlisce_end.ime + ".txt"
+        print(PODATKI_ODHODOV_FOLDER + ime_datoteke)
         # Vse tekstovne datoteke imajo isto sintakso, vsa vozlišča pa tako ime, da je ime datoteke brez težav skonstruirati
-        with open("./PodatkiOdhodov/" + ime_datoteke, "r") as input_file:
+        with open(PODATKI_ODHODOV_FOLDER + ime_datoteke, "r") as input_file:
             for line in input_file.readlines():
                 trenutna_vrsta = [int(data.strip()) for data in line.split()]
                 trenutni_odhod, trenutni_prihod = trenutna_vrsta[0], trenutna_vrsta[1]
@@ -199,14 +208,14 @@ class Povezava:
                     return self
             # Ura je preveč, da bi peljal še kakšen avtobus. 
             # Kar počakat na prvega naslednji dan ob 05:00 --> to je 300 min od polnoči
-            self.utez = 24 * 60 - minute + 300
+            self.utez = 24 * 60 - minute + 5 * 60
             return self  # Vrne sebe, ker bo ta metoda poklicana v objektu Graf.
 
     @staticmethod
     def iz_slovarja(slovar):
         return Povezava(
-            vozlisce1=Vozlisce.iz_slovarja(slovar["zacetek_povezave"]),
-            vozlisce2=Vozlisce.iz_slovarja(slovar["konec_povezave"]),
+            vozlisce_start=Vozlisce.iz_slovarja(slovar["zacetek_povezave"]),
+            vozlisce_end=Vozlisce.iz_slovarja(slovar["konec_povezave"]),
             tip_povezave=int(slovar["tip_povezave"]),
             utez=int(slovar["utez"])
         )
@@ -220,8 +229,9 @@ class Graf:
         self.tocke = tocke  # {Key: Točka; Value: množica povezav z začetkom v tej točki}
         self.stevilka_linije = stevilka_linije
 
-    def iz_slovarja_helper_metoda(ime_tocke, slovar):  # slovar: key --> objekt tocka; value --> {...}
+    def iz_slovarja_helper_metoda(ime_tocke, slovar): 
         """ Točno to kar pove ime. ;)"""
+        # slovar: key --> objekt tocka
         for tocka in slovar.keys():
             if tocka.ime == ime_tocke:
                 return tocka
@@ -234,11 +244,11 @@ class Graf:
         vozlisca_grafa = [Vozlisce.iz_slovarja(slovar_vozlisca) for slovar_vozlisca in slovar["vozlisca"]]
         tocke = {vozlisce: set() for vozlisce in vozlisca_grafa}
         for slovar_povezave in slovar["povezave"]:
-            vozlisce1 = Graf.iz_slovarja_helper_metoda(slovar_povezave["zacetek_povezave"], tocke)
-            vozlisce2 = Graf.iz_slovarja_helper_metoda(slovar_povezave["konec_povezave"], tocke)
+            vozlisce_start = Graf.iz_slovarja_helper_metoda(slovar_povezave["zacetek_povezave"], tocke)
+            vozlisce_end = Graf.iz_slovarja_helper_metoda(slovar_povezave["konec_povezave"], tocke)
             utez = int(slovar_povezave["utez"])
             tip_povezave = int(slovar_povezave["tip_povezave"])
-            tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, tip_povezave, utez))
+            tocke[vozlisce_start].add(Povezava(vozlisce_start, vozlisce_end, tip_povezave, utez))
         return Graf(stevilka_linije, tocke=tocke)
 
     def dobi_ime_linije(self):
@@ -277,21 +287,21 @@ class Graf:
             return self.tocke[tocka]
         return []
 
-    def dodaj_neusmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, utez_povezave=-1):
+    def dodaj_neusmerjeno_povezavo(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, utez_povezave=-1):
         """ 
         V graf doda neusmerjeno povezavo med vozliščema 1 in 2. 
         Ta ukaz bo generiral povezave za vožnjo s kolesom in hojo peš,
         kjer bo cena povezave v obe smeri enaka ter od časa vpogleda neodvisna. 
         Vse neusmerjene povezave bodo imele tudi fiksno ceno potovanja.
         """
-        if vozlisce1 == vozlisce2: return None  # Trivivalen primer; zank ne bomo ustvarjali.
-        return (self.dodaj_usmerjeno_povezavo(vozlisce1, vozlisce2, utez=utez_povezave),
-                self.dodaj_usmerjeno_povezavo(vozlisce2, vozlisce1, utez=utez_povezave)
+        if vozlisce_start == vozlisce_end: return None  # Trivivalen primer; zank ne bomo ustvarjali.
+        return (self.dodaj_usmerjeno_povezavo(vozlisce_start, vozlisce_end, utez=utez_povezave),
+                self.dodaj_usmerjeno_povezavo(vozlisce_end, vozlisce_start, utez=utez_povezave)
                 )
 
-    def dodaj_usmerjeno_povezavo(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, tip_povezave, utez=-1):
+    def dodaj_usmerjeno_povezavo(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, tip_povezave, utez=-1):
         """ 
-        V graf doda usmerjeno povezavo od vozlisce1 do vozlisce2.
+        V graf doda usmerjeno povezavo od vozlisce_start do vozlisce_end.
         Ta ukaz bo generiral povezave za vožnjo s trolo in avtobusom, 
         kjer cena povezave v eno in drugo smer ne bo enaka ter bo odvisna od časa vpogleda.
         Vsakič znova bo treba izračunati ceno povezave z metodo Povezava(...).izracunaj_se().
@@ -300,25 +310,36 @@ class Graf:
         # Ustvarim nov objekt. Ker se bo utež vedno znova izračunala, je lahko karkoli. 
         # Tukaj jo postavim na -1.
         # Ker utež povezave ni fiksna, je fiksna = False.
-        return self.tocke[vozlisce1].add(Povezava(vozlisce1, vozlisce2, tip_povezave, utez))
+        return self.tocke[vozlisce_start].add(Povezava(vozlisce_start, vozlisce_end, tip_povezave, utez))
 
-    def nastavi_vse_povezave(self, cas_vpogleda: datetime = datetime.now()):
+    def nastavi_vse_povezave(self, cas_vpogleda = None):
         """ 
         Posodobi vrednosti uteži vseh povezav. 
         Sprehodi se po vseh povezavah ter
         na vsaki posebi pokliče metodo za nastavitev uteži, definirano na objektu Povezava. 
         """
+        # OPOMBA: Vse povezave se nastavijo istočasno, čeprav bi pozoren gledalec pomislis, da bi bilo
+        #         smiselno povezave nastaviti tako, da štartamo v trenutnem vozlišču, nastavimo povezavo
+        #         za svoje sosede, pridemo do sosedov in šele nato nastavim povezavo za sosede sosedov.
+        #         S tem problemom se v tem programu ne ukvarjam, predpostavljam, da uporabnik lahko
+        #         pogleda vozni red samo od doma enkrat.
+        if cas_vpogleda is None:
+            cas_vpogleda = datetime.now()
         for vozlisce, seznam_povezav in self.tocke.items():
             self.tocke[vozlisce] = {povezava.izracunaj_se(cas_vpogleda) for povezava in seznam_povezav}
         return self.tocke
 
-    def dijkstra(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, cas_iskanja=datetime.now()):
+    def dijkstra(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, cas_iskanja=None):
         """
         Poišče najkrajšo pot od start_vertex do vseh ostalih. 
         Vrne nov objekt Iskanje, ki drži informacije o začetnem in končnem vozlišču,
         casu vpogleda, ceni sprehoda v grafu ter končni poti v grafu.
         """
+        if cas_iskanja is None:
+            cas_iskanja = datetime.now()
         # Najprej posodobi uteži na povezavah
+        # OPOMBA: Predpostavljam, da bo uporabnik ob času "cas_iskanja" ze na iskani postaji, pripravljen
+        #         na odhod.
         self.tocke = self.nastavi_vse_povezave(cas_vpogleda=cas_iskanja)
         # Definiraj slovarja poti in povezav. 
         # # Namesto slovarja vozlišč sem uporabil seznam povezav, 
@@ -333,7 +354,7 @@ class Graf:
             najkrajsa_pot_do_vozlisca[trenutno_vozlisce] = slovar_razdalj.pop(trenutno_vozlisce)
             # Sprehodi se po sosednjih povezavah.
             for sosednja_povezava in self.vrni_sosednje_povezave(trenutno_vozlisce):
-                sosednje_vozlisce = sosednja_povezava.vozlisce2
+                sosednje_vozlisce = sosednja_povezava.vozlisce_end
                 # Če za sosednje vozlišče še nismo našli najkrajše cene in poti
                 if sosednje_vozlisce in slovar_razdalj:
                     nova_razdalja_do_vozlisca = razdalja_vozlisca + sosednja_povezava.utez
@@ -346,8 +367,8 @@ class Graf:
         Graf.posodobi_frekvenco(najkrajsa_pot)  # Posodobi frekvenco za vse uporabnike
         najkrajsa_pot = [vozlisce.obisk() for vozlisce in najkrajsa_pot]  # Posodobi frekvenco za trenutnega uporabnika
         return Iskanje(
-            vozlisce1=vozlisce_start,
-            vozlisce2=vozlisce_end,
+            vozlisce_start=vozlisce_start,
+            vozlisce_end=vozlisce_end,
             cas_vpogleda=cas_iskanja,
             cena_potovanja=najkrajsa_pot_do_vozlisca[vozlisce_end],
             najkrajsa_pot=najkrajsa_pot,
@@ -361,7 +382,7 @@ class Graf:
         Iz seznama prepotovanih poti vrne seznam imen prepotovanih vozlišč. 
         Helper funkcija k outputu za funkcijo dikstra 
         """
-        return [seznam_povezav[0].vozlisce1] + [povezava.vozlisce2 for povezava in seznam_povezav]
+        return [seznam_povezav[0].vozlisce_start] + [povezava.vozlisce_end for povezava in seznam_povezav]
 
     @staticmethod
     def posodobi_frekvenco(seznam_vozlisc):
@@ -370,7 +391,7 @@ class Graf:
         Podatke (zagotovo) preberemo iz frekvenca_obiskov.json ter nato posodobimo frekvenco, kjer je to pač treba
         """
         imena_vozlisc = [vozlisce.ime for vozlisce in seznam_vozlisc]
-        IME_DATOTEKE = "frekvenca_obiskov.json"
+        IME_DATOTEKE = FREKVENCA_OBISKOV_DAT
 
         with open(IME_DATOTEKE, "r") as datoteka:
             slovar = json.load(datoteka)
@@ -389,7 +410,7 @@ class Graf:
         Funkcija nam vrne seznam petih najbolj popularnih vozlišč
         po padajočem vrnstnem redu glede na parameter frekvenca obiskov
         """
-        IME_DATOTEKE = "frekvenca_obiskov.json"
+        IME_DATOTEKE = FREKVENCA_OBISKOV_DAT
 
         with open(IME_DATOTEKE, "r") as datoteka:
             slovar = json.load(datoteka)
@@ -439,7 +460,6 @@ class Uporabnik:
         """ Uporabnikove podatke shrani v datoteko. """
         # Ime datoteke se ne zahteva, 
         # saj ima vsak uporabnik rezervirano svojo datoteko pod imenom "<njegovo/njeno ime>.json"
-
         with open(Uporabnik.dobi_ime_datoteke(self.ime), "w") as datoteka:
             json.dump(self.v_slovar(), datoteka, ensure_ascii=False, indent=4)
 
@@ -469,7 +489,7 @@ class Uporabnik:
         Izjem (da tako iskanje ne obstaja) zagotovo ne bo.
         """
         for prejsno_iskanje in self.prejsna_iskanja:
-            if prejsno_iskanje.vozlisce1.ime == zacetek_iskanja and prejsno_iskanje.vozlisce2.ime == konec_iskanja:
+            if prejsno_iskanje.vozlisce_start.ime == zacetek_iskanja and prejsno_iskanje.vozlisce_end.ime == konec_iskanja:
                 return prejsno_iskanje
         return None
 
@@ -543,10 +563,10 @@ class Uporabnik:
 # 1 Uporabnik: N iskanj
 class Iskanje:
 
-    def __init__(self, vozlisce1: Vozlisce, vozlisce2: Vozlisce, cas_vpogleda, cena_potovanja, najkrajsa_pot,
+    def __init__(self, vozlisce_start: Vozlisce, vozlisce_end: Vozlisce, cas_vpogleda, cena_potovanja, najkrajsa_pot,
                  stevilka_linije, najkrajsa_povezava):
-        self.vozlisce1 = vozlisce1  # Od kod potujemo; input = objekt vozlisce
-        self.vozlisce2 = vozlisce2  # Kam potujemo; input = objekt vozlisce
+        self.vozlisce_start = vozlisce_start  # Od kod potujemo; input = objekt vozlisce
+        self.vozlisce_end = vozlisce_end  # Kam potujemo; input = objekt vozlisce
         self.cena_potovanja = cena_potovanja  # Cena sprehoda od "zacetek" od "konec" v nasem grafu
         self.cas_vpogleda = cas_vpogleda
         self.najkrajsa_pot = najkrajsa_pot  # Seznam objektov vozlisce
@@ -555,8 +575,8 @@ class Iskanje:
 
     def v_slovar(self):
         return {
-            "zacetek": self.vozlisce1.v_slovar(),
-            "konec": self.vozlisce2.v_slovar(),
+            "zacetek": self.vozlisce_start.v_slovar(),
+            "konec": self.vozlisce_end.v_slovar(),
             "cas_evidence": date.isoformat(self.cas_vpogleda),
             "cena_potovanja": self.cena_potovanja,  # Enota so minute
             "najkrajsa_pot": [vozlisce.v_slovar() for vozlisce in self.najkrajsa_pot],
@@ -567,8 +587,8 @@ class Iskanje:
     @staticmethod
     def iz_slovarja(slovar):
         return Iskanje(
-            vozlisce1=Vozlisce.iz_slovarja(slovar["zacetek"]),
-            vozlisce2=Vozlisce.iz_slovarja(slovar["konec"]),
+            vozlisce_start=Vozlisce.iz_slovarja(slovar["zacetek"]),
+            vozlisce_end=Vozlisce.iz_slovarja(slovar["konec"]),
             cas_vpogleda=parser.parse(slovar["cas_evidence"]),
             cena_potovanja=int(slovar["cena_potovanja"]),
             najkrajsa_pot=[Vozlisce.iz_slovarja(slovar_vozlisca) for slovar_vozlisca in slovar["najkrajsa_pot"]],
