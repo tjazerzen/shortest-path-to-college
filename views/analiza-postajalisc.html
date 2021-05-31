@@ -5,14 +5,6 @@
 % tabela_stilov = ["progress is-link", "progress is-info", "progress is-success", "progress is-warning", "progress is-danger"]
 
 
-<!--
-<progress class="progress is-link" value="30" max="100">30%</progress>
-<progress class="progress is-info" value="45" max="100">45%</progress>
-<progress class="progress is-success" value="60" max="100">60%</progress>
-<progress class="progress is-warning" value="75" max="100">75%</progress>
-<progress class="progress is-danger" value="90" max="100">90%</progress>
--->
-
 <div class="columns">
 
     <div class="column is-fullwidth">
@@ -73,8 +65,7 @@
                                 {{popularna_vozlisca_vseh[i].frekvenca_obiskov}} iskanjih.</b>
                         </li>
                         <li>
-                            % delez = int(100*float(popularna_vozlisca_vseh[i].frekvenca_obiskov / vsota_frekvenc_vseh))
-                            + 30
+                            % delez = int(100*float(popularna_vozlisca_vseh[i].frekvenca_obiskov / vsota_frekvenc_vseh)) + 30
                             % delez = min(99, delez)
                             % index = delez // 20
                             <progress class="{{tabela_stilov[index]}}" value="{{delez}}" max="100">42%</progress>

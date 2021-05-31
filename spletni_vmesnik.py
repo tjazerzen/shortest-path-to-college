@@ -105,13 +105,9 @@ def dodaj_priljubljeno_linijo():
 @bottle.post("/isci/")
 def isci():
     uporabnik = trenutni_uporabnik()
-    vozlisce1_ime = bottle.request.forms["kraj_zacetka"]
-    vozlisce2_ime = bottle.request.forms["kraj_konca"]
-    zmagovalno_iskanje = moj_model.dobi_zmagovalno_iskanje(vozlisce1_ime, vozlisce2_ime)
-
-    for povezava in zmagovalno_iskanje.najkrajsa_povezava:
-        print(povezava.vozlisce1.ime, povezava.vozlisce2.ime)
-
+    vozlisce_start_ime = bottle.request.forms["kraj_zacetka"]
+    vozlisce_end_ime = bottle.request.forms["kraj_konca"]
+    zmagovalno_iskanje = moj_model.dobi_zmagovalno_iskanje(vozlisce_start_ime, vozlisce_end_ime)
     uporabnik.prejsna_iskanja.insert(0, zmagovalno_iskanje)
     shrani_stanje(uporabnik)
     bottle.redirect("/")

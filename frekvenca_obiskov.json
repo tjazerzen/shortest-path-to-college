@@ -6,7 +6,7 @@
         },
         {
             "ime": "LjubljanaTivoli",
-            "frekvenca_obiskov": 64
+            "frekvenca_obiskov": 66
         },
         {
             "ime": "OsnovnaSolaKaselj",
@@ -14,11 +14,11 @@
         },
         {
             "ime": "PostajaJadranska",
-            "frekvenca_obiskov": 51
+            "frekvenca_obiskov": 53
         },
         {
             "ime": "FMF",
-            "frekvenca_obiskov": 90
+            "frekvenca_obiskov": 92
         },
         {
             "ime": "Bled",
@@ -34,11 +34,11 @@
         },
         {
             "ime": "Tolmin",
-            "frekvenca_obiskov": 14
+            "frekvenca_obiskov": 16
         },
         {
             "ime": "Kobarid",
-            "frekvenca_obiskov": 11
+            "frekvenca_obiskov": 12
         },
         {
             "ime": "BritofKR",
