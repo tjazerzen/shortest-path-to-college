@@ -107,12 +107,12 @@
             <tr>
                 <td>{{str(iskanje.cas_vpogleda).split(" ")[0]}}</td>
                 <td>{{iskanje.stevilka_linije}}</td>
-                <td>{{iskanje.vozlisce1.ime}}</td>
-                <td>{{iskanje.vozlisce2.ime}}</td>
+                <td>{{iskanje.vozlisce_start.ime}}</td>
+                <td>{{iskanje.vozlisce_end.ime}}</td>
                 <td>{{iskanje.cena_potovanja}}</td>
                 <td>{{" - ".join([vozlisce.ime for vozlisce in iskanje.najkrajsa_pot])}}</td>
                 <td>
-                    <form action="/najkrajsa_voznja/isci/{{iskanje.vozlisce1.ime}}-{{iskanje.vozlisce2.ime}}/"
+                    <form action="/najkrajsa_voznja/isci/{{iskanje.vozlisce_start.ime}}-{{iskanje.vozlisce_end.ime}}/"
                           method="GET">
                         <div class="field has-addons">
                             <div class="control">
