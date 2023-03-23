@@ -1,56 +1,56 @@
 
-# Najkrajša-Do-Faksa
+# Shortest Path to College
 
-Vse poti vodijo do faksa! :D
+All roads lead to the college! :D
 
-Bolj natančno, do postaje na Jadranski, toda vprašajmo se: 
-- Kako še vseeno najhitreje priti od domače avtobusne postaje do iskanega avtobusnega postajališča? 
-- Se do našega cilja sploh da priti z direktno povezavo kam hočemo? 
-- Če se da, koliko časa bi potreboval in katera bi bila optimalna pot? 
+More precisely, to the Jadranska station (located at the [Faculty of Mathematics and Physics, University of Ljubljana, Slovenia](https://www.fmf.uni-lj.si/sl/studij-matematike/)), but let's ask ourselves:
+- What is the fastest way to get from your home bus station to the desired bus stop anyway?
+- Is it even possible to reach our goal with a direct connection to where we want?
+- If possible, how long would it take and what would be the optimal route?
 
-Pričujoči projekt odgovarja na zgoraj zastavljena vprašanja ter vse to zapakira v lepo spletno storitev.
+The present project answers the questions posed above and packages it all into a nice online service.
 
 ## Back End
 
-Jasno je, da neki množici cestnih povezav ter postajališč lahko priredimo vozlišča ter obtežene povezave, le-tem pa priredimo obtežen **graf**. Zato je za iskanje najkrajše poti od enega postajališča dobra ideja shraniti podatke v obliki nekega grafa (datoteka podatki `grafov.json`), katerega uteži pa niso nujno neodvisne od časa iskanja po grafu.
+It is clear that we can assign nodes and weighted links to some set of road connections and stops, and to them we can arrange a weighted **graph**. Therefore, in order to find the shortest route from one stop, it is a good idea to save the data in the form of a graph (data file `grafov.json`), whose weights are not necessarily independent of the graph search time.
 
-Naloga tega projekta je najti optimalno pot med dvema vozliščema v grafu z več komponentami s postajališčem FMF kot edinim skupnim med temi vsemi. 
+The task of this project is to find an optimal path between two nodes in a multi-component graph with the stop FMF as the only common among them all.
 
-Po nekaterih povezavah se lahko sprehajamo oz. vozimo s kolesom, spet po drugih pa se vozimo z avtobusom. Zato svoje *povezave delim na 2 dela*: 
+We can walk along some links or we ride a bicycle, and after others we ride a bus. That's why I'm dividing my *links into 2 parts*:
 
-1. **Povezave, ki jim utež variira s časom** (v datoteki podatki_grafov so te shranjene z vrednostjo uteži -1). Ko bomo iskali najcenejšo pot, bo vsakič znova iz tekstovnih datotek (shranjenih v mapi PodatkiOdhodov) treba izračunati trenutno utež te povezave.
-2. **Povezave s fiksno utežjo**, neodvisne od časa vpogleda (v datoteki podatki_grafov so shranjene s kakršno koli pozitivno vrednostjo)
+1. **Connections whose weight varies with time** (in the data_graphs file, these are saved with a weight value of -1). When we search for the cheapest route, the current weight of this connection will have to be calculated from the text files (saved in the Departure Data folder) every time.
+2. **Fixed weight links** independent of lookup time (stored with any positive value in graph_data file)
 
-Kasneje sem vsaki povezavi dodal še atribut `tip_povezave`, ki pove, če se bo uporabnik od začetka do konca povezave prevažal z avtobusom, vlakom, šel peš, ali pa se zapeljal z lokalnim kolesom. Ta funkcionalnost je lahko vidna ob pritisku na gumb *prikaži podrobnosti -->* na osnovni strani portala.
+Later, I added the `type_of_connection' attribute to each connection, which tells if the user will travel by bus, train, walk, or ride a local bicycle from the beginning to the end of the connection. This functionality can be seen by pressing the button *show details -->* on the main page of the portal.
 
-V datoteki `model.py` sem se lotil programiranja objektov, ki v mojem programu nastopajo:
-- **Model**: Krovni objekt, ki moj program povezuje. Sestavljen je iz posameznih grafov (voznih linij),
-- **Vozlišče**, ki nam predstavlja postajališče,
-- **Povezava**, ki povezuje dve vozlišči ter nam predstavlja neko povezavo med njima
-- **Graf**, ki povezuje vozlišča in povezave,
-- **Uporabnik**, ki je zadolžen za beleženje uporabnikovih prejšnih iskanj in njegovih (njenih) "priljubljenih relacij",
-- **Iskanje**: Vsebuje podatke kraju odhoda ter prihoda, datumu iskanja, ceni optimalnega sprehoda, najcenejši poti v temu grafu (če iskani vozlišči ležita v isti komponenti. V spletni storitvi jih imenujem "linije").
+In the `model.py` file, I set about programming the objects that appear in my program:
+- **Model**: The umbrella object that connects my program. It consists of individual graphs (driving lines),
+- **Vozlišče (Node)**, which represents a stop for us,
+- **Povezava (Connection)** that connects two nodes and presents us with some connection between them
+- **Graf (Graph)** connecting nodes and links,
+- **Uporabnik (User)**, who is responsible for recording the user's previous searches and his (her) "favorite relationships",
+- **Iskanje (Search)**: Contains information on the place of departure and arrival, the search date, the price of the optimal walk, the cheapest route in this graph (if the searched nodes lie in the same component. I call them "lines" in the web service).
 
 ## Front End
 
-Za popestritev uporabniške izkušnje sem nato vsako vozlišče opremil s parametrom **frekvenca iskanj**, ki sem ga uporabil za *prikaz uporabnikovih najbolj priljubljenih vozlišč* (vozlišče je priljubljeno, če ga je že velikokrat obiskal). Isto sem naredil za vse uporabnike hkrati, nato pa rezultata primerjal pod sekcijo *najkrajsa-voznja/analiza-postajališč/*.
+To enhance the user experience, I then equipped each node with a **search frequency** parameter, which I used to *display the user's most popular nodes* (a node is popular if it has been visited many times). I did the same for all users at the same time, and then compared the results under the *najkrajsa-voznja/analiza-postajališč/* section.
 
-V front-endu sem poskrbel za **spletno storitev, ki podpira več uporabnikov**. Vsak uporabnik do svojega računa dostopa preko uporabniškega imena in gesla. Naj omenim še, da so vsi zgoraj omenjeni objekti opremljeni z metodami za shranjevanje in branje podatkov. Zato lahko uporabnik program zapre, se naslednji dan vrne ter še vedno vidi svoja prejšna iskanja. Tukaj mi je ogromno časa prihranila pythonova knjižnica *bottle.py*. User experience sem olepšal s HTML datotekami ter *Bulminovem frameworku CSS datotek*.
+In the front-end, I provided a **web service that supports multiple users**. Each user accesses their account via a username and password. I should also mention that all the objects mentioned above are equipped with methods for storing and reading data. Therefore, the user can close the program, come back the next day and still see their previous searches. This is where the python library *bottle.py* saved me a lot of time. I embellished the user experience with HTML files and *Bulma's CSS file framework*.
 
-K uporabiku sem dodal spremenljivko imenovano **številke linij**, ki nam *hrani informacije o posameznikovih priljubljenih relacijah*. Tako se lahko uporabnik prijavi, doda priljubljeno relacijo, odjavi, pozabi po kateri liniji se običajno vozi, se nazaj prijavi ter si z dobljenimi informacijami osveži spomin.
+I added a variable called **številke linij (linenumbers)** to the user, which *keeps us information about the individual's favorite relations*. In this way, the user can log in, add a favorite route, log out, forget which line he usually takes, log back in and refresh his memory with the information obtained.
 
-## Navodila za uporabo
+## Instructions for use
 
-Program poženete tako, da poženete datoteko `spletni_vmesnik.py.` Če Pythonovih knjižnic `hashlib` in `dateutil` še nimate, si ju boste morali za uporabo tega programa predhodno naložiti.
+You run the program by running the `spletni_vmesnik.py.` (web_interface in Slovenian) file. If you don't already have the `hashlib' and `dateutil' Python libraries, you will need to download them in order to use this program.
 
-## Nadaljne raziskovanje
+## Further research
 
-Grafovski algoritmi se (na žalost) še ne obravnajo v 1. letniku, če pa koga zanima pa bi ga preusmeril na:
-- [Algoritmska biblija](https://edutechlearners.com/download/Introduction_to_algorithms-3rd%20Edition.pdf)
-- [Članek o algoritmu Dijskstra, ki je v tem programu tudi implementiran](https://www.programiz.com/dsa/dijkstra-algorithm)
-- [Posnetek o Dijstrovem algoritmu](https://www.youtube.com/watch?v=GazC3A4OQTE)
-- Kontakt za vprašanja o tem projektu: erzen.tjaz@gmail.com
+Graph algorithms are (unfortunately) not yet covered in the 1st year, but if anyone is interested, I would redirect them to:
+- [The Algorithm Bible](https://edutechlearners.com/download/Introduction_to_algorithms-3rd%20Edition.pdf)
+- [Article about the Dijkstra algorithm, which is also implemented in this program](https://www.programiz.com/dsa/dijkstra-algorithm)
+- [Video about Dijster's algorithm](https://www.youtube.com/watch?v=GazC3A4OQTE)
+- Contact for questions about this project: erzen.tjaz@gmail.com
 
-## Avtor
+## Author
 
-Tjaž Eržen, študent 1. letnika finančne matematike.
+Tjaž Eržen, student of Financial Mathematics
